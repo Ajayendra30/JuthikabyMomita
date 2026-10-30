@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-ivory: #FFFFFF;
+    --color-charcoal: #24211D;
+    --color-muga-gold: #B69A62;
+    --color-gold-hover: #A0834E;
+    --color-muted-beige: #E8DFD1;
+    --color-white: #FFFFFF;
+    --color-charcoal-light: #4A453E;
+    --color-charcoal-muted: #7A7268;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #24211D;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: 0.015em;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, .font-serif {
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Luxury Editorial Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFFFF;
+}
+::-webkit-scrollbar-thumb {
+  background: #B69A62;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8F7645;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+/* Editorial Golden Gradient Text */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #A88748 0%, #D8BE82 50%, #94773B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Subtle luxury button animations */
+.btn-luxury-primary {
+  background-color: #24211D;
+  color: #FFFFFF;
+  border: 1px solid #24211D;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-luxury-primary:hover {
+  background-color: #B69A62;
+  border-color: #B69A62;
+  color: #FFFFFF;
+}
+
+.btn-luxury-outline {
+  background-color: transparent;
+  color: #24211D;
+  border: 1px solid #24211D;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-luxury-outline:hover {
+  background-color: #24211D;
+  color: #FFFFFF;
+}
+
+.btn-luxury-gold {
+  background-color: #B69A62;
+  color: #FFFFFF;
+  border: 1px solid #B69A62;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-luxury-gold:hover {
+  background-color: #9C824E;
+  border-color: #9C824E;
+}

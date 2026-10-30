@@ -1,0 +1,50 @@
+[
+  {
+    "id": "AX-BR-829104",
+    "name": "Ananya Hazarika",
+    "email": "ananya.h@couture.com",
+    "phone": "+91 9279125091",
+    "occasion": "Bridal Matrimony",
+    "preferredFabric": "Pure Muga Silk",
+    "preferred_fabric": "Pure Muga Silk",
+    "consultationType": "Guwahati Flagship Atelier (In-Person)",
+    "consultation_type": "Guwahati Flagship Atelier (In-Person)",
+    "preferredDate": "2026-11-15",
+    "preferred_date": "2026-11-15",
+    "message": "Looking for a royal Kingkhap Muga Mekhela Chador with antique gold Guna zari and matching Riha for my winter wedding.",
+    "status": "New",
+    "createdAt": "2026-10-22T10:30:00.000Z"
+  },
+  {
+    "id": "AX-BR-419082",
+    "name": "Meenakshi Bordoloi",
+    "email": "meenakshi.b@silkpatron.org",
+    "phone": "+91 98112 34567",
+    "occasion": "Reception Gala",
+    "preferredFabric": "Ceremonial Paat Silk",
+    "preferred_fabric": "Ceremonial Paat Silk",
+    "consultationType": "New Delhi Private Suite (In-Person)",
+    "consultation_type": "New Delhi Private Suite (In-Person)",
+    "preferredDate": "2026-11-28",
+    "preferred_date": "2026-11-28",
+    "message": "Seeking a heavy vermilion Paat silk saree with kalka border and bespoke blouse tailoring.",
+    "status": "In Discussion",
+    "createdAt": "2026-10-21T14:15:00.000Z"
+  },
+  {
+    "id": "AX-BR-993021",
+    "name": "Rohan & Gayatri Sharma",
+    "email": "rohan.sharma@sanctuary.in",
+    "phone": "+91 97170 88990",
+    "occasion": "Trousseau Curation",
+    "preferredFabric": "Muga-Paat Hybrid",
+    "preferred_fabric": "Muga-Paat Hybrid",
+    "consultationType": "High-Definition Virtual Video Atelier (Global)",
+    "consultation_type": "High-Definition Virtual Video Atelier (Global)",
+    "preferredDate": "2026-12-05",
+    "preferred_date": "2026-12-05",
+    "message": "Planning complete bridal trousseau including 2 Muga Mekhela Chadors and 1 Ahimsa Eri wrap.",
+    "status": "Loom Assigned",
+    "createdAt": "2026-10-20T09:00:00.000Z"
+  }
+]
