@@ -1,4 +1,4 @@
-﻿
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
@@ -16,7 +16,7 @@ export const Hero = () => {
           playsInline
           preload="metadata"
           poster="/images/boutique-poster.jpg"
-          className="w-full h-full object-cover object-top brightness-110 contrast-100"
+          className="w-full h-full object-cover object-top brightness-[0.88] contrast-[1.02]"
         >
           <source
             src="/videos/boutique-hero.mp4"
@@ -26,8 +26,8 @@ export const Hero = () => {
         </video>
 
         {/* Editorial Gradients for Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#24211D]/40 via-[#24211D]/10 to-transparent" />
-        <div className="absolute inset-0 bg-[#24211D]/5" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#24211D]/50 via-[#24211D]/15 to-transparent" />
+        <div className="absolute inset-0 bg-[#24211D]/10" />
       </div>
 
       {/* Hero Content Container */}

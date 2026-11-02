@@ -11,10 +11,12 @@ import {
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { MegaMenu } from './MegaMenu';
+import { SHOP_DIRECTORIES } from '../data/products';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,6 +66,7 @@ export const Navbar = () => {
   return (
     <>
       <header
+        onMouseLeave={() => setIsShopHovered(false)}
         className={`sticky top-0 z-40 transition-all duration-300 ${
           isScrolled
             ? 'bg-[#FFFFFF]/95 backdrop-blur-md shadow-sm border-b border-[#E8DFD1] py-3.5'
@@ -265,16 +268,80 @@ export const Navbar = () => {
               </div>
 
               <div className="space-y-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-xs uppercase tracking-[0.25em] py-2 border-b border-[#E8DFD1]/60 text-[#24211D] hover:text-[#B69A62]"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  if (link.hasMegaMenu) {
+                    return (
+                      <div key={link.name} className="border-b border-[#E8DFD1]/60 py-2">
+                        <div className="flex items-center justify-between">
+                          <Link
+                            to={link.path}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="text-xs uppercase tracking-[0.25em] text-[#24211D] font-medium hover:text-[#B69A62]"
+                          >
+                            {link.name}
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => setIsMobileShopOpen(!isMobileShopOpen)}
+                            className="p-1 text-[#24211D] hover:text-[#B69A62]"
+                            aria-label="Expand Shop categories"
+                          >
+                            <ChevronDown
+                              size={15}
+                              className={`transition-transform duration-200 ${isMobileShopOpen ? 'rotate-180 text-[#B69A62]' : ''}`}
+                            />
+                          </button>
+                        </div>
+
+                        {/* Collapsible Mobile 5-Column Directory */}
+                        {isMobileShopOpen && (
+                          <div className="mt-3 pl-3 pr-1 py-3 border-l border-[#E8DFD1] space-y-4 animate-fade-in bg-[#FFFFFF]/70">
+                            {SHOP_DIRECTORIES.map((sec) => (
+                              <div key={sec.title} className="space-y-1.5">
+                                <span className="inline-block text-[10px] uppercase tracking-[0.22em] text-[#111111] font-semibold border-b border-[#111111] pb-0.5">
+                                  {sec.title}
+                                </span>
+                                <div className="space-y-1 pt-1">
+                                  {sec.items.map((item) => {
+                                    let href = '/shop';
+                                    if (item.sort) href = `/shop?sort=${item.sort}`;
+                                    else if (item.collection) href = `/shop?collection=${encodeURIComponent(item.collection)}`;
+                                    else if (item.category && item.category !== 'All') {
+                                      href = `/shop?category=${encodeURIComponent(item.category)}${item.department ? `&department=${item.department}` : ''}`;
+                                    } else if (item.department) {
+                                      href = `/shop?category=All&department=${item.department}`;
+                                    }
+                                    return (
+                                      <Link
+                                        key={item.name}
+                                        to={href}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="block text-[10px] uppercase tracking-[0.16em] text-[#24211D]/80 hover:text-black py-0.5"
+                                      >
+                                        {item.name}
+                                      </Link>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block text-xs uppercase tracking-[0.25em] py-2 border-b border-[#E8DFD1]/60 text-[#24211D] hover:text-[#B69A62]"
+                    >
+                      {link.name}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 

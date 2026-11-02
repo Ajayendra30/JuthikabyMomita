@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Mail,
   Phone, 
@@ -70,13 +70,13 @@ export const Contact = () => {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-[#B69A62] font-semibold mb-3">
+          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-[#111111] font-semibold mb-3">
             <span>Private Client Concierge</span>
           </div>
-          <h1 className="font-serif text-4xl sm:text-6xl text-[#24211D] font-light tracking-wide mb-4">
+          <h1 className="font-serif text-4xl sm:text-6xl text-[#111111] font-light tracking-wide mb-4">
             Connect With the Atelier
           </h1>
-          <p className="text-sm sm:text-base text-[#24211D]/80 font-light leading-relaxed">
+          <p className="text-sm sm:text-base text-[#111111]/80 font-light leading-relaxed">
             Whether inquiring about bespoke bridal commissions, private viewings, or caring for an heirloom piece, 
             our dedicated silk concierge is at your service.
           </p>
@@ -86,17 +86,17 @@ export const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
           
           {/* Left Column: Form (7 cols) */}
-          <div className="lg:col-span-7 bg-[#FFFFFF] border border-[#E8DFD1] p-8 sm:p-12 shadow-sm">
+          <div className="lg:col-span-7 bg-[#FFFFFF] border border-[#E5E5E5] p-8 sm:p-12 shadow-sm">
             {isSubmitted ? (
               <div className="text-center py-12 space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#B69A62]/15 text-[#B69A62] flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto rounded-full bg-neutral-100 text-[#111111] flex items-center justify-center">
                   <CheckCircle2 size={36} />
                 </div>
-                <h3 className="font-serif text-3xl text-[#24211D]">Message Received</h3>
-                <p className="text-xs sm:text-sm text-[#24211D]/75 font-light max-w-md mx-auto leading-relaxed">
-                  Thank you, <span className="font-medium text-[#24211D]">{formData.name}</span>. Your dispatch has been logged with our client concierge desk. A senior stylist will reply to <span className="text-[#B69A62]">{formData.email}</span> within 24 hours.
+                <h3 className="font-serif text-3xl text-[#111111]">Message Received</h3>
+                <p className="text-xs sm:text-sm text-[#111111]/75 font-light max-w-md mx-auto leading-relaxed">
+                  Thank you, <span className="font-medium text-[#111111]">{formData.name}</span>. Your dispatch has been logged with our client concierge desk. A senior stylist will reply to <span className="text-[#111111]">{formData.email}</span> within 24 hours.
                 </p>
-                <div className="text-[11px] text-[#24211D]/50 italic pt-2">
+                <div className="text-[11px] text-[#111111]/50 italic pt-2">
                   * Note: Frontend demonstration only. No backend server was contacted.
                 </div>
                 <div className="pt-6">
@@ -111,7 +111,7 @@ export const Contact = () => {
                         message: ''
                       });
                     }}
-                    className="px-6 py-3 bg-[#24211D] text-[#FFFFFF] text-xs uppercase tracking-widest font-medium hover:bg-[#B69A62] transition-colors"
+                    className="px-6 py-3 bg-[#111111] text-[#FFFFFF] text-xs uppercase tracking-widest font-medium hover:bg-black transition-colors"
                   >
                     Send Another Inquiry
                   </button>
@@ -120,17 +120,17 @@ export const Contact = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#B69A62] font-semibold block mb-1">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#111111] font-semibold block mb-1">
                     Send an Inquiry
                   </span>
-                  <h3 className="font-serif text-2xl text-[#24211D] font-normal">
+                  <h3 className="font-serif text-2xl text-[#111111] font-normal">
                     How May We Assist You?
                   </h3>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Full Name *
                     </label>
                     <input
@@ -138,15 +138,15 @@ export const Contact = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder=""
-                      className={`w-full bg-[#FFFFFF] border px-3.5 py-3 text-xs text-[#24211D] focus:outline-none transition-colors ${
-                        errors.name ? 'border-red-500' : 'border-[#E8DFD1] focus:border-[#B69A62]'
+                      className={`w-full bg-[#FFFFFF] border px-3.5 py-3 text-xs text-[#111111] focus:outline-none transition-colors ${
+                        errors.name ? 'border-red-500' : 'border-[#E5E5E5] focus:border-[#111111]'
                       }`}
                     />
                     {errors.name && <p className="text-[10px] text-red-500 mt-1">{errors.name}</p>}
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Email Address *
                     </label>
                     <input
@@ -154,8 +154,8 @@ export const Contact = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder=""
-                      className={`w-full bg-[#FFFFFF] border px-3.5 py-3 text-xs text-[#24211D] focus:outline-none transition-colors ${
-                        errors.email ? 'border-red-500' : 'border-[#E8DFD1] focus:border-[#B69A62]'
+                      className={`w-full bg-[#FFFFFF] border px-3.5 py-3 text-xs text-[#111111] focus:outline-none transition-colors ${
+                        errors.email ? 'border-red-500' : 'border-[#E5E5E5] focus:border-[#111111]'
                       }`}
                     />
                     {errors.email && <p className="text-[10px] text-red-500 mt-1">{errors.email}</p>}
@@ -164,7 +164,7 @@ export const Contact = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Phone Number (Optional)
                     </label>
                     <input
@@ -172,18 +172,18 @@ export const Contact = () => {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+91 9279125091"
-                      className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3.5 py-3 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                      className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3.5 py-3 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Subject
                     </label>
                     <select
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3.5 py-3 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                      className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3.5 py-3 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                     >
                       <option value="Client Concierge & Styling">Client Concierge & Styling</option>
                       <option value="Bespoke Bridal Commission">Bespoke Bridal Commission</option>
@@ -195,7 +195,7 @@ export const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                  <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                     Your Message *
                   </label>
                   <textarea
@@ -203,8 +203,8 @@ export const Contact = () => {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Tell us about the piece you are considering or specific questions regarding our weaves..."
-                    className={`w-full bg-[#FFFFFF] border px-3.5 py-3 text-xs text-[#24211D] focus:outline-none transition-colors ${
-                      errors.message ? 'border-red-500' : 'border-[#E8DFD1] focus:border-[#B69A62]'
+                    className={`w-full bg-[#FFFFFF] border px-3.5 py-3 text-xs text-[#111111] focus:outline-none transition-colors ${
+                      errors.message ? 'border-red-500' : 'border-[#E5E5E5] focus:border-[#111111]'
                     }`}
                   />
                   {errors.message && <p className="text-[10px] text-red-500 mt-1">{errors.message}</p>}
@@ -212,7 +212,7 @@ export const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#24211D] text-[#FFFFFF] hover:bg-[#B69A62] text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md"
+                  className="w-full py-4 bg-[#111111] text-[#FFFFFF] hover:bg-black text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md"
                 >
                   Transmit Message to Concierge
                 </button>
@@ -224,63 +224,63 @@ export const Contact = () => {
           <div className="lg:col-span-5 space-y-6">
             
             {/* Flagship Atelier Card */}
-            <div className="bg-[#FFFFFF] border border-[#E8DFD1] p-8">
+            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-8">
               <div className="flex items-start gap-3 mb-4">
-                <MapPin className="text-[#B69A62] w-5 h-5 flex-shrink-0 mt-0.5" />
+                <MapPin className="text-[#111111] w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-[#B69A62] font-semibold block">
+                  <span className="text-[10px] uppercase tracking-widest text-[#111111] font-semibold block">
                     Heritage Flagship
                   </span>
-                  <h4 className="font-serif text-xl text-[#24211D]">Sualkuchi Silk Quarter</h4>
-                  <p className="text-xs text-[#24211D]/75 font-light mt-1 leading-relaxed">
+                  <h4 className="font-serif text-xl text-[#111111]">Sualkuchi Silk Quarter</h4>
+                  <p className="text-xs text-[#111111]/75 font-light mt-1 leading-relaxed">
                     Main Loom Road, Kamrup, Sualkuchi, Assam 781103 <br />
                     (With Private Draping Lounge on GS Road, Guwahati)
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-2 pt-3 border-t border-[#E8DFD1] text-xs text-[#24211D]/80">
+              <div className="space-y-2 pt-3 border-t border-[#E5E5E5] text-xs text-[#111111]/80">
                 <div className="flex items-center gap-2">
-                  <Phone size={14} className="text-[#B69A62]" />
+                  <Phone size={14} className="text-[#111111]" />
                   <span>+91 361 298 7654 / +91 98640 12345</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail size={14} className="text-[#B69A62]" />
+                  <Mail size={14} className="text-[#111111]" />
                   <span>concierge@juthikabymomita.com</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock size={14} className="text-[#B69A62]" />
+                  <Clock size={14} className="text-[#111111]" />
                   <span>Mon – Sat: 10:30 AM – 7:30 PM (By Appointment)</span>
                 </div>
               </div>
             </div>
 
             {/* New Delhi Private Suite */}
-            <div className="bg-[#FFFFFF] border border-[#E8DFD1] p-8">
+            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-8">
               <div className="flex items-start gap-3 mb-4">
-                <MapPin className="text-[#B69A62] w-5 h-5 flex-shrink-0 mt-0.5" />
+                <MapPin className="text-[#111111] w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-[#B69A62] font-semibold block">
+                  <span className="text-[10px] uppercase tracking-widest text-[#111111] font-semibold block">
                     Capital Suite
                   </span>
-                  <h4 className="font-serif text-xl text-[#24211D]">New Delhi Private Salon</h4>
-                  <p className="text-xs text-[#24211D]/75 font-light mt-1 leading-relaxed">
+                  <h4 className="font-serif text-xl text-[#111111]">New Delhi Private Salon</h4>
+                  <p className="text-xs text-[#111111]/75 font-light mt-1 leading-relaxed">
                     The Qutub Boulevard, Mehrauli & The Chanakya Suite, New Delhi 110030
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-2 pt-3 border-t border-[#E8DFD1] text-xs text-[#24211D]/80">
+              <div className="space-y-2 pt-3 border-t border-[#E5E5E5] text-xs text-[#111111]/80">
                 <div className="flex items-center gap-2">
-                  <Phone size={14} className="text-[#B69A62]" />
+                  <Phone size={14} className="text-[#111111]" />
                   <span>+91 9279125091</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail size={14} className="text-[#B69A62]" />
+                  <Mail size={14} className="text-[#111111]" />
                   <span>delhi.salon@juthikabymomita.com</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock size={14} className="text-[#B69A62]" />
+                  <Clock size={14} className="text-[#111111]" />
                   <span>Tue – Sun: 11:00 AM – 8:00 PM (By Prior Booking)</span>
                 </div>
               </div>
@@ -291,35 +291,35 @@ export const Contact = () => {
         </div>
 
         {/* FAQ Accordion Section */}
-        <section className="bg-[#FFFFFF] border border-[#E8DFD1] p-8 sm:p-12">
+        <section className="bg-[#FFFFFF] border border-[#E5E5E5] p-8 sm:p-12">
           <div className="text-center max-w-xl mx-auto mb-10">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B69A62] font-semibold block mb-1">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
               Atelier Inquiries
             </span>
-            <h3 className="font-serif text-3xl text-[#24211D] font-light">
+            <h3 className="font-serif text-3xl text-[#111111] font-light">
               Frequently Clarified Questions
             </h3>
           </div>
 
-          <div className="max-w-3xl mx-auto divide-y divide-[#E8DFD1]">
+          <div className="max-w-3xl mx-auto divide-y divide-[#E5E5E5]">
             {faqs.map((faq, idx) => (
               <div key={idx} className="py-4">
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   className="w-full flex items-center justify-between text-left focus:outline-none"
                 >
-                  <span className="font-serif text-lg text-[#24211D] font-normal hover:text-[#B69A62] transition-colors">
+                  <span className="font-serif text-lg text-[#111111] font-normal hover:text-black hover:opacity-70 transition-colors">
                     {faq.q}
                   </span>
                   <ChevronDown
                     size={16}
-                    className={`text-[#B69A62] transition-transform duration-200 ${
+                    className={`text-[#111111] transition-transform duration-200 ${
                       openFaq === idx ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
                 {openFaq === idx && (
-                  <p className="mt-3 text-xs sm:text-sm text-[#24211D]/75 font-light leading-relaxed pl-1">
+                  <p className="mt-3 text-xs sm:text-sm text-[#111111]/75 font-light leading-relaxed pl-1">
                     {faq.a}
                   </p>
                 )}

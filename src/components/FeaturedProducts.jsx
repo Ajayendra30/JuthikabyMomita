@@ -17,17 +17,17 @@ export const FeaturedProducts = () => {
     : catalog.filter(p => p.fabric === activeFilter || p.category === activeFilter).slice(0, 8);
 
   return (
-    <section className="py-24 bg-[#FFFFFF] border-b border-[#E8DFD1]">
+    <section className="py-24 bg-[#FFFFFF] border-b border-[#E5E5E5]">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header with Title and Tabs */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#E8DFD1] pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#E5E5E5] pb-6">
           <div>
-            {/* <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-[#B69A62] font-semibold mb-2">
+            {/* <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-[#111111] font-semibold mb-2">
               <Sparkles size={14} />
               <span>Limited Masterpiece Weaves</span>
             </div> */}
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#24211D] font-light tracking-wide">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#111111] font-light tracking-wide">
               Curated in Silk
             </h2>
           </div>
@@ -40,8 +40,8 @@ export const FeaturedProducts = () => {
                 onClick={() => setActiveFilter(tab)}
                 className={`text-xs uppercase tracking-[0.2em] px-4 py-2 transition-all duration-300 ${
                   activeFilter === tab
-                    ? 'bg-[#24211D] text-[#FFFFFF]'
-                    : 'text-[#24211D]/70 hover:text-[#24211D] bg-[#FFFFFF] border border-[#E8DFD1]'
+                    ? 'bg-[#111111] text-[#FFFFFF]'
+                    : 'text-[#111111]/70 hover:text-[#111111] bg-[#FFFFFF] border border-[#E5E5E5]'
                 }`}
               >
                 {tab}
@@ -61,7 +61,7 @@ export const FeaturedProducts = () => {
         <div className="text-center mt-16">
           <Link
             to="/shop"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-[#FFFFFF] border border-[#24211D] text-[#24211D] hover:bg-[#24211D] hover:text-[#FFFFFF] text-xs uppercase tracking-[0.25em] font-medium transition-all duration-300 shadow-sm"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-[#FFFFFF] border border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-[#FFFFFF] text-xs uppercase tracking-[0.25em] font-medium transition-all duration-300 shadow-sm"
           >
             <span>View All Curated Weaves</span>
             <ArrowRight size={14} />

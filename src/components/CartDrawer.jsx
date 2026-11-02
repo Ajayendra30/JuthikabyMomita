@@ -34,21 +34,21 @@ export const CartDrawer = () => {
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#24211D]/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#111111]/60 backdrop-blur-sm transition-opacity"
         onClick={() => setIsCartDrawerOpen(false)}
       />
 
       {/* Drawer Container (Crisp White Luxury Cart Styling) */}
-      <div className="relative w-full max-w-md bg-[#FFFFFF] h-full shadow-2xl flex flex-col z-10 animate-fade-in border-l border-[#E8DFD1]">
+      <div className="relative w-full max-w-md bg-[#FFFFFF] h-full shadow-2xl flex flex-col z-10 animate-fade-in border-l border-[#E5E5E5]">
         
         {/* Header: CART with X button */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8DFD1] bg-[#FFFFFF]">
-          <h2 className="font-serif text-lg tracking-[0.2em] text-[#24211D] uppercase font-light">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#E5E5E5] bg-[#FFFFFF]">
+          <h2 className="font-serif text-lg tracking-[0.2em] text-[#111111] uppercase font-light">
             CART
           </h2>
           <button
             onClick={() => setIsCartDrawerOpen(false)}
-            className="p-1 text-[#24211D]/60 hover:text-[#24211D] transition-colors"
+            className="p-1 text-[#111111]/60 hover:text-[#111111] transition-colors"
             aria-label="Close Cart"
           >
             <X size={20} />
@@ -59,13 +59,13 @@ export const CartDrawer = () => {
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {cart.length === 0 ? (
             <div className="text-center py-20">
-              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-white border border-[#E8DFD1] flex items-center justify-center text-[#B69A62]">
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-white border border-[#E5E5E5] flex items-center justify-center text-[#111111]">
                 <ShoppingBag size={22} />
               </div>
-              <h3 className="font-serif text-lg text-[#24211D] mb-2 font-normal">
+              <h3 className="font-serif text-lg text-[#111111] mb-2 font-normal">
                 Your Shopping Bag is Empty
               </h3>
-              <p className="text-xs text-[#24211D]/70 font-light max-w-xs mx-auto leading-relaxed mb-6">
+              <p className="text-xs text-[#111111]/70 font-light max-w-xs mx-auto leading-relaxed mb-6">
                 Explore our handwoven Muga, Eri, and Paat silk masterworks from Sualkuchi.
               </p>
               <button
@@ -73,7 +73,7 @@ export const CartDrawer = () => {
                   setIsCartDrawerOpen(false);
                   navigate('/shop');
                 }}
-                className="px-5 py-2.5 bg-[#24211D] text-white text-xs uppercase tracking-widest font-medium hover:bg-[#B69A62] transition-colors"
+                className="px-5 py-2.5 bg-[#111111] text-white text-xs uppercase tracking-widest font-medium hover:bg-black transition-colors"
               >
                 Shop Creations
               </button>
@@ -82,7 +82,7 @@ export const CartDrawer = () => {
             cart.map((item) => (
               <div
                 key={`${item.id}-${item.selectedSize}`}
-                className="flex gap-4 pb-6 border-b border-[#E8DFD1] last:border-0"
+                className="flex gap-4 pb-6 border-b border-[#E5E5E5] last:border-0"
               >
                 {/* Thumbnail Image */}
                 <Link
@@ -104,18 +104,23 @@ export const CartDrawer = () => {
                     <Link
                       to={`/product/${item.id}`}
                       onClick={() => setIsCartDrawerOpen(false)}
-                      className="font-serif text-xs sm:text-sm text-[#24211D] uppercase tracking-wide hover:text-[#B69A62] transition-colors line-clamp-2 block leading-snug"
+                      className="font-serif text-xs sm:text-sm text-[#111111] uppercase tracking-wide hover:text-black hover:opacity-70 transition-colors line-clamp-2 block leading-snug"
                     >
                       {item.name}
                     </Link>
+                    {(item.assameseName || item.assamese_name) && (
+                      <span className="block text-[11px] text-[#111111] font-serif font-normal mt-0.5">
+                        {item.assameseName || item.assamese_name}
+                      </span>
+                    )}
 
                     {/* Price */}
-                    <p className="text-xs font-sans text-[#24211D] mt-1.5 font-medium">
+                    <p className="text-xs font-sans text-[#111111] mt-1.5 font-medium">
                       INR. {formatPrice(item.price)}
                     </p>
 
                     {/* Size */}
-                    <p className="text-[11px] font-sans text-[#24211D]/70 mt-1 uppercase">
+                    <p className="text-[11px] font-sans text-[#111111]/70 mt-1 uppercase">
                       {item.selectedSize || 'S'}
                     </p>
                   </div>
@@ -124,20 +129,20 @@ export const CartDrawer = () => {
                   <div className="flex items-center justify-between pt-3">
                     
                     {/* Stepper Box */}
-                    <div className="flex items-center border border-[#E0E0E0] bg-white h-8">
+                    <div className="flex items-center border border-[#E5E5E5] bg-white h-8">
                       <button
                         onClick={() => updateQuantity(item.id, item.selectedSize, -1)}
-                        className="w-8 h-full flex items-center justify-center text-[#24211D] hover:bg-neutral-100 text-xs"
+                        className="w-8 h-full flex items-center justify-center text-[#111111] hover:bg-neutral-100 text-xs"
                         aria-label="Decrease quantity"
                       >
                         &minus;
                       </button>
-                      <span className="w-8 text-center text-xs font-sans text-[#24211D] font-medium">
+                      <span className="w-8 text-center text-xs font-sans text-[#111111] font-medium">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.selectedSize, 1)}
-                        className="w-8 h-full flex items-center justify-center text-[#24211D] hover:bg-neutral-100 text-xs"
+                        className="w-8 h-full flex items-center justify-center text-[#111111] hover:bg-neutral-100 text-xs"
                         aria-label="Increase quantity"
                       >
                         &#43;
@@ -147,7 +152,7 @@ export const CartDrawer = () => {
                     {/* Underlined REMOVE Button */}
                     <button
                       onClick={() => removeFromCart(item.id, item.selectedSize)}
-                      className="text-[11px] font-sans text-[#24211D]/80 hover:text-red-700 underline uppercase tracking-wider ml-4"
+                      className="text-[11px] font-sans text-[#111111]/80 hover:text-red-700 underline uppercase tracking-wider ml-4"
                     >
                       REMOVE
                     </button>
@@ -161,13 +166,13 @@ export const CartDrawer = () => {
 
         {/* Drawer Footer (Order Note, Taxes, and Checkout Button) */}
         {cart.length > 0 && (
-          <div className="p-6 border-t border-[#E8DFD1] bg-[#FFFFFF] space-y-4">
+          <div className="p-6 border-t border-[#E5E5E5] bg-[#FFFFFF] space-y-4">
             
             {/* Add Order Note Toggle */}
             <div>
               <button
                 onClick={() => setIsNoteOpen(!isNoteOpen)}
-                className="text-xs text-[#24211D]/80 hover:text-[#24211D] underline font-sans"
+                className="text-xs text-[#111111]/80 hover:text-[#111111] underline font-sans"
               >
                 {isNoteOpen ? 'Hide order note' : 'Add order note'}
               </button>
@@ -176,21 +181,21 @@ export const CartDrawer = () => {
                   value={orderNote}
                   onChange={(e) => setOrderNote(e.target.value)}
                   placeholder="Special instructions for tailoring drape, loom timeline or delivery date..."
-                  className="w-full mt-2 p-2.5 text-xs bg-white border border-[#E8DFD1] focus:outline-none focus:border-[#24211D] font-sans"
+                  className="w-full mt-2 p-2.5 text-xs bg-white border border-[#E5E5E5] focus:outline-none focus:border-[#111111] font-sans"
                   rows={2}
                 />
               )}
             </div>
 
             {/* Taxes and Shipping Note */}
-            <p className="text-xs text-[#24211D]/75 font-sans leading-tight">
+            <p className="text-xs text-[#111111]/75 font-sans leading-tight">
               Taxes and shipping calculated at checkout
             </p>
 
             {/* Dark Charcoal Brown Checkout Button */}
             <button
               onClick={handleCheckout}
-              className="w-full py-4 bg-[#24211D] hover:bg-[#B69A62] text-white text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md flex items-center justify-center gap-2"
+              className="w-full py-4 bg-[#111111] hover:bg-black text-white text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md flex items-center justify-center gap-2"
             >
               <span>CHECKOUT</span>
               <span>&bull;</span>

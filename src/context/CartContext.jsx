@@ -6,7 +6,7 @@ const CartContext = createContext();
 
 const INITIAL_CONSULTATIONS = [
   {
-    id: 'AX-BR-829104',
+    id: 'JM-BR-829104',
     name: 'Ananya Hazarika',
     email: 'ananya.h@couture.com',
     phone: '+91 9279125091',
@@ -19,7 +19,7 @@ const INITIAL_CONSULTATIONS = [
     createdAt: '2026-10-22T10:30:00.000Z'
   },
   {
-    id: 'AX-BR-419082',
+    id: 'JM-BR-419082',
     name: 'Meenakshi Bordoloi',
     email: 'meenakshi.b@silkpatron.org',
     phone: '+91 98112 34567',
@@ -32,7 +32,7 @@ const INITIAL_CONSULTATIONS = [
     createdAt: '2026-10-21T14:15:00.000Z'
   },
   {
-    id: 'AX-BR-993021',
+    id: 'JM-BR-993021',
     name: 'Rohan & Gayatri Sharma',
     email: 'rohan.sharma@sanctuary.in',
     phone: '+91 97170 88990',
@@ -48,7 +48,51 @@ const INITIAL_CONSULTATIONS = [
 
 const INITIAL_ORDERS = [
   {
-    id: 'AX-ORD-740192',
+    id: 'JM-ORD-885256',
+    customerName: 'Patron Client',
+    email: 'patron@juthikabymomita.com',
+    phone: '+91 9279125091',
+    address: 'Atelier Dispatch Address, India',
+    items: [
+      {
+        name: 'Rausch Eri Kesa Paat Silk Saree',
+        price: 22500,
+        selectedSize: 'Standard Unstitched',
+        quantity: 1
+      }
+    ],
+    total: 22500,
+    paymentMethod: 'VIP Concierge Wire / Card Payment Link',
+    status: 'New Order Placed',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'JM-ORD-589039',
+    customerName: 'Ajayendra Shekhar',
+    email: 'ajayendrashekhar7@gmail.com',
+    phone: '+91 9279125091',
+    address: 'Chetna Villa Nehru Nagar Patna',
+    items: [
+      {
+        name: 'Royal Kingkhap Muga Mekhela Chador',
+        price: 68500,
+        selectedSize: 'Standard Unstitched with Blouse Piece',
+        quantity: 1
+      },
+      {
+        name: 'Vermilion Temple Saree',
+        price: 42000,
+        selectedSize: 'M',
+        quantity: 1
+      }
+    ],
+    total: 985500,
+    paymentMethod: 'White-Glove Cash On Delivery',
+    status: 'Preparing Cedar Chest',
+    createdAt: '2026-10-26T16:38:48.843Z'
+  },
+  {
+    id: 'JM-ORD-740192',
     customerName: 'Priyanka Saikia',
     email: 'priyanka.s@gmail.com',
     phone: '+91 98641 22334',
@@ -67,7 +111,7 @@ const INITIAL_ORDERS = [
     createdAt: '2026-10-22T08:45:00.000Z'
   },
   {
-    id: 'AX-ORD-519283',
+    id: 'JM-ORD-519283',
     customerName: 'Siddharth & Devika Sen',
     email: 'devika.sen@mumbai.co',
     phone: '+91 98200 44556',
@@ -392,25 +436,24 @@ export const CartProvider = ({ children }) => {
   // CATALOG OPERATIONS (Admin)
   // ---------------------------------------------------------------------------
   const addProduct = async (newProduct) => {
+    const rawId = newProduct.id || `jm-custom-${Date.now()}`;
     const productWithId = normalizeProduct({
       ...newProduct,
-      id: newProduct.id || `ax-custom-${Date.now()}`
+      id: rawId.startsWith('ax-') ? rawId.replace(/^ax-/i, 'jm-') : rawId
     });
 
     // Optimistic local update
     setProducts(prev => [productWithId, ...prev]);
     showNotification(`Garment "${newProduct.name}" added to the Juthika by Momita catalog.`);
 
-    // Async backend sync if connected
-    if (backendStatus === 'connected') {
-      try {
-        const serverProduct = await api.createProduct(productWithId);
-        if (serverProduct) {
-          setProducts(prev => prev.map(p => (p.id === productWithId.id ? serverProduct : p)));
-        }
-      } catch (err) {
-        console.warn('Backend sync failed for addProduct, kept in local state:', err);
+    // Async backend sync
+    try {
+      const serverProduct = await api.createProduct(productWithId);
+      if (serverProduct) {
+        setProducts(prev => prev.map(p => (p.id === productWithId.id ? serverProduct : p)));
       }
+    } catch (err) {
+      console.warn('Backend sync failed for addProduct, kept in local state:', err);
     }
   };
 
@@ -422,12 +465,10 @@ export const CartProvider = ({ children }) => {
     showNotification('Product details updated successfully.');
 
     // Async backend sync
-    if (backendStatus === 'connected') {
-      try {
-        await api.updateProduct(id, updatedFields);
-      } catch (err) {
-        console.warn('Backend sync failed for updateProduct, kept in local state:', err);
-      }
+    try {
+      await api.updateProduct(id, updatedFields);
+    } catch (err) {
+      console.warn('Backend sync failed for updateProduct, kept in local state:', err);
     }
   };
 
@@ -456,12 +497,10 @@ export const CartProvider = ({ children }) => {
 
     showNotification('Garment deleted from catalog permanently.');
 
-    if (backendStatus === 'connected') {
-      try {
-        await api.deleteProduct(id);
-      } catch (err) {
-        console.warn('Backend sync failed for deleteProduct:', err);
-      }
+    try {
+      await api.deleteProduct(id);
+    } catch (err) {
+      console.warn('Backend sync failed for deleteProduct:', err);
     }
   };
 
@@ -526,9 +565,11 @@ export const CartProvider = ({ children }) => {
   // CONSULTATION OPERATIONS
   // ---------------------------------------------------------------------------
   const addConsultation = async (consultationData) => {
+    const rawId = consultationData.id || `JM-BR-${Math.floor(100000 + Math.random() * 900000)}`;
+    const id = rawId.startsWith('AX-') ? rawId.replace(/^AX-/, 'JM-') : rawId;
     const record = normalizeConsultation({
       ...consultationData,
-      id: consultationData.id || `AX-BR-${Math.floor(100000 + Math.random() * 900000)}`,
+      id,
       status: 'New',
       createdAt: new Date().toISOString()
     });
@@ -537,7 +578,7 @@ export const CartProvider = ({ children }) => {
 
     if (backendStatus === 'connected') {
       try {
-        const serverConsultation = await api.createConsultation(consultationData);
+        const serverConsultation = await api.createConsultation({ ...consultationData, id });
         if (serverConsultation) {
           setConsultations(prev => prev.map(c => (c.id === record.id ? serverConsultation : c)));
         }
@@ -553,12 +594,21 @@ export const CartProvider = ({ children }) => {
     );
     showNotification(`Consultation ${id} marked as "${status}".`);
 
-    if (backendStatus === 'connected') {
-      try {
-        await api.updateConsultationStatus(id, status);
-      } catch (err) {
-        console.warn('Backend sync failed for updateConsultationStatus:', err);
-      }
+    try {
+      await api.updateConsultationStatus(id, status);
+    } catch (err) {
+      console.warn('Backend sync failed for updateConsultationStatus:', err);
+    }
+  };
+
+  const deleteConsultation = async (id) => {
+    setConsultations(prev => prev.filter(c => c.id !== id));
+    showNotification(`Consultation ${id} removed.`);
+
+    try {
+      await api.deleteConsultation(id);
+    } catch (err) {
+      console.warn('Backend sync failed for deleteConsultation:', err);
     }
   };
 
@@ -566,24 +616,25 @@ export const CartProvider = ({ children }) => {
   // ORDER OPERATIONS
   // ---------------------------------------------------------------------------
   const addOrder = async (orderData) => {
+    const rawId = orderData.id || `JM-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+    const id = rawId.startsWith('AX-') ? rawId.replace(/^AX-/, 'JM-') : rawId;
     const record = normalizeOrder({
       ...orderData,
-      id: orderData.id || `AX-ORD-${Math.floor(100000 + Math.random() * 900000)}`,
+      id,
       status: 'Preparing Cedar Chest',
       createdAt: new Date().toISOString()
     });
 
     setOrders(prev => [record, ...prev]);
 
-    if (backendStatus === 'connected') {
-      try {
-        const serverOrder = await api.createOrder(orderData);
-        if (serverOrder) {
-          setOrders(prev => prev.map(o => (o.id === record.id ? serverOrder : o)));
-        }
-      } catch (err) {
-        console.warn('Backend sync failed for addOrder, saved locally:', err);
+    // ALWAYS sync to backend API!
+    try {
+      const serverOrder = await api.createOrder({ ...orderData, id: record.id });
+      if (serverOrder) {
+        setOrders(prev => prev.map(o => (o.id === record.id ? serverOrder : o)));
       }
+    } catch (err) {
+      console.warn('Backend sync failed for addOrder, saved locally:', err);
     }
   };
 
@@ -593,67 +644,139 @@ export const CartProvider = ({ children }) => {
     );
     showNotification(`Order ${id} status updated to "${status}".`);
 
-    if (backendStatus === 'connected') {
-      try {
-        await api.updateOrderStatus(id, status);
-      } catch (err) {
-        console.warn('Backend sync failed for updateOrderStatus:', err);
-      }
+    try {
+      await api.updateOrderStatus(id, status);
+    } catch (err) {
+      console.warn('Backend sync failed for updateOrderStatus:', err);
+    }
+  };
+
+  const deleteOrder = async (id) => {
+    setOrders(prev => prev.filter(o => o.id !== id));
+    showNotification(`Order ${id} archived.`);
+
+    try {
+      await api.deleteOrder(id);
+    } catch (err) {
+      console.warn('Backend sync failed for deleteOrder:', err);
     }
   };
 
   // ---------------------------------------------------------------------------
   // AUTHENTICATION OPERATIONS
   // ---------------------------------------------------------------------------
-  const login = async (email, password = '', rolePreference = 'client') => {
-    let userData = null;
+  const signup = async (name, email, password) => {
+    const cleanName = (name || '').trim();
     const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = (password || '').trim();
 
-    // If backend is connected, try authenticating via FastAPI endpoint
-    if (backendStatus === 'connected') {
-      try {
-        const res = await api.login(cleanEmail, password);
-        if (res && res.user) {
-          userData = res.user;
-          setUser(userData);
-          showNotification(res.message || `Welcome to the sanctuary, ${userData.name}.`);
-          return userData;
+    if (!cleanName) throw new Error('Please enter your full name.');
+    if (!cleanEmail) throw new Error('Please enter your email address.');
+    if (!cleanPassword || cleanPassword.length < 6) {
+      throw new Error('Password must be at least 6 characters long.');
+    }
+
+    // Try backend registration
+    try {
+      const res = await api.register(cleanName, cleanEmail, cleanPassword);
+      if (res && res.user) {
+        setUser(res.user);
+        showNotification(res.message || `Welcome to Juthika by Momita, ${res.user.name}.`);
+        return res.user;
+      }
+    } catch (err) {
+      // Re-throw genuine user input / duplicate errors
+      if (err.message && !err.message.includes('fetch') && !err.message.includes('abort') && !err.message.includes('Failed to fetch')) {
+        throw err;
+      }
+      console.warn('Backend unavailable, using local client storage for signup:', err);
+    }
+
+    // LocalStorage fallback if backend is offline
+    try {
+      const localUsers = JSON.parse(localStorage.getItem('aiaxom_registered_users') || '[]');
+      if (localUsers.some(u => u.email.toLowerCase() === cleanEmail)) {
+        throw new Error('An account with this email address already exists. Please login.');
+      }
+      const newUser = {
+        id: `usr-${Date.now()}`,
+        name: cleanName,
+        email: cleanEmail,
+        password: cleanPassword,
+        role: cleanEmail.includes('admin') ? 'admin' : 'client',
+        title: 'Patron of Assamese Handloom',
+        createdAt: new Date().toISOString()
+      };
+      localUsers.push(newUser);
+      localStorage.setItem('aiaxom_registered_users', JSON.stringify(localUsers));
+      const { password: _, ...safeUser } = newUser;
+      setUser(safeUser);
+      showNotification(`Welcome to Juthika by Momita, ${cleanName}.`);
+      return safeUser;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const login = async (email, password = '') => {
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = (password || '').trim();
+
+    if (!cleanEmail) throw new Error('Please enter your email address.');
+    if (!cleanPassword) throw new Error('Please enter your password.');
+
+    // Try backend login
+    try {
+      const res = await api.login(cleanEmail, cleanPassword);
+      if (res && res.user) {
+        setUser(res.user);
+        showNotification(res.message || `Welcome back to the sanctuary, ${res.user.name}.`);
+        return res.user;
+      }
+    } catch (err) {
+      // Re-throw genuine credentials errors (wrong password, user not found)
+      if (err.message && !err.message.includes('fetch') && !err.message.includes('abort') && !err.message.includes('Failed to fetch')) {
+        throw err;
+      }
+      console.warn('Backend unavailable, falling back to local verification:', err);
+    }
+
+    // Offline / Local fallback: check registered local users
+    try {
+      const localUsers = JSON.parse(localStorage.getItem('aiaxom_registered_users') || '[]');
+      const foundUser = localUsers.find(u => u.email.toLowerCase() === cleanEmail);
+      if (foundUser) {
+        if (foundUser.password && foundUser.password !== cleanPassword) {
+          throw new Error('Incorrect password. Please try again.');
         }
-      } catch (err) {
-        console.warn('Backend login attempt fell back to local authentication:', err);
+        const { password: _, ...safeUser } = foundUser;
+        setUser(safeUser);
+        showNotification(`Welcome back, ${safeUser.name}.`);
+        return safeUser;
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    // Admin default fallback
+    if (cleanEmail === 'admin@juthikabymomita.com') {
+      if (cleanPassword === 'adminpassword123') {
+        const adminUser = {
+          id: 'usr-admin-01',
+          name: 'Curator Hemanta Saikia',
+          email: cleanEmail,
+          role: 'admin',
+          title: 'Master Atelier Director'
+        };
+        setUser(adminUser);
+        showNotification(`Welcome Curator Hemanta Saikia.`);
+        return adminUser;
+      } else {
+        throw new Error('Incorrect password for Atelier Admin.');
       }
     }
 
-    // Local / Offline authentication fallback
-    if (cleanEmail.includes('admin') || rolePreference === 'admin') {
-      userData = {
-        id: 'usr-admin-01',
-        name: 'Curator Hemanta Saikia',
-        email: cleanEmail || 'admin@juthikabymomita.com',
-        role: 'admin',
-        title: 'Master Atelier Director',
-        tier: 'Atelier Council Member',
-        joinedDate: 'October 2024'
-      };
-    } else {
-      const formattedName = cleanEmail
-        ? cleanEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-        : 'Maharani Barooah';
-
-      userData = {
-        id: 'usr-patron-01',
-        name: formattedName || 'Maharani Priyadarshini Barooah',
-        email: cleanEmail || 'patron@juthikabymomita.com',
-        role: 'client',
-        title: 'Royal Silk Patron',
-        tier: 'Ahom Gold Guild Member',
-        joinedDate: 'December 2025'
-      };
-    }
-
-    setUser(userData);
-    showNotification(`Welcome to the sanctuary, ${userData.name}.`);
-    return userData;
+    throw new Error('No account found with this email. Please sign up first.');
   };
 
   const logout = () => {
@@ -693,6 +816,7 @@ export const CartProvider = ({ children }) => {
         // Authentication APIs
         user,
         login,
+        signup,
         logout,
         // Admin & Catalog APIs
         products,
@@ -704,9 +828,11 @@ export const CartProvider = ({ children }) => {
         consultations,
         addConsultation,
         updateConsultationStatus,
+        deleteConsultation,
         orders,
         addOrder,
-        updateOrderStatus
+        updateOrderStatus,
+        deleteOrder
       }}
     >
       {children}

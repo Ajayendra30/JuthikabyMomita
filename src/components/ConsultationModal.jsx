@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { X, CheckCircle2, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
@@ -47,7 +47,7 @@ export const ConsultationModal = () => {
     }
 
     setErrors({});
-    const randomCode = 'AX-BR-' + Math.floor(100000 + Math.random() * 900000);
+    const randomCode = 'JM-BR-' + Math.floor(100000 + Math.random() * 900000);
     setReferenceCode(randomCode);
     addConsultation({
       id: randomCode,
@@ -82,20 +82,20 @@ export const ConsultationModal = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#24211D]/80 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-[#111111]/80 backdrop-blur-md transition-opacity"
         onClick={() => setIsConsultationOpen(false)}
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-2xl bg-[#FFFFFF] border border-[#B69A62]/40 shadow-2xl z-10 my-8 overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-2xl z-10 my-8 overflow-hidden">
         
         {/* Gold Border Top Accent */}
-        <div className="h-1.5 bg-gradient-to-r from-[#B69A62] via-[#E8DFD1] to-[#B69A62]" />
+        <div className="h-1.5 bg-gradient-to-r from-[#111111] via-[#E5E5E5] to-[#111111]" />
 
         {/* Close Button */}
         <button
           onClick={() => setIsConsultationOpen(false)}
-          className="absolute top-4 right-4 p-2 text-[#24211D]/70 hover:text-[#24211D] transition-colors rounded-full hover:bg-[#E8DFD1]/50 z-20"
+          className="absolute top-4 right-4 p-2 text-[#111111]/70 hover:text-[#111111] transition-colors rounded-full hover:bg-[#E5E5E5]/50 z-20"
           aria-label="Close modal"
         >
           <X size={20} />
@@ -106,45 +106,45 @@ export const ConsultationModal = () => {
           {isSubmitted ? (
             /* Confirmation Success State */
             <div className="text-center py-8">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#B69A62]/15 flex items-center justify-center text-[#B69A62]">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-neutral-100 flex items-center justify-center text-[#111111]">
                 <CheckCircle2 size={36} />
               </div>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#B69A62] font-semibold block mb-2">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-2">
                 Consultation Request Received
               </span>
-              <h3 className="font-serif text-3xl text-[#24211D] font-normal mb-3">
+              <h3 className="font-serif text-3xl text-[#111111] font-normal mb-3">
                 Thank You, {formData.name}
               </h3>
-              <p className="text-sm text-[#24211D]/75 font-light max-w-md mx-auto mb-6 leading-relaxed">
+              <p className="text-sm text-[#111111]/75 font-light max-w-md mx-auto mb-6 leading-relaxed">
                 Your private bridal & couture appointment dossier has been logged. Our senior silk concierge will reach out via WhatsApp & email within 24 hours.
               </p>
 
-              <div className="bg-[#FFFFFF] border border-[#E8DFD1] p-5 max-w-md mx-auto mb-8 text-left space-y-2 text-xs">
-                <div className="flex justify-between border-b border-[#E8DFD1] pb-2">
-                  <span className="text-[#24211D]/60 uppercase tracking-wider">Inquiry Reference</span>
-                  <span className="font-mono font-bold text-[#B69A62]">{referenceCode}</span>
+              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-5 max-w-md mx-auto mb-8 text-left space-y-2 text-xs">
+                <div className="flex justify-between border-b border-[#E5E5E5] pb-2">
+                  <span className="text-[#111111]/60 uppercase tracking-wider">Inquiry Reference</span>
+                  <span className="font-mono font-bold text-[#111111]">{referenceCode}</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-[#24211D]/60">Occasion:</span>
-                  <span className="font-medium text-[#24211D]">{formData.occasion}</span>
+                  <span className="text-[#111111]/60">Occasion:</span>
+                  <span className="font-medium text-[#111111]">{formData.occasion}</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-[#24211D]/60">Selected Fabric:</span>
-                  <span className="font-medium text-[#24211D]">{formData.preferredFabric}</span>
+                  <span className="text-[#111111]/60">Selected Fabric:</span>
+                  <span className="font-medium text-[#111111]">{formData.preferredFabric}</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-[#24211D]/60">Location / Format:</span>
-                  <span className="font-medium text-[#24211D]">{formData.consultationType}</span>
+                  <span className="text-[#111111]/60">Location / Format:</span>
+                  <span className="font-medium text-[#111111]">{formData.consultationType}</span>
                 </div>
               </div>
 
-              <div className="text-[11px] text-[#24211D]/50 italic mb-6">
+              <div className="text-[11px] text-[#111111]/50 italic mb-6">
                 * Note: Frontend demonstration only. No live external booking system was contacted.
               </div>
 
               <button
                 onClick={handleReset}
-                className="px-8 py-3.5 bg-[#24211D] text-[#FFFFFF] hover:bg-[#B69A62] transition-colors text-xs uppercase tracking-[0.2em] font-medium"
+                className="px-8 py-3.5 bg-[#111111] text-[#FFFFFF] hover:bg-black transition-colors text-xs uppercase tracking-[0.2em] font-medium"
               >
                 Close Window
               </button>
@@ -153,14 +153,14 @@ export const ConsultationModal = () => {
             /* Input Form */
             <div>
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-[#B69A62] font-semibold mb-2">
+                <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold mb-2">
                   <Sparkles size={14} />
                   <span>Juthika by Momita Haute Couture Atelier</span>
                 </div>
-                <h3 className="font-serif text-2xl sm:text-3xl text-[#24211D] font-normal">
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#111111] font-normal">
                   Book a Custom Bridal Consultation
                 </h3>
-                <p className="text-xs sm:text-sm text-[#24211D]/70 font-light mt-2 max-w-lg mx-auto">
+                <p className="text-xs sm:text-sm text-[#111111]/70 font-light mt-2 max-w-lg mx-auto">
                   Reserve a personalized one-on-one session with our master drapers and silversmiths 
                   for bespoke Mekhela Chador ensembles and wedding trousseaus.
                 </p>
@@ -171,7 +171,7 @@ export const ConsultationModal = () => {
                 {/* Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Full Name *
                     </label>
                     <div className="relative">
@@ -180,8 +180,8 @@ export const ConsultationModal = () => {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Priyadarshini Barooah"
-                        className={`w-full bg-[#FFFFFF] border px-3 py-2.5 text-xs text-[#24211D] focus:outline-none transition-colors ${
-                          errors.name ? 'border-red-500' : 'border-[#E8DFD1] focus:border-[#B69A62]'
+                        className={`w-full bg-[#FFFFFF] border px-3 py-2.5 text-xs text-[#111111] focus:outline-none transition-colors ${
+                          errors.name ? 'border-red-500' : 'border-[#E5E5E5] focus:border-[#111111]'
                         }`}
                       />
                     </div>
@@ -189,7 +189,7 @@ export const ConsultationModal = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Email Address *
                     </label>
                     <input
@@ -197,8 +197,8 @@ export const ConsultationModal = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="client@couture.com"
-                      className={`w-full bg-[#FFFFFF] border px-3 py-2.5 text-xs text-[#24211D] focus:outline-none transition-colors ${
-                        errors.email ? 'border-red-500' : 'border-[#E8DFD1] focus:border-[#B69A62]'
+                      className={`w-full bg-[#FFFFFF] border px-3 py-2.5 text-xs text-[#111111] focus:outline-none transition-colors ${
+                        errors.email ? 'border-red-500' : 'border-[#E5E5E5] focus:border-[#111111]'
                       }`}
                     />
                     {errors.email && <p className="text-[10px] text-red-500 mt-1">{errors.email}</p>}
@@ -208,7 +208,7 @@ export const ConsultationModal = () => {
                 {/* Phone & Preferred Date */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Phone Number / WhatsApp *
                     </label>
                     <input
@@ -216,22 +216,22 @@ export const ConsultationModal = () => {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+91 9279125091"
-                      className={`w-full bg-[#FFFFFF] border px-3 py-2.5 text-xs text-[#24211D] focus:outline-none transition-colors ${
-                        errors.phone ? 'border-red-500' : 'border-[#E8DFD1] focus:border-[#B69A62]'
+                      className={`w-full bg-[#FFFFFF] border px-3 py-2.5 text-xs text-[#111111] focus:outline-none transition-colors ${
+                        errors.phone ? 'border-red-500' : 'border-[#E5E5E5] focus:border-[#111111]'
                       }`}
                     />
                     {errors.phone && <p className="text-[10px] text-red-500 mt-1">{errors.phone}</p>}
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Preferred Date (Optional)
                     </label>
                     <input
                       type="date"
                       value={formData.preferredDate}
                       onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                      className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3 py-2.5 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                      className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2.5 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                     />
                   </div>
                 </div>
@@ -239,13 +239,13 @@ export const ConsultationModal = () => {
                 {/* Occasion & Preferred Fabric */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Occasion
                     </label>
                     <select
                       value={formData.occasion}
                       onChange={(e) => setFormData({ ...formData, occasion: e.target.value })}
-                      className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3 py-2.5 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                      className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2.5 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                     >
                       <option value="Bridal Matrimony">Bridal Matrimony (Assamese Wedding)</option>
                       <option value="Reception Gala">Royal Reception Gala</option>
@@ -256,13 +256,13 @@ export const ConsultationModal = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                    <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                       Preferred Fabric
                     </label>
                     <select
                       value={formData.preferredFabric}
                       onChange={(e) => setFormData({ ...formData, preferredFabric: e.target.value })}
-                      className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3 py-2.5 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                      className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2.5 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                     >
                       <option value="Pure Muga Silk">Pure Golden Muga Silk (GI Certified)</option>
                       <option value="Ceremonial Paat Silk">Luminous White & Jewel Paat Silk</option>
@@ -275,13 +275,13 @@ export const ConsultationModal = () => {
 
                 {/* Consultation Format */}
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                  <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                     Consultation Format
                   </label>
                   <select
                     value={formData.consultationType}
                     onChange={(e) => setFormData({ ...formData, consultationType: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3 py-2.5 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2.5 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   >
                     <option value="Private Atelier (Guwahati)">Guwahati Flagship Atelier (In-Person)</option>
                     <option value="Private Suite (New Delhi)">New Delhi Private Suite (In-Person)</option>
@@ -291,7 +291,7 @@ export const ConsultationModal = () => {
 
                 {/* Message / Bespoke Notes */}
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider text-[#24211D] mb-1 font-medium">
+                  <label className="block text-[11px] uppercase tracking-wider text-[#111111] mb-1 font-medium">
                     Bespoke Notes & Special Requests
                   </label>
                   <textarea
@@ -299,7 +299,7 @@ export const ConsultationModal = () => {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Share any preferred motifs (Kingkhap, Singkhap), color palette, or wedding dates..."
-                    className="w-full bg-[#FFFFFF] border border-[#E8DFD1] px-3 py-2 text-xs text-[#24211D] focus:outline-none focus:border-[#B69A62]"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
 
@@ -307,11 +307,11 @@ export const ConsultationModal = () => {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-4 bg-[#24211D] text-[#FFFFFF] hover:bg-[#B69A62] text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md"
+                    className="w-full py-4 bg-[#111111] text-[#FFFFFF] hover:bg-black text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md"
                   >
                     Request Private Appointment
                   </button>
-                  <p className="text-[10px] text-center text-[#24211D]/60 mt-2">
+                  <p className="text-[10px] text-center text-[#111111]/60 mt-2">
                     Complimentary initial consultation &bull; No obligation &bull; Strictly confidential
                   </p>
                 </div>

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 import { CartProvider, useCart } from './context/CartContext';
+import { isAdminSubdomain, getAdminSubdomainUrl, getMainStoreUrl } from './utils/subdomain';
 
 // Components
-// import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ConsultationModal } from './components/ConsultationModal';
@@ -47,64 +47,87 @@ function GlobalToast() {
   if (!notification) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 bg-[#24211D] text-[#FFFFFF] px-5 py-3.5 shadow-2xl border border-[#B69A62]/50 text-xs flex items-center gap-3 animate-fade-in">
-      <span className="w-2 h-2 rounded-full bg-[#B69A62] animate-ping" />
+    <div className="fixed bottom-6 right-6 z-50 bg-[#111111] text-[#FFFFFF] px-5 py-3.5 shadow-2xl border border-[#111111]/50 text-xs flex items-center gap-3 animate-fade-in">
+      <span className="w-2 h-2 rounded-full bg-[#111111] animate-ping" />
       <span>{notification}</span>
     </div>
   );
 }
 
+// 1. DEDICATED ADMIN SUBDOMAIN APP (admin.yourdomain.com / admin.localhost)
+function AdminSubdomainApp() {
+  return (
+    <div className="min-h-screen flex flex-col bg-[#FFFFFF] text-[#111111]">
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Admin />} />
+          <Route path="/admin" element={<Navigate to="/" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <GlobalToast />
+    </div>
+  );
+}
+
+// 2. MAIN CUSTOMER STOREFRONT APP (yourdomain.com / localhost)
+function StorefrontApp() {
+  return (
+    <div className="min-h-screen flex flex-col bg-[#FFFFFF] text-[#111111]">
+      {/* Premium Navbar with MegaMenu */}
+      <Navbar />
+
+      {/* Main Routing Outlet */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/collections" element={<Collections />} />
+          <Route path="/bridal" element={<Bridal />} />
+          <Route path="/lookbook" element={<Lookbook />} />
+          <Route path="/our-craft" element={<OurCraft />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/admin" element={<Navigate to="/" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+
+      {/* Premium Footer */}
+      <Footer />
+
+      {/* Global Consultation Modal */}
+      <ConsultationModal />
+
+      {/* Global Wishlist Slide-over Drawer */}
+      <WishlistDrawer />
+
+      {/* Global Cart Slide-over Drawer */}
+      <CartDrawer />
+
+      {/* Floating WhatsApp Concierge Button */}
+      <WhatsAppConcierge />
+
+      {/* Toast Notification */}
+      <GlobalToast />
+    </div>
+  );
+}
+
 export function App() {
+  const onAdminSubdomain = isAdminSubdomain();
+
   return (
     <CartProvider>
       <BrowserRouter>
         <ScrollToTop />
-        <div className="min-h-screen flex flex-col bg-[#FFFFFF] text-[#24211D]">
-          {/* A. Top Slim Announcement Bar
-          <AnnouncementBar /> */}
-
-          {/* B. Premium Navbar with MegaMenu */}
-          <Navbar />
-
-          {/* Main Routing Outlet */}
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/collections" element={<Collections />} />
-              <Route path="/bridal" element={<Bridal />} />
-              <Route path="/lookbook" element={<Lookbook />} />
-              <Route path="/our-craft" element={<OurCraft />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-
-          {/* K. Premium Footer */}
-          <Footer />
-
-          {/* Global Consultation Modal */}
-          <ConsultationModal />
-
-          {/* Global Wishlist Slide-over Drawer */}
-          <WishlistDrawer />
-
-          {/* Global Cart Slide-over Drawer (Tarun Tahiliani style) */}
-          <CartDrawer />
-
-
-          {/* Floating WhatsApp Concierge Button */}
-          <WhatsAppConcierge />
-
-          {/* Toast Notification */}
-          <GlobalToast />
-        </div>
+        {onAdminSubdomain ? <AdminSubdomainApp /> : <StorefrontApp />}
       </BrowserRouter>
     </CartProvider>
   );

@@ -3,6 +3,29 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  isSupabaseConfigured,
+  getProductsFromSupabase,
+  insertProductToSupabase,
+  updateProductInSupabase,
+  deleteProductFromSupabase,
+  resetProductsInSupabase,
+  getOrdersFromSupabase,
+  insertOrderToSupabase,
+  updateOrderStatusInSupabase,
+  deleteOrderFromSupabase,
+  findUserInSupabase,
+  insertUserToSupabase,
+  getConsultationsFromSupabase,
+  insertConsultationToSupabase,
+  updateConsultationStatusInSupabase,
+  deleteConsultationFromSupabase
+} from './supabase.js';
+import {
+  sendCustomerAccountConfirmationEmail,
+  getSentEmails,
+  renderAccountConfirmationHtml
+} from './email.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,7 +78,7 @@ const writeJsonFile = (filePath, data) => {
 // Initialize Consultations if missing
 const INITIAL_CONSULTATIONS = [
   {
-    id: 'AX-BR-829104',
+    id: 'JM-BR-829104',
     name: 'Ananya Hazarika',
     email: 'ananya.h@couture.com',
     phone: '+91 9279125091',
@@ -71,7 +94,7 @@ const INITIAL_CONSULTATIONS = [
     createdAt: '2026-10-22T10:30:00.000Z'
   },
   {
-    id: 'AX-BR-419082',
+    id: 'JM-BR-419082',
     name: 'Meenakshi Bordoloi',
     email: 'meenakshi.b@silkpatron.org',
     phone: '+91 98112 34567',
@@ -87,7 +110,7 @@ const INITIAL_CONSULTATIONS = [
     createdAt: '2026-10-21T14:15:00.000Z'
   },
   {
-    id: 'AX-BR-993021',
+    id: 'JM-BR-993021',
     name: 'Rohan & Gayatri Sharma',
     email: 'rohan.sharma@sanctuary.in',
     phone: '+91 97170 88990',
@@ -107,7 +130,7 @@ const INITIAL_CONSULTATIONS = [
 // Initialize Orders if missing
 const INITIAL_ORDERS = [
   {
-    id: 'AX-ORD-740192',
+    id: 'JM-ORD-740192',
     customerName: 'Priyanka Saikia',
     customer_name: 'Priyanka Saikia',
     email: 'priyanka.s@gmail.com',
@@ -128,7 +151,7 @@ const INITIAL_ORDERS = [
     createdAt: '2026-10-22T08:45:00.000Z'
   },
   {
-    id: 'AX-ORD-519283',
+    id: 'JM-ORD-519283',
     customerName: 'Siddharth & Devika Sen',
     customer_name: 'Siddharth & Devika Sen',
     email: 'devika.sen@mumbai.co',
@@ -159,14 +182,71 @@ if (!fs.existsSync(ORDERS_FILE)) {
 }
 
 // -----------------------------------------------------------------------------
+// 0. ROOT WELCOME & API DIRECTORY
+// -----------------------------------------------------------------------------
+app.get('/', (req, res) => {
+  const supabaseActive = isSupabaseConfigured();
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Juthika by Momita — Backend API Server</title>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #FAF8F5; color: #24211D; padding: 40px 20px; line-height: 1.6; }
+        .card { max-width: 650px; margin: 0 auto; background: #FFFFFF; border: 1px solid #E8DFD1; padding: 32px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .badge { display: inline-block; padding: 4px 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-radius: 3px; background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+        h1 { font-family: Georgia, serif; font-size: 24px; font-weight: normal; margin-top: 12px; margin-bottom: 6px; }
+        p { color: #666; font-size: 14px; margin-bottom: 24px; }
+        .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #B69A62; font-weight: 600; margin-top: 24px; margin-bottom: 12px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { padding: 10px 14px; border: 1px solid #F0ECE4; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; background: #FCFBF9; }
+        a { color: #24211D; text-decoration: none; font-weight: 500; font-family: monospace; font-size: 13px; }
+        a:hover { color: #B69A62; }
+        .method { font-size: 11px; font-weight: 600; background: #EEF2FF; color: #4338CA; padding: 2px 6px; border-radius: 2px; }
+        .footer { margin-top: 28px; padding-top: 20px; border-top: 1px solid #E8DFD1; font-size: 12px; color: #888; text-align: center; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <span class="badge">● Online & Ready</span>
+        <h1>Juthika by Momita Backend API</h1>
+        <p>Node.js & Express 5 Server connected to <strong>${supabaseActive ? 'Supabase PostgreSQL' : 'Local Persistent Storage'}</strong>.</p>
+
+        <div class="section-title">Available REST Endpoints</div>
+        <ul>
+          <li><a href="/api/health">/api/health</a> <span class="method">GET</span></li>
+          <li><a href="/api/products">/api/products</a> <span class="method">GET</span></li>
+          <li><a href="/api/orders">/api/orders</a> <span class="method">GET</span></li>
+          <li><a href="/api/consultations">/api/consultations</a> <span class="method">GET</span></li>
+          <li><a href="/api/emails/preview-raw" target="_blank">/api/emails/preview-raw (HTML Email Preview)</a> <span class="method">GET</span></li>
+          <li><a href="/api/emails/sent">/api/emails/sent (Sent Outbox Log)</a> <span class="method">GET</span></li>
+        </ul>
+
+        <div class="section-title">Frontend Applications</div>
+        <ul>
+          <li><a href="http://localhost:5173" target="_blank">Storefront Website ↗</a> <span>http://localhost:5173</span></li>
+          <li><a href="http://admin.localhost:5173" target="_blank">Admin Atelier Console ↗</a> <span>http://admin.localhost:5173</span></li>
+        </ul>
+
+        <div class="footer">Port 8000 &bull; Juthika by Momita Luxury Silk Boutique</div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
+// -----------------------------------------------------------------------------
 // 1. HEALTH CHECK ENDPOINT
 // -----------------------------------------------------------------------------
 app.get('/api/health', (req, res) => {
+  const supabaseActive = isSupabaseConfigured();
   res.json({
     status: 'healthy',
     online: true,
     backend: 'Node.js Express Server',
-    database_type: 'Node.js JSON Database',
+    database_type: supabaseActive ? 'Supabase PostgreSQL' : 'Persistent Storage (Local JSON)',
+    supabase_connected: supabaseActive,
     timestamp: new Date().toISOString()
   });
 });
@@ -176,9 +256,21 @@ app.get('/api/health', (req, res) => {
 // -----------------------------------------------------------------------------
 
 // GET all products with optional filters
-app.get('/api/products', (req, res) => {
+app.get('/api/products', async (req, res) => {
   const { category, fabric, search, sort } = req.query;
-  let products = readJsonFile(PRODUCTS_FILE);
+  let products = null;
+
+  if (isSupabaseConfigured()) {
+    try {
+      products = await getProductsFromSupabase();
+    } catch (e) {
+      console.warn('[Supabase] Products query error:', e.message);
+    }
+  }
+
+  if (!products || products.length === 0) {
+    products = readJsonFile(PRODUCTS_FILE);
+  }
 
   if (category && category !== 'All') {
     products = products.filter(p => p.category === category);
@@ -201,28 +293,37 @@ app.get('/api/products', (req, res) => {
     products.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
   }
 
+  // Standardize all IDs from 'ax-' to 'jm-'
+  products = products.map(p => ({
+    ...p,
+    id: p.id ? p.id.replace(/^ax-/i, 'jm-') : p.id
+  }));
+
   res.json(products);
 });
 
 // GET single product by ID
 app.get('/api/products/:id', (req, res) => {
+  const reqId = req.params.id;
+  const altId = reqId.startsWith('jm-') ? reqId.replace(/^jm-/i, 'ax-') : reqId.replace(/^ax-/i, 'jm-');
   const products = readJsonFile(PRODUCTS_FILE);
-  const product = products.find(p => p.id === req.params.id);
+  const product = products.find(p => p.id === reqId || p.id === altId);
   if (!product) {
-    return res.status(404).json({ error: `Product ${req.params.id} not found` });
+    return res.status(404).json({ error: `Product ${reqId} not found` });
   }
-  res.json(product);
+  res.json({ ...product, id: product.id ? product.id.replace(/^ax-/i, 'jm-') : product.id });
 });
 
 // POST create new product
-app.post('/api/products', (req, res) => {
+app.post('/api/products', async (req, res) => {
   const newProduct = req.body;
   if (!newProduct.name || !newProduct.price) {
     return res.status(400).json({ error: 'Product name and price are required' });
   }
 
   const products = readJsonFile(PRODUCTS_FILE);
-  const id = newProduct.id || `ax-item-${Date.now()}`;
+  const rawId = newProduct.id || `jm-item-${Date.now()}`;
+  const id = rawId.startsWith('ax-') ? rawId.replace(/^ax-/i, 'jm-') : rawId;
   const slug = newProduct.slug || newProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   const created = {
@@ -242,59 +343,102 @@ app.post('/api/products', (req, res) => {
   products.unshift(created);
   writeJsonFile(PRODUCTS_FILE, products);
 
+  if (isSupabaseConfigured()) {
+    try {
+      await insertProductToSupabase(created);
+    } catch (e) {
+      console.warn('[Supabase] Product sync error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] Created new product: ${created.name} (${created.id})`);
   res.status(201).json(created);
 });
 
 // PUT update existing product
-app.put('/api/products/:id', (req, res) => {
-  const id = req.params.id;
+app.put('/api/products/:id', async (req, res) => {
+  const reqId = req.params.id;
+  const altId = reqId.startsWith('jm-') ? reqId.replace(/^jm-/i, 'ax-') : reqId.replace(/^ax-/i, 'jm-');
   const updates = req.body;
   const products = readJsonFile(PRODUCTS_FILE);
-  const index = products.findIndex(p => p.id === id);
+  const index = products.findIndex(p => p.id === reqId || p.id === altId);
 
   if (index === -1) {
-    return res.status(404).json({ error: `Product ${id} not found` });
+    return res.status(404).json({ error: `Product ${reqId} not found` });
   }
 
   const existing = products[index];
+  const id = reqId.startsWith('ax-') ? reqId.replace(/^ax-/i, 'jm-') : reqId;
   const updated = {
     ...existing,
     ...updates,
     id,
+    name: updates.name !== undefined ? updates.name : existing.name,
+    assameseName: updates.assameseName !== undefined ? updates.assameseName : (updates.assamese_name !== undefined ? updates.assamese_name : existing.assameseName),
+    assamese_name: updates.assamese_name !== undefined ? updates.assamese_name : (updates.assameseName !== undefined ? updates.assameseName : existing.assamese_name),
+    fabric: updates.fabric || existing.fabric,
+    category: updates.category || existing.category,
     price: updates.price !== undefined ? Number(updates.price) : existing.price,
     originalPrice: updates.originalPrice !== undefined ? Number(updates.originalPrice) : existing.originalPrice,
-    loomDays: updates.loomDays !== undefined ? Number(updates.loomDays) : existing.loomDays,
+    original_price: updates.originalPrice !== undefined ? Number(updates.originalPrice) : existing.originalPrice,
+    loomDays: updates.loomDays !== undefined ? Number(updates.loomDays) : (updates.loom_days !== undefined ? Number(updates.loom_days) : existing.loomDays),
+    loom_days: updates.loomDays !== undefined ? Number(updates.loomDays) : (updates.loom_days !== undefined ? Number(updates.loom_days) : existing.loomDays),
+    inStock: updates.inStock !== undefined ? Boolean(updates.inStock) : (updates.in_stock !== undefined ? Boolean(updates.in_stock) : existing.inStock),
+    in_stock: updates.inStock !== undefined ? Boolean(updates.inStock) : (updates.in_stock !== undefined ? Boolean(updates.in_stock) : existing.inStock),
+    images: updates.images || existing.images,
+    description: updates.description !== undefined ? updates.description : existing.description,
     updatedAt: new Date().toISOString()
   };
 
   products[index] = updated;
   writeJsonFile(PRODUCTS_FILE, products);
 
+  if (isSupabaseConfigured()) {
+    try {
+      await updateProductInSupabase(reqId, updates);
+    } catch (e) {
+      console.warn('[Supabase] Product update sync error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] Updated product: ${updated.name} (${id})`);
   res.json(updated);
 });
 
 // DELETE product
-app.delete('/api/products/:id', (req, res) => {
-  const id = req.params.id;
+app.delete('/api/products/:id', async (req, res) => {
+  const reqId = req.params.id;
+  const altId = reqId.startsWith('jm-') ? reqId.replace(/^jm-/i, 'ax-') : reqId.replace(/^ax-/i, 'jm-');
   let products = readJsonFile(PRODUCTS_FILE);
-  const initialLength = products.length;
-  products = products.filter(p => p.id !== id);
-
-  if (products.length === initialLength) {
-    return res.status(404).json({ error: `Product ${id} not found` });
-  }
+  products = products.filter(p => p.id !== reqId && p.id !== altId);
 
   writeJsonFile(PRODUCTS_FILE, products);
-  console.log(`[Node.js Backend] Deleted product: ${id}`);
-  res.json({ success: true, message: `Product ${id} deleted successfully` });
+
+  if (isSupabaseConfigured()) {
+    try {
+      await deleteProductFromSupabase(reqId);
+    } catch (e) {
+      console.warn('[Supabase] Product delete error:', e.message);
+    }
+  }
+
+  console.log(`[Node.js Backend] Deleted product: ${reqId}`);
+  res.json({ success: true, message: `Product ${reqId} deleted successfully` });
 });
 
 // POST reset products to default masterwork data
-app.post('/api/products/reset', (req, res) => {
+app.post('/api/products/reset', async (req, res) => {
   const initial = readJsonFile(INITIAL_PRODUCTS_FILE);
   writeJsonFile(PRODUCTS_FILE, initial);
+
+  if (isSupabaseConfigured()) {
+    try {
+      await resetProductsInSupabase(initial);
+    } catch (e) {
+      console.warn('[Supabase] Product reset sync error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] Reset products to default (${initial.length} items)`);
   res.json(initial);
 });
@@ -303,21 +447,72 @@ app.post('/api/products/reset', (req, res) => {
 // 3. CONSULTATIONS API (Bespoke Bridal Control)
 // -----------------------------------------------------------------------------
 
+// Helper to normalize any legacy AX- to JM-
+const toJMId = (id) => (id && typeof id === 'string' && id.startsWith('AX-') ? id.replace(/^AX-/, 'JM-') : id);
+const toAXId = (id) => (id && typeof id === 'string' && id.startsWith('JM-') ? id.replace(/^JM-/, 'AX-') : id);
+
 // GET all consultations
-app.get('/api/consultations', (req, res) => {
-  const consultations = readJsonFile(CONSULTATIONS_FILE);
-  res.json(consultations);
+app.get('/api/consultations', async (req, res) => {
+  const localConsultations = readJsonFile(CONSULTATIONS_FILE, []).map(c => ({
+    ...c,
+    id: toJMId(c.id)
+  }));
+  let supabaseConsultations = null;
+
+  if (isSupabaseConfigured()) {
+    try {
+      const raw = await getConsultationsFromSupabase();
+      if (raw) {
+        supabaseConsultations = raw.map(c => ({
+          ...c,
+          id: toJMId(c.id)
+        }));
+      }
+    } catch (e) {
+      console.warn('[Supabase] Consultations query error:', e.message);
+    }
+  }
+
+  if (!supabaseConsultations || supabaseConsultations.length === 0) {
+    return res.json(localConsultations);
+  }
+
+  // Merge: Local status & local fields take precedence for updated items
+  const localMap = new Map(localConsultations.map(c => [c.id, c]));
+  const merged = supabaseConsultations.map(sc => {
+    const local = localMap.get(sc.id);
+    if (local) {
+      return {
+        ...sc,
+        status: local.status || sc.status,
+        updatedAt: local.updatedAt || sc.createdAt
+      };
+    }
+    return sc;
+  });
+
+  // Include any local items not yet in Supabase
+  const supabaseIds = new Set(supabaseConsultations.map(c => c.id));
+  for (const lc of localConsultations) {
+    if (!supabaseIds.has(lc.id)) {
+      merged.push(lc);
+    }
+  }
+
+  res.json(merged);
 });
 
 // POST create consultation
-app.post('/api/consultations', (req, res) => {
+app.post('/api/consultations', async (req, res) => {
   const data = req.body;
   if (!data.name || !data.email) {
     return res.status(400).json({ error: 'Name and email are required' });
   }
 
   const consultations = readJsonFile(CONSULTATIONS_FILE);
-  const id = `AX-BR-${Math.floor(100000 + Math.random() * 900000)}`;
+  const rawId = data.id || `JM-BR-${Math.floor(100000 + Math.random() * 900000)}`;
+  const id = toJMId(rawId);
+
   const created = {
     id,
     name: data.name,
@@ -338,27 +533,87 @@ app.post('/api/consultations', (req, res) => {
   consultations.unshift(created);
   writeJsonFile(CONSULTATIONS_FILE, consultations);
 
+  if (isSupabaseConfigured()) {
+    try {
+      await insertConsultationToSupabase(created);
+    } catch (e) {
+      console.warn('[Supabase] Consultation sync error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] New Bespoke Consultation: ${created.name} (${id})`);
   res.status(201).json(created);
 });
 
 // PATCH consultation status
-app.patch('/api/consultations/:id/status', (req, res) => {
+app.patch('/api/consultations/:id/status', async (req, res) => {
   const id = req.params.id;
+  const altId = id.startsWith('JM-') ? toAXId(id) : toJMId(id);
   const { status } = req.body;
   const consultations = readJsonFile(CONSULTATIONS_FILE);
-  const index = consultations.findIndex(c => c.id === id);
+  const index = consultations.findIndex(c => c.id === id || c.id === altId);
 
-  if (index === -1) {
-    return res.status(404).json({ error: `Consultation ${id} not found` });
+  let updatedRecord = null;
+  if (index !== -1) {
+    consultations[index].status = status;
+    consultations[index].updatedAt = new Date().toISOString();
+    consultations[index].id = toJMId(consultations[index].id);
+    updatedRecord = consultations[index];
+  } else {
+    // If not in local file, find from Supabase or create record
+    let existingItem = null;
+    if (isSupabaseConfigured()) {
+      try {
+        const allSupabase = await getConsultationsFromSupabase();
+        existingItem = allSupabase?.find(c => c.id === id || c.id === altId);
+      } catch (e) {}
+    }
+    updatedRecord = {
+      ...(existingItem || {}),
+      id: toJMId(id),
+      status,
+      updatedAt: new Date().toISOString()
+    };
+    consultations.push(updatedRecord);
   }
-
-  consultations[index].status = status;
-  consultations[index].updatedAt = new Date().toISOString();
   writeJsonFile(CONSULTATIONS_FILE, consultations);
 
+  if (isSupabaseConfigured()) {
+    try {
+      await updateConsultationStatusInSupabase(id, status);
+      if (altId !== id) {
+        await updateConsultationStatusInSupabase(altId, status);
+      }
+    } catch (e) {
+      console.warn('[Supabase] Consultation status sync error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] Consultation ${id} status updated to: ${status}`);
-  res.json(consultations[index]);
+  res.json(updatedRecord);
+});
+
+// DELETE consultation
+app.delete('/api/consultations/:id', async (req, res) => {
+  const id = req.params.id;
+  const altId = id.startsWith('JM-') ? toAXId(id) : toJMId(id);
+  let consultations = readJsonFile(CONSULTATIONS_FILE);
+  consultations = consultations.filter(c => c.id !== id && c.id !== altId);
+  writeJsonFile(CONSULTATIONS_FILE, consultations);
+
+  if (isSupabaseConfigured()) {
+    try {
+      await deleteConsultationFromSupabase(id);
+      if (altId !== id) {
+        await deleteConsultationFromSupabase(altId);
+      }
+    } catch (e) {
+      console.warn('[Supabase] Consultation delete error:', e.message);
+    }
+  }
+
+  console.log(`[Node.js Backend] Deleted consultation: ${id}`);
+  res.json({ success: true, message: `Consultation ${id} deleted successfully` });
 });
 
 // -----------------------------------------------------------------------------
@@ -366,16 +621,61 @@ app.patch('/api/consultations/:id/status', (req, res) => {
 // -----------------------------------------------------------------------------
 
 // GET all orders
-app.get('/api/orders', (req, res) => {
-  const orders = readJsonFile(ORDERS_FILE);
-  res.json(orders);
+app.get('/api/orders', async (req, res) => {
+  const localOrders = readJsonFile(ORDERS_FILE, []).map(o => ({
+    ...o,
+    id: toJMId(o.id)
+  }));
+  let supabaseOrders = null;
+
+  if (isSupabaseConfigured()) {
+    try {
+      const raw = await getOrdersFromSupabase();
+      if (raw) {
+        supabaseOrders = raw.map(o => ({
+          ...o,
+          id: toJMId(o.id)
+        }));
+      }
+    } catch (e) {
+      console.warn('[Supabase] Orders query error:', e.message);
+    }
+  }
+
+  if (!supabaseOrders || supabaseOrders.length === 0) {
+    return res.json(localOrders);
+  }
+
+  // Merge: Local status & local fields take precedence for updated items
+  const localMap = new Map(localOrders.map(o => [o.id, o]));
+  const merged = supabaseOrders.map(so => {
+    const local = localMap.get(so.id);
+    if (local) {
+      return {
+        ...so,
+        status: local.status || so.status,
+        updatedAt: local.updatedAt || so.createdAt
+      };
+    }
+    return so;
+  });
+
+  const supabaseIds = new Set(supabaseOrders.map(o => o.id));
+  for (const lo of localOrders) {
+    if (!supabaseIds.has(lo.id)) {
+      merged.push(lo);
+    }
+  }
+
+  res.json(merged);
 });
 
 // POST create order
-app.post('/api/orders', (req, res) => {
+app.post('/api/orders', async (req, res) => {
   const data = req.body;
   const orders = readJsonFile(ORDERS_FILE);
-  const id = `AX-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+  const rawId = data.id || `JM-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+  const id = toJMId(rawId);
 
   const created = {
     id,
@@ -395,75 +695,333 @@ app.post('/api/orders', (req, res) => {
   orders.unshift(created);
   writeJsonFile(ORDERS_FILE, orders);
 
+  if (isSupabaseConfigured()) {
+    try {
+      await insertOrderToSupabase(created);
+    } catch (e) {
+      console.warn('[Supabase] Order sync error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] New Client Order: ${id} by ${created.customerName} (₹${created.total})`);
   res.status(201).json(created);
 });
 
 // PATCH order status
-app.patch('/api/orders/:id/status', (req, res) => {
+app.patch('/api/orders/:id/status', async (req, res) => {
   const id = req.params.id;
+  const altId = id.startsWith('JM-') ? toAXId(id) : toJMId(id);
   const { status } = req.body;
   const orders = readJsonFile(ORDERS_FILE);
-  const index = orders.findIndex(o => o.id === id);
+  const index = orders.findIndex(o => o.id === id || o.id === altId);
 
-  if (index === -1) {
-    return res.status(404).json({ error: `Order ${id} not found` });
+  let updatedRecord = null;
+  if (index !== -1) {
+    orders[index].status = status;
+    orders[index].updatedAt = new Date().toISOString();
+    orders[index].id = toJMId(orders[index].id);
+    updatedRecord = orders[index];
+  } else {
+    let existingItem = null;
+    if (isSupabaseConfigured()) {
+      try {
+        const allSupabase = await getOrdersFromSupabase();
+        existingItem = allSupabase?.find(o => o.id === id || o.id === altId);
+      } catch (e) {}
+    }
+    updatedRecord = {
+      ...(existingItem || {}),
+      id: toJMId(id),
+      status,
+      updatedAt: new Date().toISOString()
+    };
+    orders.push(updatedRecord);
   }
-
-  orders[index].status = status;
-  orders[index].updatedAt = new Date().toISOString();
   writeJsonFile(ORDERS_FILE, orders);
 
+  if (isSupabaseConfigured()) {
+    try {
+      await updateOrderStatusInSupabase(id, status);
+      if (altId !== id) {
+        await updateOrderStatusInSupabase(altId, status);
+      }
+    } catch (e) {
+      console.warn('[Supabase] Order update status error:', e.message);
+    }
+  }
+
   console.log(`[Node.js Backend] Order ${id} status updated to: ${status}`);
-  res.json(orders[index]);
+  res.json(updatedRecord);
+});
+
+// DELETE order
+app.delete('/api/orders/:id', async (req, res) => {
+  const id = req.params.id;
+  const altId = id.startsWith('JM-') ? toAXId(id) : toJMId(id);
+  let orders = readJsonFile(ORDERS_FILE);
+  orders = orders.filter(o => o.id !== id && o.id !== altId);
+  writeJsonFile(ORDERS_FILE, orders);
+
+  if (isSupabaseConfigured()) {
+    try {
+      await deleteOrderFromSupabase(id);
+      if (altId !== id) {
+        await deleteOrderFromSupabase(altId);
+      }
+    } catch (e) {
+      console.warn('[Supabase] Order delete error:', e.message);
+    }
+  }
+
+  console.log(`[Node.js Backend] Deleted order: ${id}`);
+  res.json({ success: true, message: `Order ${id} deleted successfully` });
 });
 
 // -----------------------------------------------------------------------------
-// 5. AUTHENTICATION API
+// 5. AUTHENTICATION API (Persistent in server/data/users.json)
 // -----------------------------------------------------------------------------
-app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
-  const cleanEmail = (email || '').trim().toLowerCase();
 
-  if (cleanEmail.includes('admin') || cleanEmail === 'admin@juthikabymomita.com') {
-    return res.json({
-      user: {
-        id: 'usr-admin-01',
-        name: 'Curator Hemanta Saikia',
-        email: cleanEmail || 'admin@juthikabymomita.com',
-        role: 'admin',
-        title: 'Master Atelier Director',
-        tier: 'Atelier Council Member'
-      },
-      token: `node-admin-token-${Date.now()}`,
-      message: 'Welcome Curator Hemanta Saikia to the Private Atelier Console.'
-    });
+// Informative GET helper for browser address bar checks
+app.get('/api/auth/register', (req, res) => {
+  res.json({
+    status: 'active',
+    endpoint: '/api/auth/register',
+    method: 'POST',
+    description: 'Endpoint to register new users. Send a POST request with JSON body to create an account.',
+    example_payload: {
+      name: 'Priyanka Saikia',
+      email: 'priyanka@example.com',
+      password: 'securepassword123'
+    }
+  });
+});
+
+app.get('/api/auth/login', (req, res) => {
+  res.json({
+    status: 'active',
+    endpoint: '/api/auth/login',
+    method: 'POST',
+    description: 'Endpoint to login users. Send a POST request with JSON body.',
+    example_payload: {
+      email: 'admin@juthikabymomita.com',
+      password: 'adminpassword123'
+    }
+  });
+});
+
+// Customer / Admin Registration
+app.post('/api/auth/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  const cleanName = (name || '').trim();
+  const cleanEmail = (email || '').trim().toLowerCase();
+  const cleanPassword = (password || '').trim();
+
+  if (!cleanName) {
+    return res.status(400).json({ error: 'Please enter your full name.' });
+  }
+  if (!cleanEmail || !cleanEmail.includes('@')) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+  if (!cleanPassword || cleanPassword.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
   }
 
-  const formattedName = cleanEmail
-    ? cleanEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-    : 'Maharani Barooah';
+  // Check Supabase if configured
+  if (isSupabaseConfigured()) {
+    try {
+      const existingInSupabase = await findUserInSupabase(cleanEmail);
+      if (existingInSupabase) {
+        return res.status(400).json({ error: 'An account with this email address already exists. Please login.' });
+      }
+    } catch (e) {
+      console.warn('[Supabase] User lookup warning:', e.message);
+    }
+  }
 
+  const users = readJsonFile(USERS_FILE, []);
+  const existingUser = users.find(u => u.email.toLowerCase() === cleanEmail);
+  if (existingUser) {
+    return res.status(400).json({ error: 'An account with this email address already exists. Please login.' });
+  }
+
+  const isRoleAdmin = cleanEmail === 'admin@juthikabymomita.com' || cleanEmail.includes('admin');
+  const newUser = {
+    id: `usr-${Date.now()}`,
+    name: cleanName,
+    email: cleanEmail,
+    password: cleanPassword,
+    role: isRoleAdmin ? 'admin' : 'client',
+    title: isRoleAdmin ? 'Master Atelier Director' : 'Patron of Assamese Handloom',
+    tier: isRoleAdmin ? 'Atelier Council Member' : 'Heritage Silk Patron',
+    createdAt: new Date().toISOString()
+  };
+
+  users.push(newUser);
+  writeJsonFile(USERS_FILE, users);
+
+  if (isSupabaseConfigured()) {
+    try {
+      await insertUserToSupabase(newUser);
+    } catch (e) {
+      console.warn('[Supabase] User registration sync error:', e.message);
+    }
+  }
+
+  console.log(`[Node.js Backend] Registered new user: ${cleanName} (${cleanEmail}) [${newUser.role}]`);
+
+  // Automated Customer Account Confirmation Email Trigger
+  const storeUrl = `${req.protocol}://${req.get('host') ? req.get('host').replace(':8000', ':5173') : 'http://localhost:5173'}`;
+  sendCustomerAccountConfirmationEmail({
+    to: cleanEmail,
+    name: cleanName,
+    storeUrl,
+    isLogin: false
+  }).then(result => {
+    console.log(`[Email Service] Confirmation dispatch for ${cleanEmail}:`, result.status || (result.delivered ? 'delivered' : 'simulated'));
+  }).catch(err => {
+    console.warn(`[Email Service] Registration email warning:`, err.message);
+  });
+
+  const { password: _, ...safeUser } = newUser;
+  return res.status(201).json({
+    user: safeUser,
+    token: `node-token-${Date.now()}`,
+    message: `Account created successfully. Welcome to Juthika by Momita, ${cleanName}.`
+  });
+});
+
+// Customer / Admin Login
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  const cleanEmail = (email || '').trim().toLowerCase();
+  const cleanPassword = (password || '').trim();
+
+  if (!cleanEmail) {
+    return res.status(400).json({ error: 'Please enter your email address.' });
+  }
+  if (!cleanPassword) {
+    return res.status(400).json({ error: 'Please enter your password.' });
+  }
+
+  let user = null;
+
+  // Check Supabase first if configured
+  if (isSupabaseConfigured()) {
+    try {
+      user = await findUserInSupabase(cleanEmail);
+    } catch (e) {
+      console.warn('[Supabase] Login check warning:', e.message);
+    }
+  }
+
+  // Fallback to local users.json
+  if (!user) {
+    const users = readJsonFile(USERS_FILE, []);
+    user = users.find(u => u.email.toLowerCase() === cleanEmail);
+  }
+
+  // Default admin fallback if not already in file
+  if (!user && (cleanEmail === 'admin@juthikabymomita.com' || cleanEmail.includes('admin'))) {
+    if (cleanPassword === 'adminpassword123') {
+      user = {
+        id: 'usr-admin-01',
+        name: 'Curator Hemanta Saikia',
+        email: cleanEmail,
+        password: cleanPassword,
+        role: 'admin',
+        title: 'Master Atelier Director',
+        tier: 'Atelier Council Member',
+        createdAt: new Date().toISOString()
+      };
+      const users = readJsonFile(USERS_FILE, []);
+      users.push(user);
+      writeJsonFile(USERS_FILE, users);
+    }
+  }
+
+  if (!user) {
+    return res.status(404).json({ error: 'No account found with this email. Please sign up first.' });
+  }
+
+  // Password verification
+  if (user.password && user.password !== cleanPassword) {
+    return res.status(401).json({ error: 'Incorrect password. Please try again.' });
+  }
+
+  console.log(`[Node.js Backend] User logged in: ${user.name} (${user.email})`);
+
+  // Automated Customer Login / Account Notification Email Trigger
+  const storeUrl = `${req.protocol}://${req.get('host') ? req.get('host').replace(':8000', ':5173') : 'http://localhost:5173'}`;
+  sendCustomerAccountConfirmationEmail({
+    to: cleanEmail,
+    name: user.name,
+    storeUrl,
+    isLogin: true
+  }).then(result => {
+    console.log(`[Email Service] Login notification dispatch for ${cleanEmail}:`, result.status || (result.delivered ? 'delivered' : 'simulated'));
+  }).catch(err => {
+    console.warn(`[Email Service] Login email warning:`, err.message);
+  });
+
+  const { password: _, ...safeUser } = user;
   return res.json({
-    user: {
-      id: `usr-${Date.now().toString().slice(-4)}`,
-      name: formattedName,
-      email: cleanEmail,
-      role: 'client',
-      title: 'Royal Silk Patron'
-    },
-    token: `node-client-token-${Date.now()}`,
-    message: `Welcome to Juthika by Momita, ${formattedName}.`
+    user: safeUser,
+    token: `node-token-${Date.now()}`,
+    message: `Welcome back to the sanctuary, ${user.name}.`
   });
 });
 
 app.get('/api/auth/me', (req, res) => {
+  const users = readJsonFile(USERS_FILE, []);
+  if (users.length > 0) {
+    const { password: _, ...safeUser } = users[0];
+    return res.json(safeUser);
+  }
+  res.status(404).json({ error: 'No user session active.' });
+});
+
+// -----------------------------------------------------------------------------
+// 6. CUSTOMER EMAIL NOTIFICATION APIS
+// -----------------------------------------------------------------------------
+
+// Live HTML preview of the customer confirmation email
+app.get('/api/emails/preview-raw', (req, res) => {
+  const name = req.query.name || 'Ajayendra Shekhar';
+  const storeUrl = req.query.storeUrl || 'http://localhost:5173';
+  const html = renderAccountConfirmationHtml({
+    customerName: name,
+    storeUrl
+  });
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(html);
+});
+
+// JSON list of recently dispatched confirmation emails
+app.get('/api/emails/sent', (req, res) => {
+  const emails = getSentEmails();
   res.json({
-    id: 'usr-admin-01',
-    name: 'Curator Hemanta Saikia',
-    email: 'admin@juthikabymomita.com',
-    role: 'admin',
-    title: 'Master Atelier Director'
+    total: emails.length,
+    recent: emails
+  });
+});
+
+// Test trigger endpoint to test email dispatch to any address
+app.post('/api/emails/send-test', async (req, res) => {
+  const { to, name } = req.body;
+  if (!to || !to.includes('@')) {
+    return res.status(400).json({ error: 'Valid recipient email is required in JSON body.' });
+  }
+
+  const result = await sendCustomerAccountConfirmationEmail({
+    to,
+    name: name || 'Valued Patron',
+    storeUrl: 'http://localhost:5173',
+    isLogin: false
+  });
+
+  res.json({
+    message: `Account confirmation email triggered for ${to}.`,
+    result
   });
 });
 
@@ -471,8 +1029,10 @@ app.get('/api/auth/me', (req, res) => {
 app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(` Juthika by Momita Node.js Backend Running on Port ${PORT}`);
-  console.log(` Health check: http://localhost:${PORT}/api/health`);
-  console.log(` Products API: http://localhost:${PORT}/api/products`);
-  console.log(` Orders API:   http://localhost:${PORT}/api/orders`);
+  console.log(` Health check:  http://localhost:${PORT}/api/health`);
+  console.log(` Products API:  http://localhost:${PORT}/api/products`);
+  console.log(` Orders API:    http://localhost:${PORT}/api/orders`);
+  console.log(` Email Preview: http://localhost:${PORT}/api/emails/preview-raw`);
+  console.log(` Email Log:     http://localhost:${PORT}/api/emails/sent`);
   console.log(`=======================================================`);
 });

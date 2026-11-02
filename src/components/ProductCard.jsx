@@ -152,9 +152,14 @@ export const ProductCard = ({ product }) => {
         
         {/* Product Title */}
         <Link to={`/product/${product.id}`} className="group/title block">
-          <h3 className="font-serif text-xs sm:text-[13px] text-[#24211D] font-normal leading-snug line-clamp-1 uppercase tracking-[0.14em] group-hover/title:text-[#B69A62] transition-colors mb-1">
+          <h3 className="font-serif text-xs sm:text-[13px] text-[#24211D] font-normal leading-snug line-clamp-1 uppercase tracking-[0.14em] group-hover/title:text-[#B69A62] transition-colors mb-0.5">
             {product.name}
           </h3>
+          {(product.assameseName || product.assamese_name) && (
+            <p className="font-serif text-[11px] sm:text-xs text-[#B69A62] font-normal tracking-wide line-clamp-1 mb-1">
+              {product.assameseName || product.assamese_name}
+            </p>
+          )}
         </Link>
 
         {/* Price */}

@@ -1,6 +1,6 @@
 [
   {
-    "id": "ax-muga-01",
+    "id": "jm-muga-01",
     "name": "Royal Kingkhap Muga Mekhela Chador",
     "assameseName": "ৰাজকীয় কিংখাপ মুগা মেখেলা চাদৰ",
     "slug": "royal-kingkhap-muga-mekhela-chador",
@@ -31,10 +31,11 @@
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "ৰাজকীয় কিংখাপ মুগা মেখেলা চাদৰ"
   },
   {
-    "id": "ax-bridal-01",
+    "id": "jm-bridal-01",
     "name": "Imperial Pearl & Vermilion Paat Bridal Ensemble",
     "assameseName": "আইদেউ পাট ৰেচমী বিবাহৰ সাজ",
     "slug": "imperial-pearl-vermilion-paat-bridal-ensemble",
@@ -65,10 +66,11 @@
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "আইদেউ পাট ৰেচমী বিবাহৰ সাজ"
   },
   {
-    "id": "ax-eri-01",
+    "id": "jm-eri-01",
     "name": "Ahimsa Raw Almond Eri Silk Cocoon Wrap",
     "assameseName": "অহিংস এৰি চাদৰ",
     "slug": "ahimsa-raw-almond-eri-silk-cocoon-wrap",
@@ -98,12 +100,13 @@
       "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "অহিংস এৰি চাদৰ"
   },
   {
-    "id": "ax-saree-01",
+    "id": "jm-saree-01",
     "name": "Vintage Guna Zari Muga Drape Saree",
-    "assameseName": "সোণালী মুগা ৰেচমী শাৰী",
+    "assameseName": "সোণালী গুণা মুগা ৰেচমী শাৰী",
     "slug": "vintage-guna-zari-muga-drape-saree",
     "fabric": "Muga Silk",
     "category": "Sarees",
@@ -130,10 +133,11 @@
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "সোণালী গুণা মুগা ৰেচমী শাৰী"
   },
   {
-    "id": "ax-paat-01",
+    "id": "jm-paat-01",
     "name": "Midnight Indigo & Silver Paat Silk Mekhela",
     "assameseName": "ৰাজকীয় নীল পাট মেখেলা চাদৰ",
     "slug": "midnight-indigo-silver-paat-silk-mekhela",
@@ -163,10 +167,11 @@
       "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "ৰাজকীয় নীল পাট মেখেলা চাদৰ"
   },
   {
-    "id": "ax-occasion-01",
+    "id": "jm-occasion-01",
     "name": "Aura Champagne Muga Pleated Cape Ensemble",
     "assameseName": "আধুনিক মুগা কেপ আৰু স্কাৰ্ট",
     "slug": "aura-champagne-muga-pleated-cape-ensemble",
@@ -200,12 +205,13 @@
       "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "আধুনিক মুগা কেপ আৰু স্কাৰ্ট"
   },
   {
-    "id": "ax-rtw-01",
+    "id": "jm-rtw-01",
     "name": "Botanical Dyed Eri Silk Trench Overlay",
-    "assameseName": "প্ৰাকৃতিক ৰং এৰি অ'ভাৰকোট",
+    "assameseName": "প্ৰাকৃতিক ৰং এৰি ৰেচমৰ অ'ভাৰলে",
     "slug": "botanical-dyed-eri-silk-trench-overlay",
     "fabric": "Eri Silk",
     "category": "Ready-to-Wear",
@@ -235,10 +241,11 @@
       "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "প্ৰাকৃতিক ৰং এৰি ৰেচমৰ অ'ভাৰলে"
   },
   {
-    "id": "ax-saree-02",
+    "id": "jm-saree-02",
     "name": "Lotus Crest Vermilion Paat Silk Saree",
     "assameseName": "পদ্মিনী ৰঙা পাট শাৰী",
     "slug": "lotus-crest-vermilion-paat-silk-saree",
@@ -267,10 +274,11 @@
       "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "পদ্মিনী ৰঙা পাট শাৰী"
   },
   {
-    "id": "ax-bridal-02",
+    "id": "jm-bridal-02",
     "name": "Golden Sanctuary Muga Bridal Riha & Chador",
     "assameseName": "সোণালী মুগা ৰিহা আৰু চাদৰ",
     "slug": "golden-sanctuary-muga-bridal-riha-chador",
@@ -299,10 +307,11 @@
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "সোণালী মুগা ৰিহা আৰু চাদৰ"
   },
   {
-    "id": "ax-rtw-02",
+    "id": "jm-rtw-02",
     "name": "Monochrome Geometric Eri Tunic & Trousers",
     "assameseName": "আধুনিক এৰি কোৰ্তা-পাইজামা",
     "slug": "monochrome-geometric-eri-tunic-trousers",
@@ -333,10 +342,11 @@
       "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "আধুনিক এৰি কোৰ্তা-পাইজামা"
   },
   {
-    "id": "ax-muga-02",
+    "id": "jm-muga-02",
     "name": "Kaziranga Flora Hand-Woven Muga Shawl",
     "assameseName": "কাজিৰঙা প্ৰাকৃতিক মুগা শাল",
     "slug": "kaziranga-flora-hand-woven-muga-shawl",
@@ -364,12 +374,13 @@
     "images": [
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "কাজিৰঙা প্ৰাকৃতিক মুগা শাল"
   },
   {
-    "id": "ax-occasion-02",
+    "id": "jm-occasion-02",
     "name": "Emerald Resham & Paat Silk Flared Anarkali",
-    "assameseName": "ৰাজকীয় সেউজীয়া পাট আনাৰকলি",
+    "assameseName": "ৰাজকীয় পান্না পাট ৰেচমৰ আনাৰকলি",
     "slug": "emerald-resham-paat-silk-flared-anarkali",
     "fabric": "Paat Silk",
     "category": "Occasion Wear",
@@ -399,6 +410,7 @@
     "images": [
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=1200&q=85"
-    ]
+    ],
+    "assamese_name": "ৰাজকীয় পান্না পাট ৰেচমৰ আনাৰকলি"
   }
 ]

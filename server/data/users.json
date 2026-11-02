@@ -1,0 +1,32 @@
+[
+  {
+    "id": "usr-admin-01",
+    "name": "Curator Hemanta Saikia",
+    "email": "admin@juthikabymomita.com",
+    "password": "adminpassword123",
+    "role": "admin",
+    "title": "Master Atelier Director",
+    "tier": "Atelier Council Member",
+    "createdAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "usr-1793441970550",
+    "name": "Ajayendra Shekhar",
+    "email": "ajayendrashekhar9@gmail.com",
+    "password": "282828",
+    "role": "client",
+    "title": "Patron of Assamese Handloom",
+    "tier": "Heritage Silk Patron",
+    "createdAt": "2026-10-31T10:19:30.550Z"
+  },
+  {
+    "id": "usr-1793460462867",
+    "name": "Shekhar",
+    "email": "shekhar47@gmail.com",
+    "password": "131313",
+    "role": "client",
+    "title": "Patron of Assamese Handloom",
+    "tier": "Heritage Silk Patron",
+    "createdAt": "2026-10-31T15:27:42.867Z"
+  }
+]

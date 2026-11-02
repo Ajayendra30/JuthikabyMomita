@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { X, Heart, Trash2, Share2, LogIn, CheckCircle2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -77,19 +77,19 @@ export const WishlistDrawer = () => {
       />
 
       {/* Centered Wishlist Modal Container (matching reference image) */}
-      <div className="relative w-full max-w-3xl bg-[#FFFFFF] shadow-2xl flex flex-col z-10 animate-fade-in border border-[#E8DFD1] max-h-[88vh]">
+      <div className="relative w-full max-w-3xl bg-[#FFFFFF] shadow-2xl flex flex-col z-10 animate-fade-in border border-[#E5E5E5] max-h-[88vh]">
         
         {/* Header Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-[#FFFFFF]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E5E5] bg-[#FFFFFF]">
           <div className="flex items-center gap-2.5">
-            <Heart size={22} className="fill-[#24211D] text-[#24211D]" />
-            <h2 className="font-serif text-2xl text-[#24211D] font-normal tracking-wide">
+            <Heart size={22} className="fill-[#111111] text-[#111111]" />
+            <h2 className="font-serif text-2xl text-[#111111] font-normal tracking-wide">
               My Wishlist
             </h2>
           </div>
           <button 
             onClick={() => setIsWishlistOpen(false)}
-            className="p-1 text-[#24211D] hover:opacity-60 transition-opacity"
+            className="p-1 text-[#111111] hover:opacity-60 transition-opacity"
             aria-label="Close Wishlist"
           >
             <X size={20} />
@@ -99,10 +99,10 @@ export const WishlistDrawer = () => {
         {/* Login Reminder Banner */}
         <div className="px-6 py-3 border-b border-gray-100 bg-[#FFFFFF] flex items-center justify-between text-xs sm:text-[13px] text-gray-700">
           {user ? (
-            <div className="flex items-center gap-2 text-emerald-800">
-              <CheckCircle2 size={16} className="text-emerald-600 flex-shrink-0" />
+            <div className="flex items-center gap-2 text-black">
+              <CheckCircle2 size={16} className="text-black flex-shrink-0" />
               <span>
-                Signed in as <strong className="font-medium text-[#24211D]">{user.name}</strong> • Wishlist synchronized across your devices.
+                Signed in as <strong className="font-medium text-[#111111]">{user.name}</strong> � Wishlist synchronized across your devices.
               </span>
             </div>
           ) : (
@@ -114,7 +114,7 @@ export const WishlistDrawer = () => {
                   setIsWishlistOpen(false);
                   navigate('/login');
                 }}
-                className="text-[#0084B4] hover:underline font-bold uppercase tracking-wider text-xs sm:text-[13px] ml-1 focus:outline-none"
+                className="text-[#111111] hover:underline font-bold uppercase tracking-wider text-xs sm:text-[13px] ml-1 focus:outline-none"
               >
                 LOGIN
               </button>
@@ -126,10 +126,10 @@ export const WishlistDrawer = () => {
         <div className="flex-1 overflow-y-auto px-6 py-5">
           {wishlistProducts.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-[#24211D]">
-                <Heart size={24} className="fill-[#24211D]" />
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gray-50 border border-[#E5E5E5] flex items-center justify-center text-[#111111]">
+                <Heart size={24} className="fill-[#111111]" />
               </div>
-              <h3 className="font-serif text-lg text-[#24211D] mb-1 font-normal">
+              <h3 className="font-serif text-lg text-[#111111] mb-1 font-normal">
                 Your Wishlist is Empty
               </h3>
               <p className="text-xs text-gray-500 font-light max-w-xs mx-auto leading-relaxed mb-5">
@@ -140,7 +140,7 @@ export const WishlistDrawer = () => {
                   setIsWishlistOpen(false);
                   navigate('/shop');
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#24211D] hover:bg-[#B69A62] text-white text-xs uppercase tracking-widest font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#111111] hover:bg-black text-white text-xs uppercase tracking-widest font-medium transition-colors"
               >
                 Discover Creations
               </button>
@@ -152,18 +152,23 @@ export const WishlistDrawer = () => {
                 return (
                   <div 
                     key={product.id}
-                    className="border border-gray-200 p-3 sm:p-3.5 bg-white flex flex-col justify-between group hover:border-[#B69A62]/60 transition-all shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+                    className="border border-[#E5E5E5] p-3 sm:p-3.5 bg-white flex flex-col justify-between group hover:border-[#111111]/60 transition-all shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
                   >
                     {/* Top: Title & Date */}
                     <div>
                       <Link 
                         to={`/product/${product.id}`}
                         onClick={() => setIsWishlistOpen(false)}
-                        className="block text-xs sm:text-[13px] font-medium text-[#24211D] hover:text-[#B69A62] leading-snug line-clamp-2"
+                        className="block text-xs sm:text-[13px] font-medium text-[#111111] hover:text-black hover:opacity-70 leading-snug line-clamp-2"
                         title={product.name}
                       >
                         {product.name} - {itemSize}
                       </Link>
+                      {(product.assameseName || product.assamese_name) && (
+                        <span className="block text-[11px] text-[#111111] font-serif font-normal mt-0.5">
+                          {product.assameseName || product.assamese_name}
+                        </span>
+                      )}
                       <p className="text-[11px] text-gray-500 font-light mt-1 mb-2.5">
                         {todayFormatted}
                       </p>
@@ -202,20 +207,20 @@ export const WishlistDrawer = () => {
         </div>
 
         {/* Bottom Action Footer Bar */}
-        <div className="border-t border-gray-200 px-6 py-4 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 select-none">
+        <div className="border-t border-[#E5E5E5] px-6 py-4 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 select-none">
           {/* Left Buttons: ADD ALL TO CART & REMOVE ALL FROM WISHLIST */}
           <div className="flex items-center gap-5 sm:gap-7 w-full sm:w-auto justify-start">
             <button
               onClick={handleAddAllToCart}
               disabled={wishlistProducts.length === 0}
-              className="text-xs sm:text-[12px] font-bold uppercase tracking-wider text-[#24211D] hover:text-[#B69A62] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="text-xs sm:text-[12px] font-bold uppercase tracking-wider text-[#111111] hover:text-black hover:opacity-70 disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               ADD ALL TO CART
             </button>
             <button
               onClick={handleRemoveAll}
               disabled={wishlistProducts.length === 0}
-              className="text-xs sm:text-[12px] font-bold uppercase tracking-wider text-[#24211D] hover:text-red-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="text-xs sm:text-[12px] font-bold uppercase tracking-wider text-[#111111] hover:text-red-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               REMOVE ALL FROM WISHLIST
             </button>
@@ -226,7 +231,7 @@ export const WishlistDrawer = () => {
             <button
               onClick={handleShareWishlist}
               disabled={wishlistProducts.length === 0}
-              className="text-xs sm:text-[12px] font-bold uppercase tracking-wider text-[#24211D] hover:text-[#B69A62] flex items-center gap-1.5 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="text-xs sm:text-[12px] font-bold uppercase tracking-wider text-[#111111] hover:text-black hover:opacity-70 flex items-center gap-1.5 disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               <Share2 size={16} />
               <span>{copied ? 'LINK COPIED' : 'SHARE WISHLIST'}</span>

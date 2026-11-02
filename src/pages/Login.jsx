@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { UserCheck, LogOut, Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import { isAdminSubdomain, getAdminSubdomainUrl, getMainStoreUrl } from '../utils/subdomain';
 
 export const Login = () => {
-  const { user, login, logout } = useCart();
+  const { user, login, signup, logout, orders = [] } = useCart();
   const navigate = useNavigate();
 
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -12,25 +13,48 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [forgotMessage, setForgotMessage] = useState(false);
 
-  // Quick fill for test demo
-  const handleDemoFill = (role) => {
-    if (role === 'admin') {
-      setEmail('admin@juthikabymomita.com');
-      setPassword('adminpassword123');
-      setName('Curator Hemanta Saikia');
-    } else {
-      setEmail('patron@juthikabymomita.com');
-      setPassword('patronpassword123');
-      setName('Maharani Priyadarshini Barooah');
+  // Address management state
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [tempAddress, setTempAddress] = useState('');
+  const [savedAddress, setSavedAddress] = useState(() => {
+    try {
+      const stored = localStorage.getItem('aiaxom_user_address');
+      if (stored) return stored;
+    } catch (e) {
+      // ignore
     }
+    return 'India';
+  });
+
+  // Filter orders for the currently logged in user
+  const userOrders = (orders || []).filter(o => 
+    o.email && user?.email && o.email.toLowerCase() === user.email.toLowerCase()
+  );
+
+  const handleSaveAddress = (e) => {
+    e.preventDefault();
+    if (tempAddress.trim()) {
+      setSavedAddress(tempAddress.trim());
+      try {
+        localStorage.setItem('aiaxom_user_address', tempAddress.trim());
+      } catch (err) {
+        console.warn('Could not save address to localStorage:', err);
+      }
+    }
+    setIsEditingAddress(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+    if (isSignUpMode && !name.trim()) {
+      setError('Please enter your full name.');
+      return;
+    }
     if (!email.trim()) {
       setError('Please enter your email address.');
       return;
@@ -39,90 +63,234 @@ export const Login = () => {
       setError('Please enter your password.');
       return;
     }
+    if (isSignUpMode && password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
+    }
 
+    setIsSubmitting(true);
     try {
-      const loggedUser = await login(email, password);
-      // Admin login opens Admin portal (/admin), Customer login opens Home page (/)
-      if (loggedUser?.role === 'admin' || email.toLowerCase().includes('admin')) {
-        navigate('/admin');
+      let loggedUser = null;
+      if (isSignUpMode) {
+        loggedUser = await signup(name, email, password);
       } else {
-        navigate('/');
+        loggedUser = await login(email, password);
+      }
+
+      // Admin login opens Admin Subdomain portal, Customer login opens Storefront
+      if (loggedUser?.role === 'admin' || email.toLowerCase().includes('admin')) {
+        if (!isAdminSubdomain()) {
+          window.location.href = getAdminSubdomainUrl('/');
+        } else {
+          navigate('/');
+        }
+      } else {
+        if (isAdminSubdomain()) {
+          window.location.href = getMainStoreUrl('/');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
-      setError('Authentication failed. Please check credentials.');
+      setError(err.message || 'Authentication failed. Please check your credentials.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-[#FFFFFF] min-h-[82vh] flex items-center justify-center py-16 px-4">
-      <div className="w-full max-w-md mx-auto">
-        
-        {/* If user is already logged in */}
-        {user ? (
-          <div className="bg-[#FFFFFF] border border-[#E8DFD1] p-8 sm:p-10 text-center shadow-sm">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#B69A62]/15 text-[#B69A62] flex items-center justify-center">
-              <UserCheck size={28} />
+    <div className="bg-white min-h-[82vh] py-14 sm:py-20 px-6 sm:px-12 lg:px-16">
+      
+      {/* ------------------------------------------------------------------ */}
+      {/* 1. MINIMALIST LUXURY ACCOUNT PAGE (Matches Exact Screenshot Style) */}
+      {/* ------------------------------------------------------------------ */}
+      {user ? (
+        <div className="max-w-5xl mx-auto animate-fade-in font-sans">
+          
+          {/* Top Left Logout Link */}
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+              className="text-[11px] uppercase tracking-[0.2em] text-[#666666] hover:text-[#111111] transition-colors inline-flex items-center gap-1 cursor-pointer font-medium"
+            >
+              <span>&lsaquo;</span>
+              <span>LOGOUT</span>
+            </button>
+          </div>
+
+          {/* Heading & Subtitle */}
+          <h1 className="text-xl sm:text-2xl font-normal tracking-[0.2em] text-[#111111] uppercase mb-2">
+            YOUR ACCOUNT
+          </h1>
+          <p className="text-xs sm:text-[13px] text-[#555555] mb-12 font-normal">
+            View all your orders and manage your account information.
+          </p>
+
+          {/* Two-Column Split Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 border-t border-[#F5F5F5] pt-8">
+            
+            {/* Left Column: ORDERS (Takes 2 Columns) */}
+            <div className="md:col-span-2">
+              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[#777777] font-medium mb-8">
+                ORDERS
+              </h2>
+
+              {userOrders.length === 0 ? (
+                <div>
+                  <p className="text-xs sm:text-[13px] text-[#444444] mb-8 font-normal leading-relaxed">
+                    You haven't placed any orders yet.
+                  </p>
+                  <Link
+                    to="/shop"
+                    className="inline-block px-8 py-3.5 bg-[#333333] hover:bg-[#111111] text-white text-[11px] uppercase tracking-[0.22em] font-medium transition-colors text-center"
+                  >
+                    CONTINUE SHOPPING
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="border border-[#E5E5E5] divide-y divide-[#E5E5E5]">
+                    {userOrders.map((ord) => (
+                      <div key={ord.id} className="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                          <span className="font-mono text-xs font-semibold text-[#111111] block">
+                            {ord.id}
+                          </span>
+                          <span className="text-[11px] text-[#666666] mt-0.5 block">
+                            {new Date(ord.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            {' '}&bull; {ord.items?.length || 1} {(ord.items?.length || 1) === 1 ? 'creation' : 'creations'}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-medium text-[#111111] block">
+                            ₹{Number(ord.total || 0).toLocaleString('en-IN')}
+                          </span>
+                          <span className="text-[10px] uppercase tracking-wider text-[#111111] font-medium">
+                            {ord.status || 'Preparing Cedar Chest'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link
+                    to="/shop"
+                    className="inline-block px-8 py-3.5 bg-[#333333] hover:bg-[#111111] text-white text-[11px] uppercase tracking-[0.22em] font-medium transition-colors text-center"
+                  >
+                    CONTINUE SHOPPING
+                  </Link>
+                </div>
+              )}
             </div>
 
-            <span className="text-[10px] uppercase tracking-[0.28em] text-[#B69A62] font-semibold block mb-1">
-              Active Session
-            </span>
-            <h2 className="font-serif text-2xl text-[#24211D] mb-1">
-              Welcome, {user.name}
-            </h2>
-            <p className="text-xs text-[#24211D]/60 mb-6 font-mono">
-              {user.email} &bull; <span className="text-[#B69A62] font-sans font-medium">{user.role}</span>
-            </p>
+            {/* Right Column: PRIMARY ADDRESS (Takes 1 Column) */}
+            <div>
+              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[#777777] font-medium mb-8">
+                PRIMARY ADDRESS
+              </h2>
 
-            <div className="space-y-3 pt-2">
-              {user.role === 'admin' && (
-                <Link
-                  to="/admin"
-                  className="block w-full py-3.5 bg-[#B69A62] hover:bg-[#A0834E] text-white text-xs uppercase tracking-[0.2em] font-medium transition-colors"
-                >
-                  ADMIN
-                </Link>
-              )}
-              <Link
-                to="/shop"
-                className="block w-full py-3.5 bg-[#24211D] hover:bg-[#B69A62] text-white text-xs uppercase tracking-[0.2em] font-medium transition-colors"
-              >
-                Explore Silk Catalog
-              </Link>
+              <div className="text-xs sm:text-[13px] text-[#444444] space-y-1 mb-8 leading-relaxed">
+                <p className="font-medium text-[#111111]">{user.name}</p>
+                <p className="text-[#333333]">{savedAddress}</p>
+                <p className="text-[#777777] text-xs font-mono">{user.email}</p>
+              </div>
+
               <button
                 type="button"
                 onClick={() => {
-                  logout();
-                  navigate('/login');
+                  setTempAddress(savedAddress);
+                  setIsEditingAddress(true);
                 }}
-                className="w-full py-3 border border-[#24211D] text-[#24211D] hover:bg-[#24211D] hover:text-white text-xs uppercase tracking-[0.2em] font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="px-8 py-3.5 bg-[#333333] hover:bg-[#111111] text-white text-[11px] uppercase tracking-[0.22em] font-medium transition-colors text-center cursor-pointer"
               >
-                <LogOut size={13} />
-                <span>Sign Out / Logout</span>
+                MANAGE
               </button>
+
+              {user.role === 'admin' && (
+                <div className="mt-8 pt-6 border-t border-[#F5F5F5]">
+                  <a
+                    href={isAdminSubdomain() ? '/' : getAdminSubdomainUrl('/')}
+                    className="block w-full py-3 bg-[#111111] hover:bg-[#222222] text-white text-[11px] uppercase tracking-[0.2em] font-medium transition-colors text-center"
+                  >
+                    ATELIER ADMIN CONSOLE
+                  </a>
+                </div>
+              )}
             </div>
+
           </div>
-        ) : (
-          /* Login / Sign Up Form matching Screenshot 2 */
-          <div className="text-center animate-fade-in">
+
+          {/* Modal to Manage / Edit Address */}
+          {isEditingAddress && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+              <div className="bg-white border border-[#E5E5E5] p-6 sm:p-8 max-w-md w-full shadow-lg relative animate-fade-in">
+                <button
+                  type="button"
+                  onClick={() => setIsEditingAddress(false)}
+                  className="absolute top-4 right-4 text-[#111111]/60 hover:text-[#111111] cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+                <h3 className="font-serif text-lg text-[#111111] mb-1">Update Primary Address</h3>
+                <p className="text-xs text-[#666666] mb-4">Set your default shipping destination for loom dispatches.</p>
+                <form onSubmit={handleSaveAddress} className="space-y-4">
+                  <textarea
+                    rows={3}
+                    required
+                    value={tempAddress}
+                    onChange={(e) => setTempAddress(e.target.value)}
+                    placeholder="Enter full address, city, state, postal code"
+                    className="w-full border border-[#D5CEBF] p-3 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
+                  />
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      className="flex-1 py-3 bg-[#333333] hover:bg-[#111111] text-white text-[11px] uppercase tracking-[0.2em] font-medium transition-colors cursor-pointer"
+                    >
+                      SAVE ADDRESS
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingAddress(false)}
+                      className="px-5 py-3 border border-[#E5E5E5] text-[#111111] text-[11px] uppercase tracking-[0.2em] font-medium hover:bg-[#F5F2EC] transition-colors cursor-pointer"
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+        </div>
+      ) : (
+        /* ------------------------------------------------------------------ */
+        /* 2. CUSTOMER SIGN IN / SIGN UP FORM (When Not Logged In)           */
+        /* ------------------------------------------------------------------ */
+        <div className="w-full max-w-md mx-auto">
+          <div className="text-center animate-fade-in font-sans">
             
             {/* Title */}
-            <h1 className="font-sans text-xl sm:text-2xl font-normal tracking-[0.22em] text-[#24211D] uppercase mb-2">
+            <h1 className="text-xl sm:text-2xl font-normal tracking-[0.22em] text-[#111111] uppercase mb-2">
               {isSignUpMode ? 'SIGN UP' : 'LOGIN'}
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-[13px] text-[#24211D]/75 font-normal mb-8">
+            <p className="text-xs sm:text-[13px] text-[#111111]/75 font-normal mb-8">
               {isSignUpMode 
-                ? 'Enter your details to create an account:' 
-                : 'Enter your email and password to login:'
+                ? 'Register with your name, email, and password to manage your silk orders:' 
+                : 'Enter your registered email and password to sign in:'
               }
             </p>
 
             {/* Forgot password feedback notice */}
             {forgotMessage && (
-              <div className="mb-5 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-center gap-2">
-                <Check size={14} className="text-emerald-600 flex-shrink-0" />
+              <div className="mb-5 p-3 bg-neutral-100 border border-neutral-300 text-black text-xs flex items-center justify-center gap-2">
+                <Check size={14} className="text-black flex-shrink-0" />
                 <span>Password reset link has been dispatched to your email.</span>
               </div>
             )}
@@ -137,65 +305,84 @@ export const Login = () => {
             {/* Form */}
             <form onSubmit={handleSubmit} className="text-left space-y-4">
               
-              {/* Optional Name for Sign Up */}
+              {/* Full Name for Sign Up */}
               {isSignUpMode && (
                 <div>
+                  <label className="block text-[11px] uppercase tracking-wider text-[#111111]/60 mb-1.5 font-medium">
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     required
-                    placeholder="Full Name"
+                    placeholder="Enter your full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-white border border-[#E0E0E0] focus:border-[#24211D] px-4 py-3.5 text-xs text-[#24211D] placeholder:text-[#24211D]/45 focus:outline-none transition-colors"
+                    className="w-full bg-white border border-[#E0E0E0] focus:border-[#111111] px-4 py-3.5 text-xs text-[#111111] placeholder:text-[#111111]/45 focus:outline-none transition-colors"
                   />
                 </div>
               )}
 
               {/* E-mail Input */}
               <div>
+                <label className="block text-[11px] uppercase tracking-wider text-[#111111]/60 mb-1.5 font-medium">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   required
-                  placeholder="E-mail"
+                  placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-[#E0E0E0] focus:border-[#24211D] px-4 py-3.5 text-xs text-[#24211D] placeholder:text-[#24211D]/45 focus:outline-none transition-colors"
+                  className="w-full bg-white border border-[#E0E0E0] focus:border-[#111111] px-4 py-3.5 text-xs text-[#111111] placeholder:text-[#111111]/45 focus:outline-none transition-colors"
                 />
               </div>
 
               {/* Password Input with inline "Forgot your password?" on the right */}
-              <div className="relative flex items-center border border-[#E0E0E0] focus-within:border-[#24211D] bg-white transition-colors">
-                <input
-                  type="password"
-                  required
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent px-4 py-3.5 text-xs text-[#24211D] placeholder:text-[#24211D]/45 focus:outline-none"
-                />
-                {!isSignUpMode && (
-                  <button
-                    type="button"
-                    onClick={() => setForgotMessage(true)}
-                    className="pr-4 text-xs text-[#24211D]/55 hover:text-[#24211D] whitespace-nowrap transition-colors cursor-pointer"
-                  >
-                    Forgot your password?
-                  </button>
-                )}
+              <div>
+                <label className="block text-[11px] uppercase tracking-wider text-[#111111]/60 mb-1.5 font-medium">
+                  Password
+                </label>
+                <div className="relative flex items-center border border-[#E0E0E0] focus-within:border-[#111111] bg-white transition-colors">
+                  <input
+                    type="password"
+                    required
+                    placeholder={isSignUpMode ? "Create a secure password (min. 6 chars)" : "Enter your password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent px-4 py-3.5 text-xs text-[#111111] placeholder:text-[#111111]/45 focus:outline-none"
+                  />
+                  {!isSignUpMode && (
+                    <button
+                      type="button"
+                      onClick={() => setForgotMessage(true)}
+                      className="pr-4 text-xs text-[#111111]/55 hover:text-[#111111] whitespace-nowrap transition-colors cursor-pointer"
+                    >
+                      Forgot?
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {/* LOGIN / SIGN UP Button */}
+              {/* LOGIN / SIGN UP Submit Button */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#4A4744] hover:bg-[#24211D] text-white text-xs uppercase tracking-[0.24em] font-medium transition-colors cursor-pointer shadow-sm"
+                  disabled={isSubmitting}
+                  className="w-full py-4 bg-[#111111] hover:bg-black text-white text-xs uppercase tracking-[0.24em] font-medium transition-colors cursor-pointer shadow-sm disabled:opacity-60 flex items-center justify-center gap-2"
                 >
-                  {isSignUpMode ? 'CREATE ACCOUNT' : 'LOGIN'}
+                  {isSubmitting ? (
+                    <>
+                      <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>PLEASE WAIT...</span>
+                    </>
+                  ) : (
+                    <span>{isSignUpMode ? 'SIGN UP' : 'SIGN IN'}</span>
+                  )}
                 </button>
               </div>
 
               {/* Footer Toggle: "Don't have an account? Sign up" */}
-              <div className="text-center pt-3 text-xs sm:text-[13px] text-[#24211D]/75">
+              <div className="text-center pt-3 text-xs sm:text-[13px] text-[#111111]/75">
                 {isSignUpMode ? (
                   <>
                     <span>Already have an account?</span>
@@ -205,9 +392,9 @@ export const Login = () => {
                         setIsSignUpMode(false);
                         setError('');
                       }}
-                      className="text-[#24211D] font-medium hover:text-[#B69A62] ml-1.5 underline underline-offset-2 cursor-pointer"
+                      className="text-[#111111] font-medium hover:text-black hover:opacity-70 ml-1.5 underline underline-offset-2 cursor-pointer"
                     >
-                      Log in
+                      Sign In
                     </button>
                   </>
                 ) : (
@@ -219,42 +406,21 @@ export const Login = () => {
                         setIsSignUpMode(true);
                         setError('');
                       }}
-                      className="text-[#24211D] font-medium hover:text-[#B69A62] ml-1.5 underline underline-offset-2 cursor-pointer"
+                      className="text-[#111111] font-medium hover:text-black hover:opacity-70 ml-1.5 underline underline-offset-2 cursor-pointer"
                     >
-                      Sign up
+                      Sign Up
                     </button>
                   </>
                 )}
               </div>
 
-              {/* Demo Credentials Helper */}
-              <div className="pt-8 border-t border-[#F0EBE1] text-center">
-                <p className="text-[10px] uppercase tracking-wider text-[#24211D]/50 mb-2 font-medium">
-                  Quick Demo Credentials:
-                </p>
-                <div className="flex justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleDemoFill('admin')}
-                    className="text-[10px] px-3 py-1 bg-stone-100 hover:bg-[#24211D] hover:text-white text-[#24211D] border border-stone-200 transition-colors"
-                  >
-                    Admin
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDemoFill('patron')}
-                    className="text-[10px] px-3 py-1 bg-stone-100 hover:bg-[#24211D] hover:text-white text-[#24211D] border border-stone-200 transition-colors"
-                  >
-                    Customer
-                  </button>
-                </div>
-              </div>
-
             </form>
           </div>
-        )}
+        </div>
+      )}
 
-      </div>
     </div>
   );
 };
+
+export default Login;

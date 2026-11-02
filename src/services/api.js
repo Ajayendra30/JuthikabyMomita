@@ -31,8 +31,10 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 4000) {
 // -----------------------------------------------------------------------------
 export function normalizeProduct(p) {
   if (!p) return null;
+  const rawId = p.id || '';
+  const normalizedId = rawId.startsWith('ax-') ? rawId.replace(/^ax-/i, 'jm-') : rawId;
   return {
-    id: p.id,
+    id: normalizedId,
     name: p.name,
     assameseName: p.assameseName || p.assamese_name || '',
     assamese_name: p.assamese_name || p.assameseName || '',
@@ -64,8 +66,10 @@ export function normalizeProduct(p) {
 
 export function normalizeConsultation(c) {
   if (!c) return null;
+  const rawId = c.id || '';
+  const id = rawId.startsWith('AX-') ? rawId.replace(/^AX-/, 'JM-') : rawId;
   return {
-    id: c.id,
+    id,
     name: c.name,
     email: c.email,
     phone: c.phone,
@@ -85,8 +89,10 @@ export function normalizeConsultation(c) {
 
 export function normalizeOrder(o) {
   if (!o) return null;
+  const rawId = o.id || '';
+  const id = rawId.startsWith('AX-') ? rawId.replace(/^AX-/, 'JM-') : rawId;
   return {
-    id: o.id,
+    id,
     customerName: o.customerName || o.customer_name || 'Client Patron',
     customer_name: o.customer_name || o.customerName || 'Client Patron',
     email: o.email,
@@ -257,6 +263,14 @@ export const api = {
     return normalizeConsultation(raw);
   },
 
+  async deleteConsultation(id) {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/consultations/${id}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error(`Failed to delete consultation ${id}`);
+    return await res.json();
+  },
+
   // ----------------- ORDERS -----------------
   async getOrders() {
     const res = await fetchWithTimeout(`${API_BASE_URL}/orders`, { method: 'GET' });
@@ -267,13 +281,16 @@ export const api = {
 
   async createOrder(data) {
     const payload = {
+      id: data.id,
       customer_name: data.customerName || data.customer_name,
+      customerName: data.customerName || data.customer_name,
       email: data.email,
       phone: data.phone || '',
       address: data.address || '',
       items: data.items || [],
       total: Number(data.total) || 0,
-      payment_method: data.paymentMethod || data.payment_method || 'VIP Concierge Wire'
+      payment_method: data.paymentMethod || data.payment_method || 'VIP Concierge Wire',
+      paymentMethod: data.paymentMethod || data.payment_method || 'VIP Concierge Wire'
     };
 
     const res = await fetchWithTimeout(`${API_BASE_URL}/orders`, {
@@ -295,6 +312,14 @@ export const api = {
     return normalizeOrder(raw);
   },
 
+  async deleteOrder(id) {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/orders/${id}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error(`Failed to delete order ${id}`);
+    return await res.json();
+  },
+
   // ----------------- AUTHENTICATION -----------------
   async login(email, password = '') {
     const res = await fetchWithTimeout(`${API_BASE_URL}/auth/login`, {
@@ -303,7 +328,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail || 'Authentication failed');
+      throw new Error(err.error || err.detail || 'Authentication failed. Please check credentials.');
     }
     return await res.json();
   },
@@ -315,7 +340,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail || 'Registration failed');
+      throw new Error(err.error || err.detail || 'Registration failed. Please check details.');
     }
     return await res.json();
   },
