@@ -1,637 +1,6 @@
 // Juthika by Momita Luxury Assamese Silk Boutique — Curated Product Catalog
 // Authentic Handloom Masterpieces from Sualkuchi, Assam
 
-export const PRODUCTS = [
-  {
-    id: "jm-muga-01",
-    name: "Royal Kingkhap Muga Mekhela Chador",
-    assameseName: "ৰাজকীয় কিংখাপ মুগা মেখেলা চাদৰ",
-    slug: "royal-kingkhap-muga-mekhela-chador",
-    fabric: "Muga Silk",
-    department: "Women",
-    collection: "Timeless",
-    category: "Concept Sarees",
-    secondaryCategory: "Muga Silk",
-    price: 68500,
-    originalPrice: 75000,
-    featured: true,
-    tag: "Signature Heritage",
-    inStock: true,
-    loomDays: 28,
-    artisanLocation: "Sualkuchi, Assam",
-    description: "Crafted from 100% pure wild Muga silk endemic exclusively to the Brahmaputra valley. Adorned with heritage Kingkhap motifs traditionally worn by the Ahom nobility, woven with pure antique gold zari across 195 meticulous loom hours.",
-    details: [
-      "Naturally golden silk that deepens in luster over generations",
-      "Woven on traditional throw-shuttle wooden looms",
-      "GI (Geographical Indication) Tag certified Assamese Muga",
-      "Includes matching unstitched Muga blouse piece (0.8m)",
-      "Adorned with pure Kingkhap and Gos Buta motifs"
-    ],
-    care: "Dry clean only by luxury silk specialists. Store wrapped in unbleached pure cotton muslin. Air periodically in gentle shade.",
-    sizes: ["Standard Unstitched (Mekhela + Chador + Blouse)", "Custom Tailored Drape"],
-    images: [
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-bridal-01",
-    name: "Imperial Pearl & Vermilion Paat Bridal Ensemble",
-    assameseName: "আইদেউ পাট ৰেচমী বিবাহৰ সাজ",
-    slug: "imperial-pearl-vermilion-paat-bridal-ensemble",
-    fabric: "Paat Silk",
-    department: "Women",
-    collection: "Fall Winter Occasion Wear",
-    category: "Lehenga Sets",
-    secondaryCategory: "Bridal Couture",
-    price: 92000,
-    originalPrice: 98000,
-    featured: true,
-    tag: "Haute Bridal",
-    inStock: true,
-    loomDays: 45,
-    artisanLocation: "Sualkuchi Master Atelier",
-    description: "An awe-inspiring bridal masterpiece woven in pristine mulberry Paat silk. Luminous pearl-ivory ground embellished with handcrafted Guna zari floral jaal, heavy kalka borders, and vermilion resham accents. Created for the quintessential royal bride.",
-    details: [
-      "Heavyweight ceremonial pure mulberry Paat silk",
-      "Handcrafted pure silver-dipped gold zari border and pallu",
-      "Hand-rolled hems and reinforced hand-knotted tassels",
-      "Includes tailored bridal blouse piece and custom riha veil",
-      "Authenticity certificate signed by our master artisan"
-    ],
-    care: "Specialist couture dry cleaning only. Wrap in acid-free tissue and store in moisture-controlled wooden chest.",
-    sizes: ["Custom Bridal Bespoke", "Standard Unstitched"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/teal.jpg?v=1766847656&width=1800"
-    ]
-  },
-  {
-    id: "jm-eri-01",
-    name: "Ahimsa Raw Almond Eri Silk Cocoon Wrap",
-    assameseName: "অহিংস এৰি চাদৰ",
-    slug: "ahimsa-raw-almond-eri-silk-cocoon-wrap",
-    fabric: "Eri Silk",
-    department: "Women",
-    collection: "Ever Bloom",
-    category: "Capes & Jackets",
-    secondaryCategory: "Eri Silk",
-    price: 24500,
-    originalPrice: 28000,
-    featured: true,
-    tag: "Peace Silk",
-    inStock: true,
-    loomDays: 14,
-    artisanLocation: "Kamrup Guild, Assam",
-    description: "100% cruelty-free Ahimsa Eri silk, woven from cocoons naturally vacated by the silk moth. Known as the peace silk of Assam, Eri is celebrated for its soothing isothermal nature—comfortingly warm in winter and breathably crisp in summer.",
-    details: [
-      "Certified Ahimsa non-violent silk processing",
-      "Natural undyed shades of almond, oatmeal, and raw cream",
-      "Geometric tribal diamond weave inspired by Mishing folklore",
-      "Luxurious dimensions: 2.6m length x 1.1m width",
-      "Naturally moisture-wicking and hypoallergenic"
-    ],
-    care: "Gentle hand wash in cold water using organic wool/silk wash or eco dry clean. Dry flat in natural shade.",
-    sizes: ["One Size Luxury Wrap (2.6m x 1.1m)"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/erisilksari_18749ea6-7a3f-4c6c-9a09-1618d14a8328.jpg?v=1770292936&width=1800",
-      "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-saree-01",
-    name: "Vintage Guna Zari Muga Drape Saree",
-    assameseName: "সোণালী মুগা ৰেচমী শাৰী",
-    slug: "vintage-guna-zari-muga-drape-saree",
-    fabric: "Muga Silk",
-    department: "Women",
-    collection: "Quintessence",
-    category: "Sarees",
-    secondaryCategory: "Muga Silk",
-    price: 74000,
-    originalPrice: 80000,
-    featured: true,
-    tag: "Artisan Edition",
-    inStock: true,
-    loomDays: 32,
-    artisanLocation: "Sualkuchi Heritage Quarter",
-    description: "Six full yards of undiluted golden splendour. This rare full-length Muga saree features intricate temple border weaves, traditional Karbi-inspired floral butas, and a majestic antique zari pallu that shimmers with sunlit intensity.",
-    details: [
-      "Full 6-yard heritage drape with running blouse fabric",
-      "Features ceremonial peacock (Moora) and floral lattice work",
-      "Heavier 120-gram pure wild silk yarn for architectural fall",
-      "Hand-finished selvedge and contrast selvedge thread"
-    ],
-    care: "Professional silk dry clean only. Wrap in dark muslin fabric to protect natural golden patina.",
-    sizes: ["Full Length 6.2m (Includes 0.8m Blouse)"],
-    images: [
-      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800"
-    ]
-  },
-  {
-    id: "jm-paat-01",
-    name: "Midnight Indigo & Silver Paat Silk Mekhela",
-    assameseName: "ৰাজকীয় নীল পাট মেখেলা চাদৰ",
-    slug: "midnight-indigo-silver-paat-silk-mekhela",
-    fabric: "Paat Silk",
-    department: "Women",
-    collection: "Otherworldly",
-    category: "Skirt & Trouser Sets",
-    secondaryCategory: "Paat Silk",
-    price: 52000,
-    originalPrice: 58000,
-    featured: false,
-    tag: "New Arrival",
-    inStock: true,
-    loomDays: 22,
-    artisanLocation: "Sualkuchi, Assam",
-    description: "A dramatic nocturnal composition. Pure handwoven mulberry Paat silk in deep midnight indigo, contrast-woven with pure silver Rupahi Guna threads depicting dancing butterflies and the sacred Jaapi motif.",
-    details: [
-      "Pure mulberry Bombyx silk base with smooth satin luster",
-      "Handcrafted silver Rupahi Guna borders",
-      "Richly decorated aanchal with Ahom royal insignias",
-      "Includes matched blouse piece with border trims"
-    ],
-    care: "Specialist dry cleaning recommended. Avoid prolonged exposure to moisture or high heat.",
-    sizes: ["Standard Unstitched", "Custom Tailored"],
-    images: [
-      "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-occasion-01",
-    name: "Aura Champagne Muga Pleated Cape Ensemble",
-    assameseName: "আধুনিক মুগা কেপ আৰু স্কাৰ্ট",
-    slug: "aura-champagne-muga-pleated-cape-ensemble",
-    fabric: "Muga Silk",
-    department: "Women",
-    collection: "Golden Light",
-    category: "Capes & Jackets",
-    secondaryCategory: "Occasion Wear",
-    price: 59000,
-    originalPrice: 65000,
-    featured: true,
-    tag: "Contemporary Couture",
-    inStock: true,
-    loomDays: 20,
-    artisanLocation: "Guwahati Design Studio",
-    description: "Architectural grandeur meets Assamese artisanal luxury. An asymmetric hand-pleated cape crafted from lightweight washed Muga silk, paired with a high-waisted floor-sweeping column skirt adorned with subtle micro-motifs.",
-    details: [
-      "Contemporary structured silhouette with traditional handloom drape",
-      "Concealed hand-cast gold finish brass fastenings",
-      "Lined with organic Eri silk for supreme skin comfort",
-      "Individually hand-pleated by master drapers"
-    ],
-    care: "Specialist couture dry clean only. Steam gently from reverse.",
-    sizes: ["XS (32)", "S (34)", "M (36)", "L (38)", "XL (40)", "Bespoke Measurement"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/erikp_3649e180-cde4-4052-bf27-234ba580ef55.jpg?v=1713617452&width=1800",
-      "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800"
-    ]
-  },
-  {
-    id: "jm-rtw-01",
-    name: "Botanical Dyed Eri Silk Trench Overlay",
-    assameseName: "প্ৰাকৃতিক ৰং এৰি অ'ভাৰকোট",
-    slug: "botanical-dyed-eri-silk-trench-overlay",
-    fabric: "Eri Silk",
-    department: "Women",
-    collection: "Languid Summer",
-    category: "Dresses",
-    secondaryCategory: "Ready-to-Wear",
-    price: 38000,
-    originalPrice: 42000,
-    featured: false,
-    tag: "Sustainable Luxury",
-    inStock: true,
-    loomDays: 16,
-    artisanLocation: "Majuli Island, Assam",
-    description: "An everyday luxury statement piece. Handcrafted from homespun Eri silk tinted with natural madder root and wild indigo. Features a relaxed tailored lapel, horn buttons, and a cinched sash belt for effortless cosmopolitan dressing.",
-    details: [
-      "100% natural botanical dyes without synthetic chemicals",
-      "Pure organic Ahimsa Eri handloom weave",
-      "Deep patch pockets and storm flap accents",
-      "Ideal transitional layering garment for global travels"
-    ],
-    care: "Gentle cold hand wash with eco detergent or eco dry clean. Store in breathable canvas cover.",
-    sizes: ["S", "M", "L", "XL"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/kperisari_4e0389a4-2f66-4583-bcce-3088a728a035.jpg?v=1739620090&width=1800",
-      "https://thesilkchamber.com/cdn/shop/files/erisilksari_18749ea6-7a3f-4c6c-9a09-1618d14a8328.jpg?v=1770292936&width=1800",
-      "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-saree-02",
-    name: "Lotus Crest Vermilion Paat Silk Saree",
-    assameseName: "পদ্মিনী ৰঙা পাট শাৰী",
-    slug: "lotus-crest-vermilion-paat-silk-saree",
-    fabric: "Paat Silk",
-    department: "Women",
-    collection: "Painterly Dreams",
-    category: "Sarees",
-    secondaryCategory: "Bridal Couture",
-    price: 64000,
-    originalPrice: 70000,
-    featured: true,
-    tag: "Festive Exclusive",
-    inStock: true,
-    loomDays: 26,
-    artisanLocation: "Sualkuchi, Assam",
-    description: "A celebration of auspicious scarlet and shimmering gold. Pure Paat silk woven with resplendent lotus pond motifs (Podum Buta) and finished with a solid temple border that frames the silhouette with imperial grace.",
-    details: [
-      "Fluid mulberry Paat silk with luminous natural sheen",
-      "Dense gold Guna embroidery across the 38-inch pallu",
-      "Includes matched unstitched Paat blouse with zari sleeve panels",
-      "Tested for pure silk fiber authenticity"
-    ],
-    care: "Dry clean only. Roll rather than fold along heavy zari creases.",
-    sizes: ["Full Length 6.2m with Blouse"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/teal.jpg?v=1766847656&width=1800",
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-bridal-02",
-    name: "Golden Sanctuary Muga Bridal Riha & Chador",
-    assameseName: "সোণালী মুগা ৰিহা আৰু চাদৰ",
-    slug: "golden-sanctuary-muga-bridal-riha-chador",
-    fabric: "Muga Silk",
-    department: "Women",
-    collection: "Timeless",
-    category: "Gowns",
-    secondaryCategory: "Bridal Couture",
-    price: 115000,
-    originalPrice: 125000,
-    featured: false,
-    tag: "Bespoke Masterwork",
-    inStock: true,
-    loomDays: 52,
-    artisanLocation: "Sualkuchi Royal Looms",
-    description: "The pinnacle of Assamese royal heritage. Handspun Muga silk woven with real gold-plated Guna wires in the legendary Kingkhap pattern. Reserved for the grandest wedding celebrations, this heirloom increases in spiritual and material value with every generation.",
-    details: [
-      "Heaviest grade 100% wild Muga silk with natural golden luster",
-      "Pure gold-dipped silver zari wire detailing",
-      "Includes authentic ceremonial silk Riha waist drape and bridal veil",
-      "Presented in a handcrafted cedarwood presentation heirloom box"
-    ],
-    care: "Heritage heirloom care: Specialist dry clean only. Wrap in untreated mulmul.",
-    sizes: ["Custom Bespoke Fitting Only"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-rtw-02",
-    name: "Monochrome Geometric Eri Tunic & Trousers",
-    assameseName: "আধুনিক এৰি কোৰ্তা-পাইজামা",
-    slug: "monochrome-geometric-eri-tunic-trousers",
-    fabric: "Eri Silk",
-    department: "Women",
-    collection: "Sol",
-    category: "Suit Sets",
-    secondaryCategory: "Ready-to-Wear",
-    price: 32000,
-    originalPrice: 35000,
-    featured: false,
-    tag: "Contemporary",
-    inStock: true,
-    loomDays: 12,
-    artisanLocation: "Guwahati Atelier",
-    description: "Effortless tailored luxury for contemporary living. Relaxed-fit tunic crafted from feather-soft spun Eri silk in charcoal and ivory houndstooth weave, completed with matching straight-leg trousers.",
-    details: [
-      "Pure handloom Ahimsa Eri silk fabric with soft matte texture",
-      "Mother-of-pearl buttons and clean mandarin collar",
-      "Breathable, wrinkle-resistant and naturally temperature-regulating"
-    ],
-    care: "Dry clean or delicate hand wash cold. Medium iron with cloth overlay.",
-    sizes: ["S", "M", "L", "XL"],
-    images: [
-      "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/kperisari_4e0389a4-2f66-4583-bcce-3088a728a035.jpg?v=1739620090&width=1800",
-      "https://thesilkchamber.com/cdn/shop/files/erikp_3649e180-cde4-4052-bf27-234ba580ef55.jpg?v=1713617452&width=1800"
-    ]
-  },
-  {
-    id: "jm-muga-02",
-    name: "Kaziranga Flora Hand-Woven Muga Shawl",
-    assameseName: "কাজিৰঙা প্ৰাকৃতিক মুগা শাল",
-    slug: "kaziranga-flora-hand-woven-muga-shawl",
-    fabric: "Muga Silk",
-    department: "Women",
-    collection: "Delayed Checkout",
-    category: "Capes & Jackets",
-    secondaryCategory: "Ready-to-Wear",
-    price: 36000,
-    originalPrice: 40000,
-    featured: false,
-    tag: "Collector's Weave",
-    inStock: true,
-    loomDays: 18,
-    artisanLocation: "Bokakhat & Sualkuchi",
-    description: "An homage to the untamed wilderness of Assam. Golden Muga silk handwoven with subtle impressions of water lilies, wild ferns, and the iconic one-horned rhinoceros stylized in traditional Ahom geometry.",
-    details: [
-      "100% natural wild golden Muga silk",
-      "Delicate hand-knotted fringe borders",
-      "Featherlight drape suitable for evening wear across all seasons",
-      "Length: 2.2m x 0.9m"
-    ],
-    care: "Dry clean only. Air twice annually in shade.",
-    sizes: ["One Size (2.2m x 0.9m)"],
-    images: [
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/erisilksari_18749ea6-7a3f-4c6c-9a09-1618d14a8328.jpg?v=1770292936&width=1800"
-    ]
-  },
-  {
-    id: "jm-occasion-02",
-    name: "Emerald Resham & Paat Silk Flared Anarkali",
-    assameseName: "ৰাজকীয় সেউজীয়া পাট আনাৰকলি",
-    slug: "emerald-resham-paat-silk-flared-anarkali",
-    fabric: "Paat Silk",
-    department: "Women",
-    collection: "Fall Winter Occasion Wear",
-    category: "Jumpsuit Sets",
-    secondaryCategory: "Occasion Wear",
-    price: 66000,
-    originalPrice: 72000,
-    featured: false,
-    tag: "Atelier Signature",
-    inStock: true,
-    loomDays: 30,
-    artisanLocation: "Sualkuchi, Assam",
-    description: "Draped in majestic emerald green Paat silk with a dramatic 24-kali flare. Accentuated with intricate micro-zari buttas, scalloped hemline, and an ethereal gossamer Paat silk dupatta.",
-    details: [
-      "Custom woven 24-panel flared silhouette",
-      "Intricate hand zardozi and antique gold guna work",
-      "Includes tailored chudidar trousers and silk dupatta",
-      "Lined with organic mulmul cotton for exceptional comfort"
-    ],
-    care: "Specialist dry clean only.",
-    sizes: ["S (34)", "M (36)", "L (38)", "XL (40)", "Bespoke Measurement"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://thesilkchamber.com/cdn/shop/files/teal.jpg?v=1766847656&width=1800"
-    ]
-  },
-  {
-    id: "jm-men-01",
-    name: "Imperial Kingkhap Muga Silk Kurta & Dhoti Set",
-    assameseName: "ৰাজকীয় কিংখাপ মুগা কুৰ্তা সাজ",
-    slug: "imperial-kingkhap-muga-silk-kurta-dhoti-set",
-    fabric: "Muga Silk",
-    department: "Men",
-    collection: "Timeless",
-    category: "Kurta Sets",
-    secondaryCategory: "Muga Silk",
-    price: 48000,
-    originalPrice: 54000,
-    featured: true,
-    tag: "Heritage Gents",
-    inStock: true,
-    loomDays: 24,
-    artisanLocation: "Sualkuchi Master Atelier",
-    description: "An aristocratic ceremonial ensemble crafted from pure natural golden Muga silk. Embroidered with antique gold Guna Kingkhap motifs along the mandarin placket and cuffs, paired with an authentic woven Paat silk dhoti.",
-    details: [
-      "100% natural golden wild Muga silk with handloom sheen",
-      "Includes tailored Muga kurta and traditional silk dhoti drape",
-      "Hand-finished pure brass filigree buttons",
-      "Custom bespoke sizing available"
-    ],
-    care: "Specialist dry clean only.",
-    sizes: ["38 (S)", "40 (M)", "42 (L)", "44 (XL)", "Custom Bespoke Tailored"],
-    images: [
-      "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-men-02",
-    name: "Ivory Paat Silk Royal Zari Sherwani Set",
-    assameseName: "আইদেউ পাট ৰাজকীয় চেৰৱানী",
-    slug: "ivory-paat-silk-royal-zari-sherwani-set",
-    fabric: "Paat Silk",
-    department: "Men",
-    collection: "Fall Winter Occasion Wear",
-    category: "Sherwani Sets",
-    secondaryCategory: "Bridal Couture",
-    price: 88000,
-    originalPrice: 96000,
-    featured: true,
-    tag: "Haute Groom",
-    inStock: true,
-    loomDays: 38,
-    artisanLocation: "Sualkuchi Royal Looms",
-    description: "The pinnacle of regal groomswear. Woven from heavy ivory mulberry Paat silk embellished with intricate Ahom flora and silver-gilt Guna zari, complete with matching churidar trousers and ceremonial Muga stole.",
-    details: [
-      "Ceremonial heavyweight mulberry Paat silk base",
-      "Includes matched Churidar and handloom silk stole",
-      "Lined with breathable organic silk-cotton",
-      "Signed certificate from our master weaver"
-    ],
-    care: "Specialist couture dry cleaning only.",
-    sizes: ["38 (S)", "40 (M)", "42 (L)", "44 (XL)", "Custom Bespoke Tailored"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
-      "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-men-03",
-    name: "Heritage Guna Embroidered Muga Waistcoat Set",
-    assameseName: "মুগা গুণা কটি আৰু কুৰ্তা",
-    slug: "heritage-guna-muga-waistcoat-set",
-    fabric: "Muga Silk",
-    department: "Men",
-    collection: "Golden Light",
-    category: "Waistcoat Sets",
-    secondaryCategory: "Ready-to-Wear",
-    price: 34000,
-    originalPrice: 38000,
-    featured: false,
-    tag: "Bespoke Suiting",
-    inStock: true,
-    loomDays: 16,
-    artisanLocation: "Guwahati Atelier",
-    description: "Sophisticated formal layering. A tailored waistcoat crafted from textured wild Muga silk with subtle tone-on-tone Guna diamond quilting, paired over a crisp linen-silk tunic.",
-    details: [
-      "Pure golden Muga silk exterior with silk satin lining",
-      "Concealed welt pockets and mother-of-pearl buttons",
-      "Versatile styling for gala receptions and daytime soirees"
-    ],
-    care: "Dry clean only.",
-    sizes: ["38", "40", "42", "44"],
-    images: [
-      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/erikp_3649e180-cde4-4052-bf27-234ba580ef55.jpg?v=1713617452&width=1800"
-    ]
-  },
-  {
-    id: "jm-men-04",
-    name: "Midnight Charcoal Eri Silk Royal Bandhgala Set",
-    assameseName: "চাৰকোল এৰি ৰাজকীয় বন্ধগলা",
-    slug: "midnight-charcoal-eri-silk-bandhgala-set",
-    fabric: "Eri Silk",
-    department: "Men",
-    collection: "Quintessence",
-    category: "Bandhgala Sets",
-    secondaryCategory: "Eri Silk",
-    price: 56000,
-    originalPrice: 62000,
-    featured: false,
-    tag: "Artisan Tailored",
-    inStock: true,
-    loomDays: 22,
-    artisanLocation: "Kamrup Guild",
-    description: "Clean modern royalty. Handspun Ahimsa Eri silk in rich midnight charcoal, naturally isothermal and crafted with a sharp Bandhgala collar and tailored slim-fit trousers.",
-    details: [
-      "100% cruelty-free handwoven Ahimsa Eri silk",
-      "Includes structured Bandhgala jacket and matched tailored trousers",
-      "Hand-sewn horn buttons with reinforced silk buttonholes"
-    ],
-    care: "Gentle eco dry clean only.",
-    sizes: ["38", "40", "42", "44"],
-    images: [
-      "https://thesilkchamber.com/cdn/shop/files/kperisari_4e0389a4-2f66-4583-bcce-3088a728a035.jpg?v=1739620090&width=1800",
-      "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-acc-01",
-    name: "Heirloom Muga Silk & Antique Zari Potli Bag",
-    assameseName: "ৰাজকীয় মুগা গামোচা পোটলী বেগ",
-    slug: "heirloom-muga-silk-potli-bag",
-    fabric: "Muga Silk",
-    department: "Accessories",
-    collection: "Ever Bloom",
-    category: "Bags",
-    secondaryCategory: "Muga Silk",
-    price: 18500,
-    originalPrice: 21000,
-    featured: true,
-    tag: "Artisan Heirloom",
-    inStock: true,
-    loomDays: 8,
-    artisanLocation: "Sualkuchi, Assam",
-    description: "An opulent drawstring evening clutch handcrafted from pure golden Muga silk, adorned with heavy antique gold tassel drops and intricate hand-beaded borders.",
-    details: [
-      "100% pure wild Muga silk with hand-rolled silk cord",
-      "Heavily embellished with antique gold resham tassels",
-      "Spacious interior lined with protective cotton satin"
-    ],
-    care: "Spot clean with dry cloth. Store in dustbag.",
-    sizes: ["Standard Luxury Evening Clutch (22cm x 18cm)"],
-    images: [
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-acc-02",
-    name: "Junbiri & Lokaparo 24K Gold-Dipped Choker",
-    assameseName: "জোনবিৰি আৰু লোকাপাৰো গলপতা",
-    slug: "junbiri-lokaparo-gold-dipped-choker",
-    fabric: "Heritage Craft",
-    department: "Accessories",
-    collection: "Timeless",
-    category: "Jewellery",
-    secondaryCategory: "Traditional Jewellery",
-    price: 42000,
-    originalPrice: 48000,
-    featured: true,
-    tag: "Traditional Filigree",
-    inStock: true,
-    loomDays: 14,
-    artisanLocation: "Ranthali Goldsmiths, Assam",
-    description: "Handcrafted by traditional Ranthali silversmiths using the ancient Kesason technique. Features twin pigeon motifs (Lokaparo) and crescent moon pendants (Junbiri) set with untreated crimson meena enamel.",
-    details: [
-      "Pure silver base dipped in 24K antique micro-gold",
-      "Traditional Assamese gem encrusting and ruby-red lac fill",
-      "Adjustable woven silk thread Dori closure"
-    ],
-    care: "Keep away from perfumes and moisture. Store in velvet pouch.",
-    sizes: ["Adjustable Neck Choker with Silk Dori"],
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1200&q=85"
-    ]
-  },
-  {
-    id: "jm-acc-03",
-    name: "Hand-Embroidered Paat Silk Architectural Sash Belt",
-    assameseName: "পাট ৰেচমী কোঁৱৰী কঁকালৰ পেটি",
-    slug: "hand-embroidered-paat-silk-belt",
-    fabric: "Paat Silk",
-    department: "Accessories",
-    collection: "Golden Light",
-    category: "Belts",
-    secondaryCategory: "Occasion Wear",
-    price: 14500,
-    originalPrice: 17000,
-    featured: false,
-    tag: "Couture Accent",
-    inStock: true,
-    loomDays: 7,
-    artisanLocation: "Guwahati Design Studio",
-    description: "A statement waist cincher woven from stiff Paat silk, detailed with geometric gold Guna topstitching and an antiqued dual-buckle clasp.",
-    details: [
-      "Pure Paat silk structural band with leather backing",
-      "Handcrafted antiqued gold-finish metal buckle",
-      "Elevates sarees, lehengas, and gowns"
-    ],
-    care: "Wipe clean with soft dry cloth.",
-    sizes: ["S (26-28 in)", "M (29-32 in)", "L (33-36 in)"],
-    images: [
-      "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85",
-      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800"
-    ]
-  },
-  {
-    id: "jm-book-01",
-    name: "The Golden Cocoon: Sualkuchi Looms Coffee Table Book",
-    assameseName: "সোণালী পলু: শুৱালকুছিৰ শিপিনী কফি টেবুল বুক",
-    slug: "sualkuchi-looms-coffee-table-book",
-    fabric: "Linen & Silk Hardcover",
-    department: "Trending",
-    collection: "Timeless",
-    category: "Coffee Table Book",
-    secondaryCategory: "Collector's Weave",
-    price: 8500,
-    originalPrice: 10000,
-    featured: true,
-    tag: "Collector's Monograph",
-    inStock: true,
-    loomDays: 1,
-    artisanLocation: "Juthika Atelier Publications",
-    description: "An archival luxury art monograph chronicling five centuries of Assamese handloom heritage. 320 pages of high-resolution archival photography, loom diagrams, and weaver oral histories bound in pure Muga silk hardcover.",
-    details: [
-      "Hardcover bound in certified 100% pure wild Muga silk cloth",
-      "320 full-color art plates on heavyweight 200gsm archival paper",
-      "Comes in a gold-embossed presentation slipcase",
-      "Individually hand-numbered collector's edition"
-    ],
-    care: "Keep in climate-controlled indoor library.",
-    sizes: ["Coffee Table Hardcover Folio (34cm x 26cm, 3.2kg)"],
-    images: [
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=85"
-    ]
-  }
-];
-
-// Exact 5-Column High-Fashion Directory (1:1 with Screenshot Reference)
 export const SHOP_DIRECTORIES = [
   {
     title: 'WOMEN',
@@ -699,6 +68,9 @@ export const SHOP_DIRECTORIES = [
 
 export const CATEGORIES = [
   "All",
+  "Muga Silk",
+  "Paat Silk",
+  "Eri Silk",
   "Sarees",
   "Lehenga Sets",
   "Concept Sarees",
@@ -716,4 +88,380 @@ export const CATEGORIES = [
   "Jewellery",
   "Belts",
   "Coffee Table Book"
+];
+
+export const FABRICS = [
+  "All",
+  "Muga Silk",
+  "Paat Silk",
+  "Eri Silk"
+];
+
+export const PRODUCTS = [
+  {
+    "id": "jm-custom-1793615329895",
+    "name": "Isakki Muga Silk Saree",
+    "assameseName": "ইছাকি মুগা ৰেচমৰ শাৰী",
+    "slug": "isakki-muga-silk-saree",
+    "fabric": "Muga Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Muga Silk",
+    "secondaryCategory": "",
+    "price": 155000,
+    "originalPrice": 170500,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "The Isakki Muga Silk Saree is an exquisite expression of traditional Assamese craftsmanship and timeless luxury. Handwoven by skilled artisans, it features a beautiful natural golden hue, intricate traditional Assamese motifs, and finely detailed decorative borders. Crafted from luxurious Muga silk, this saree showcases a natural lustre, rich texture, and elegant drape. Perfect for weddings, grand celebrations, festive occasions, and cultural gatherings.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/muga_9e838143-a066-4048-a0cc-7ac96427e704.jpg?v=1750243511&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasilksari.jpg?v=1750243528&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasilk_cbb256fc-405f-4112-b984-c01118ba622a.jpg?v=1750243528&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasilksaree.jpg?v=1750243528&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/silkmuga_308ffbf7-cb16-4c36-86ea-1bacef2df50e.jpg?v=1750243528&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasari_da3bd446-81cc-4348-9aae-90ff34039eef.jpg?v=1750243528&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/sarimuga_2b7f6158-320b-4e84-b4b9-a6e0d30dd7da.jpg?v=1750243528&width=1800"
+    ],
+    "createdAt": "2026-11-02T10:28:49.937Z"
+  },
+  {
+    "id": "jm-custom-1793596590799",
+    "name": "Hunter Green Eri Silk Saree",
+    "assameseName": "গাঢ় সেউজীয়া এৰি ৰেচমৰ শাৰী",
+    "slug": "hunter-green-eri-silk-saree",
+    "fabric": "Eri Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Muga Silk",
+    "secondaryCategory": "",
+    "price": 34578,
+    "originalPrice": 38035.8,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "An elegant Hunter Green Eri Silk Saree, beautifully handcrafted by skilled Assamese artisans. Featuring a rich deep forest-green shade, intricate traditional Assamese woven motifs, and delicate contrasting borders, this saree celebrates the natural beauty and distinctive texture of authentic Eri silk. Its graceful drape, soft feel, and understated luxury make it perfect for festive celebrations, cultural gatherings, weddings, and special occasions.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/erisilksari_18749ea6-7a3f-4c6c-9a09-1618d14a8328.jpg?v=1770292936&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erigreensari.jpg?v=1770292936&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erigreen_e96827a4-f241-4964-884e-9d2776ddf944.jpg?v=1770292936&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/eri_5d6f6f85-b717-4276-a0ab-c749f8df4c58.jpg?v=1770292936&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erisilk_29bd11dd-eb2d-4657-9c7e-74b28a335632.jpg?v=1770292936&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/greenerisari.jpg?v=1770292936&width=1800"
+    ],
+    "createdAt": "2026-11-02T05:16:30.807Z"
+  },
+  {
+    "id": "jm-custom-1793596404317",
+    "name": "Mustard-Lac Eri Kesa Paat Silk Saree",
+    "assameseName": "সৰিয়হীয়া-লাখী এৰি কেছা পাটৰ শাৰী",
+    "slug": "mustard-lac-eri-kesa-paat-silk-saree",
+    "fabric": "Eri Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Muga Silk",
+    "secondaryCategory": "",
+    "price": 77855,
+    "originalPrice": 85640.5,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "An elegant Mustard-Lac Eri Kesa Paat Silk Saree inspired by the rich textile heritage of Assam. Featuring a beautiful mustard-yellow base complemented by deep lac-red accents, intricate traditional Assamese motifs, and finely detailed woven borders. Crafted with a graceful blend of Eri Kesa and Paat silk textures, this saree celebrates artisanal craftsmanship and timeless ethnic elegance. Perfect for weddings, festive occasions, and cultural celebrations.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/kperisari_4e0389a4-2f66-4583-bcce-3088a728a035.jpg?v=1739620090&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikpsari_03a41f2b-86b5-4658-842e-c765beba0cc2.jpg?v=1739620090&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikp_ac96dea3-6534-4ceb-b19d-c7a0af8e9b82.jpg?v=1739620090&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikpsaree_c03f4afe-342c-45a7-af12-a55022e93823.jpg?v=1739620090&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikpsilksaree.jpg?v=1739620090&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/kperi_106ee733-3ab0-4ef1-9c68-c3b77cbf7f08.jpg?v=1739620090&width=1800"
+    ],
+    "createdAt": "2026-11-02T05:13:24.397Z"
+  },
+  {
+    "id": "jm-custom-1793461552162",
+    "name": "Mohini Muga Silk Saree",
+    "assameseName": "মোহিনী মুগা ৰেচমৰ শাৰী",
+    "slug": "mohini-muga-silk-saree",
+    "fabric": "Muga Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Muga Silk",
+    "secondaryCategory": "",
+    "price": 82435,
+    "originalPrice": 90678.50000000001,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "The Mohini Muga Silk Saree is a celebration of timeless Assamese elegance, handcrafted by skilled Sualkuchi artisans. Featuring a luxurious natural golden hue, intricate traditional floral motifs, and beautifully woven decorative borders, this saree showcases the unmatched beauty and natural sheen of authentic Muga silk. Its graceful drape and exquisite craftsmanship make it perfect for bridal celebrations, weddings, and prestigious festive occasions.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/assammuga_7514861b-a317-436e-81f8-db46a4018ed9.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/muga_4773ea29-8de2-4611-9cc4-eca51a3d793a.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasilksaree_39d4e5cc-3f4a-4e9f-82be-659fe669c09c.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasilk_d3199238-6113-415c-8fed-ed27d9810db2.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/muga_silk_341203cd-65c7-4dc0-8075-a0dbac7d024c.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/silkmuga_e81ebb89-d4b7-4ff2-b5e7-95fce8794a36.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasilksari_0083f3ff-8aa5-41ef-96c6-387daa731ab2.jpg?v=1758283256&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mugasaree_5a0add0d-1798-4e44-9397-f511821ba362.jpg?v=1758283256&width=1800"
+    ],
+    "createdAt": "2026-10-31T15:45:52.202Z"
+  },
+  {
+    "id": "jm-custom-1793461164905",
+    "name": "Guna Muga Silk Saree",
+    "assameseName": "গুণ মুগা ৰেচমৰ শাৰী",
+    "slug": "guna-muga-silk-saree",
+    "fabric": "Muga Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Muga Silk",
+    "secondaryCategory": "",
+    "price": 95000,
+    "originalPrice": 104500.00000000001,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "An exquisite Guna Muga Silk Saree showcasing the natural golden elegance of traditional Assamese Muga silk. Handwoven by skilled Sualkuchi artisans, this luxurious saree features intricate traditional Guna motifs, finely detailed borders, and a beautiful natural sheen. Its rich texture and timeless craftsmanship make it an ideal choice for weddings, cultural celebrations, and grand festive occasions.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/products/gunamuga.jpg?v=1651663863&width=1800",
+      "https://thesilkchamber.com/cdn/shop/products/mugagunasaree-2.jpg?v=1651663863&width=1800",
+      "https://thesilkchamber.com/cdn/shop/products/gunamugasari.jpg?v=1651663863&width=1800",
+      "https://thesilkchamber.com/cdn/shop/products/mugagunasaree.jpg?v=1651663863&width=1800",
+      "https://thesilkchamber.com/cdn/shop/products/mugaguna.jpg?v=1651663863&width=1800",
+      "https://thesilkchamber.com/cdn/shop/products/mugasaree-2.jpg?v=1651975091&width=1800",
+      "https://thesilkchamber.com/cdn/shop/products/gunamuga.jpg?v=1651663863&width=1800"
+    ],
+    "createdAt": "2026-10-31T15:39:24.909Z"
+  },
+  {
+    "id": "jm-custom-1793460369068",
+    "name": "Old Rose Paat Silk Saree",
+    "assameseName": "পুৰণি গোলাপী পাটৰ শাৰী",
+    "slug": "old-rose-paat-silk-saree",
+    "fabric": "Paat Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Paat Silk",
+    "secondaryCategory": "",
+    "price": 32508,
+    "originalPrice": 35758.8,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "An exquisite Old Rose Paat Silk Saree, beautifully handwoven by skilled Assamese artisans. Featuring a soft dusty rose shade, intricate traditional floral motifs, and delicate golden zari-inspired borders, this saree reflects timeless elegance and refined craftsmanship. Its smooth texture and natural silk sheen make it perfect for weddings, festive celebrations, and elegant occasions.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/paatrose.jpg?v=1690632178&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/paatrosesaree.jpg?v=1690632178&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/rosepaatsari.jpg?v=1690632178&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/paatrosesari.jpg?v=1690632178&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/rosepaatsilk.jpg?v=1690632178&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/rosepaatsilksaree.jpg?v=1690632178&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/oldrosepaatsilksari.jpg?v=1690632178&width=1800"
+    ],
+    "createdAt": "2026-10-31T15:26:09.078Z"
+  },
+  {
+    "id": "jm-custom-1793460107638",
+    "name": "Teal Blue Paat Silk Mekhela Sador",
+    "assameseName": "সেউজীয়া নীলা পাটৰ মেখেলা চাদৰ",
+    "slug": "teal-blue-paat-silk-mekhela-sador",
+    "fabric": "Paat Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Paat Silk",
+    "secondaryCategory": "",
+    "price": 34500,
+    "originalPrice": 37950,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "A luxurious handwoven Assamese Paat silk Mekhela Sador in a beautiful teal blue shade, featuring intricate traditional Assamese floral motifs and elegant golden zari-inspired borders. Crafted by skilled Sualkuchi artisans, this ensemble showcases the natural sheen, smooth texture, and timeless beauty of authentic Assamese handloom. Perfect for weddings, festive celebrations, and special occasions.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/teal.jpg?v=1766847656&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/tealmekhelasador.jpg?v=1766847656&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/sador_b10b2dd8-a76e-4974-8e0e-7258a8353570.jpg?v=1766847656&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_7bdf953c-c155-493a-beaa-59b9beb1354e.jpg?v=1766847702&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/chador.jpg?v=1766847702&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/mekhelachadorteal.jpg?v=1766847702&width=1800"
+    ],
+    "createdAt": "2026-10-31T15:21:47.648Z"
+  },
+  {
+    "id": "jm-custom-1793441337185",
+    "name": "Vermilion Temple Saree",
+    "assameseName": "সেন্দুৰীয়া মন্দিৰ চানেকি পাটৰ শাৰী",
+    "slug": "vermilion-temple-saree",
+    "fabric": "Paat Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Paat Silk",
+    "secondaryCategory": "",
+    "price": 42000,
+    "originalPrice": 46200.00000000001,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "Exquisitely handwoven Assamese Pat silk saree featuring rich vermilion-red tones and traditional temple-inspired motifs. Crafted by skilled artisans with a smooth, natural sheen, this elegant saree is perfect for weddings, festivals, and special occasions.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/mekhelasador_4de2660f-1617-463b-ac9c-c525dd93f96e.jpg?v=1759510815&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/redpaatsilk.jpg?v=1759510815&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/paatred.jpg?v=1759510865&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/red_1da9cce6-9169-4b90-a6d5-268cd60c28a4.jpg?v=1759510865&width=1800"
+    ],
+    "createdAt": "2026-10-31T10:08:57.245Z"
+  },
+  {
+    "id": "jm-custom-1793031579131",
+    "name": "Rausch Eri Kesa Paat Silk Saree",
+    "assameseName": "কেঁচা পাট আৰু এৰি ৰেচমী শাৰী",
+    "slug": "rausch-eri-kesa-paat-silk-saree",
+    "fabric": "Paat Silk",
+    "department": "Women",
+    "collection": "Timeless Handloom",
+    "category": "Paat Silk",
+    "secondaryCategory": "",
+    "price": 22500,
+    "originalPrice": 24750.000000000004,
+    "featured": false,
+    "tag": "New Atelier Creation",
+    "inStock": true,
+    "loomDays": 20,
+    "artisanLocation": "Sualkuchi, Assam",
+    "description": "Exquisitely handwoven in Sualkuchi using traditional wooden throw-shuttle looms.",
+    "details": [
+      "100% pure authentic handloom silk from Sualkuchi, Assam",
+      "Woven on traditional throw-shuttle wooden looms",
+      "Certified authentic Assamese silk with Silk Mark guarantee",
+      "Includes matching unstitched blouse piece",
+      "Intricate traditional handwoven motifs"
+    ],
+    "care": "Specialist silk dry clean only.",
+    "sizes": [
+      "Standard Unstitched",
+      "Custom Tailored Fit"
+    ],
+    "images": [
+      "https://thesilkchamber.com/cdn/shop/files/erikp_3649e180-cde4-4052-bf27-234ba580ef55.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/coralerikp.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikpcoralsari.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/coralerisari.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/kperi.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/coralsari.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikpsari_9efac905-e296-4e27-9592-43cc7700dd34.jpg?v=1713617452&width=1800",
+      "https://thesilkchamber.com/cdn/shop/files/erikpcoral.jpg?v=1713617452&width=1800"
+    ],
+    "createdAt": "2026-10-26T16:19:39.137Z"
+  }
 ];

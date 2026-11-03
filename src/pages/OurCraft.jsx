@@ -59,7 +59,7 @@ export const OurCraft = () => {
           {/* Right Column: 100% Full-Bleed Handloom Imagery */}
           <div className="lg:col-span-6 relative min-h-[380px] lg:min-h-full overflow-hidden bg-[#111111]">
             <img
-              src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80"
+              src="/images/assam-loom-artisan.jpg"
               alt="Sualkuchi Artisan Handloom"
               className="absolute inset-0 w-full h-full object-cover filter brightness-[0.95] contrast-[1.03]"
             />

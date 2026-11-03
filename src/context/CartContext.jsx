@@ -151,12 +151,28 @@ export const CartProvider = ({ children }) => {
       if (savedProducts) {
         const parsed = JSON.parse(savedProducts);
         // Clean out any explicitly deleted IDs, ax-velvet-01, or contemporary-velvet photos
-        const filtered = parsed.filter(p => 
+        let filtered = parsed.filter(p => 
           p && 
           p.id !== 'ax-velvet-01' && 
           !deletedIds.has(p.id) &&
           !p.images?.some(img => typeof img === 'string' && img.includes('contemporary-velvet'))
         );
+
+        // Ensure newly introduced creations from INITIAL_PRODUCTS are merged in if not present
+        const existingIds = new Set(filtered.map(p => (p.id ? p.id.replace(/^ax-/i, 'jm-') : '')));
+        const existingNames = new Set(filtered.map(p => (p.name || '').trim().toLowerCase()));
+        for (const initP of INITIAL_PRODUCTS) {
+          const initNorm = normalizeProduct(initP);
+          if (
+            initNorm &&
+            !existingIds.has(initNorm.id) &&
+            !existingNames.has(initNorm.name.trim().toLowerCase()) &&
+            !deletedIds.has(initNorm.id)
+          ) {
+            filtered.push(initNorm);
+          }
+        }
+
         try {
           localStorage.setItem('aiaxom_products', JSON.stringify(filtered));
         } catch (e) {}
@@ -208,7 +224,7 @@ export const CartProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState(() => {
     try {
       const savedWishlist = localStorage.getItem('aiaxom_wishlist');
-      return savedWishlist ? JSON.parse(savedWishlist) : ['ax-muga-01', 'ax-bridal-01'];
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
     } catch (err) {
       console.error('Error reading wishlist from localStorage', err);
       return [];
@@ -243,10 +259,13 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     try {
       localStorage.setItem('aiaxom_cart', JSON.stringify(cart));
+      if (user?.email) {
+        localStorage.setItem(`aiaxom_cart_${user.email.toLowerCase()}`, JSON.stringify(cart));
+      }
     } catch (err) {
       console.error('Error writing cart to localStorage', err);
     }
-  }, [cart]);
+  }, [cart, user]);
 
   useEffect(() => {
     try {
@@ -275,10 +294,13 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     try {
       localStorage.setItem('aiaxom_wishlist', JSON.stringify(wishlist));
+      if (user?.email) {
+        localStorage.setItem(`aiaxom_wishlist_${user.email.toLowerCase()}`, JSON.stringify(wishlist));
+      }
     } catch (err) {
       console.error('Error writing wishlist to localStorage', err);
     }
-  }, [wishlist]);
+  }, [wishlist, user]);
 
   // Flash notification helper
   const showNotification = useCallback((msg) => {
@@ -401,6 +423,11 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
+    try {
+      localStorage.setItem('aiaxom_cart', '[]');
+    } catch (e) {
+      console.warn('Failed to clear cart in localStorage:', e);
+    }
   };
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
@@ -426,6 +453,11 @@ export const CartProvider = ({ children }) => {
 
   const clearWishlist = () => {
     setWishlist([]);
+    try {
+      localStorage.setItem('aiaxom_wishlist', '[]');
+    } catch (e) {
+      console.warn('Failed to clear wishlist in localStorage:', e);
+    }
     showNotification('All items removed from wishlist.');
   };
 
@@ -518,7 +550,7 @@ export const CartProvider = ({ children }) => {
           }
           if (filteredImages.length === 0) {
             filteredImages = [
-              'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+              'https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'
             ];
           }
           updatedProduct = normalizeProduct({ ...p, images: filteredImages });
@@ -730,6 +762,7 @@ export const CartProvider = ({ children }) => {
       const res = await api.login(cleanEmail, cleanPassword);
       if (res && res.user) {
         setUser(res.user);
+        loadUserCartAndWishlist(cleanEmail);
         showNotification(res.message || `Welcome back to the sanctuary, ${res.user.name}.`);
         return res.user;
       }
@@ -751,6 +784,7 @@ export const CartProvider = ({ children }) => {
         }
         const { password: _, ...safeUser } = foundUser;
         setUser(safeUser);
+        loadUserCartAndWishlist(cleanEmail);
         showNotification(`Welcome back, ${safeUser.name}.`);
         return safeUser;
       }
@@ -769,6 +803,7 @@ export const CartProvider = ({ children }) => {
           title: 'Master Atelier Director'
         };
         setUser(adminUser);
+        loadUserCartAndWishlist(cleanEmail);
         showNotification(`Welcome Curator Hemanta Saikia.`);
         return adminUser;
       } else {
@@ -779,11 +814,43 @@ export const CartProvider = ({ children }) => {
     throw new Error('No account found with this email. Please sign up first.');
   };
 
-  const logout = () => {
-    const prevName = user?.name || 'Patron';
-    setUser(null);
-    showNotification(`You have signed out. Farewell, ${prevName}.`);
+  const loadUserCartAndWishlist = (email) => {
+    if (!email) return;
+    try {
+      const savedCart = localStorage.getItem(`aiaxom_cart_${email.toLowerCase()}`);
+      const savedWish = localStorage.getItem(`aiaxom_wishlist_${email.toLowerCase()}`);
+      const restoredCart = savedCart ? JSON.parse(savedCart) : [];
+      const restoredWish = savedWish ? JSON.parse(savedWish) : [];
+      setCart(restoredCart);
+      setWishlist(restoredWish);
+      localStorage.setItem('aiaxom_cart', JSON.stringify(restoredCart));
+      localStorage.setItem('aiaxom_wishlist', JSON.stringify(restoredWish));
+    } catch (e) {
+      console.warn('Error loading user cart and wishlist:', e);
+    }
   };
+
+  const logout = useCallback(() => {
+    const prevName = user?.name || 'Patron';
+    const userEmail = user?.email;
+    if (userEmail) {
+      try {
+        localStorage.setItem(`aiaxom_cart_${userEmail.toLowerCase()}`, JSON.stringify(cart));
+        localStorage.setItem(`aiaxom_wishlist_${userEmail.toLowerCase()}`, JSON.stringify(wishlist));
+      } catch (e) {}
+    }
+    setUser(null);
+    setCart([]);
+    setWishlist([]);
+    try {
+      localStorage.setItem('aiaxom_cart', '[]');
+      localStorage.setItem('aiaxom_wishlist', '[]');
+      localStorage.removeItem('aiaxom_user');
+    } catch (e) {
+      console.warn('Error clearing cart/wishlist on logout:', e);
+    }
+    showNotification(`You have signed out. Farewell, ${prevName}.`);
+  }, [user, cart, wishlist, showNotification]);
 
   return (
     <CartContext.Provider

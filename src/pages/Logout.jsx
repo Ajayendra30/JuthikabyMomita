@@ -7,10 +7,9 @@ export const Logout = () => {
   const { user, logout } = useCart();
 
   useEffect(() => {
-    if (user) {
-      logout();
-    }
-  }, [user, logout]);
+    logout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="bg-[#FFFFFF] min-h-[80vh] flex items-center justify-center py-16 px-4">
@@ -39,7 +38,7 @@ export const Logout = () => {
 
         <div className="p-4 bg-[#FFFFFF] border border-[#E5E5E5] max-w-sm mx-auto mb-8 text-xs text-[#111111]/70 space-y-1 text-left">
           <p>&bull; Client session terminated</p>
-          <p>&bull; Shopping bag saved to local device</p>
+          <p>&bull; Shopping bag and wishlist reset to zero</p>
           <p>&bull; Concierge hotline remains available 24/7</p>
         </div>
 

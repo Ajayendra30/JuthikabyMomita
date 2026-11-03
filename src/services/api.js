@@ -43,6 +43,9 @@ export function normalizeProduct(p) {
     category: p.category,
     secondaryCategory: p.secondaryCategory || p.secondary_category || '',
     secondary_category: p.secondary_category || p.secondaryCategory || '',
+    department: p.department || 'Women',
+    collection: p.collection || 'Timeless Handloom',
+    createdAt: p.createdAt || p.created_at || new Date().toISOString(),
     price: Number(p.price) || 0,
     originalPrice: p.originalPrice ?? p.original_price ?? (Number(p.price) * 1.1),
     original_price: p.original_price ?? p.originalPrice ?? (Number(p.price) * 1.1),
@@ -59,7 +62,7 @@ export function normalizeProduct(p) {
     care: p.care || 'Specialist silk dry clean only.',
     sizes: Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['Standard Unstitched', 'Custom Tailored Drape'],
     images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+      'https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'
     ]
   };
 }

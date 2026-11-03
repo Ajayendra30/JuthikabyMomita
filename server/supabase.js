@@ -61,6 +61,8 @@ export async function getProductsFromSupabase() {
     fabric: p.fabric,
     category: p.category,
     secondaryCategory: p.secondary_category || '',
+    department: p.department || 'Women',
+    collection: p.collection || 'Timeless Handloom',
     price: Number(p.price),
     originalPrice: p.original_price ? Number(p.original_price) : undefined,
     featured: Boolean(p.featured),

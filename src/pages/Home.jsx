@@ -21,6 +21,18 @@ export const Home = () => {
       {/* D.1 Haute Couture 4-Video Grid ( 2x2 Showcase) */}
       <CoutureVideoGrid />
 
+      {/* E. Poetic Editorial Quotation Banner in White Space */}
+      <section className="w-full bg-[#FFFFFF] pt-10 pb-8 sm:pt-12 sm:pb-10 px-6 text-center border-b border-[#E8DFD1]/60 overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#111111] font-light tracking-wide mb-3">
+            The Soul of Sualkuchi
+          </h2>
+          <p className="text-xs sm:text-sm md:text-base text-[#111111]/75 font-light leading-relaxed max-w-2xl mx-auto">
+            &ldquo;True luxury is never rushed. It is born of quiet patience, whispered across hereditary wooden looms, and consecrated by the golden grace of Sualkuchi.&rdquo;
+          </p>
+        </div>
+      </section>
+
       {/* F. Craftsmanship Storytelling ("The Soul of Assamese Craft") */}
       <Craftsmanship />
 

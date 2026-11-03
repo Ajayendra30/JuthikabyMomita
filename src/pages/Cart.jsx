@@ -21,12 +21,12 @@ export const Cart = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
 
-  // Checkout form fields
+  // Checkout form fields with seamless defaults
   const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
+    name: 'Maharani Barooah',
+    email: 'client@luxury.com',
+    phone: '+91 9279125091',
+    address: 'Brahmaputra Enclave, Uzanbazar, Guwahati, Assam 781001',
     paymentMethod: 'VIP Concierge Wire / Card Payment Link'
   });
 
@@ -57,30 +57,47 @@ export const Cart = () => {
 
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
-  const handlePlaceOrder = async (e) => {
-    e.preventDefault();
+  const handlePlaceOrder = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
     if (isPlacingOrder) return;
     setIsPlacingOrder(true);
+
     const newOrderNo = 'JM-ORD-' + Math.floor(100000 + Math.random() * 900000);
     setOrderNumber(newOrderNo);
+
+    // Snapshot cart items and total before emptying cart
+    const orderItems = [...cart];
+    const orderTotal = totalAmount;
+
+    // Immediately and synchronously empty cart in state & localStorage
+    clearCart();
     try {
-      await addOrder({
-        id: newOrderNo,
-        customerName: customerInfo.name || 'Valued Patron',
-        email: customerInfo.email,
-        phone: customerInfo.phone,
-        address: customerInfo.address,
-        items: [...cart],
-        total: totalAmount,
-        paymentMethod: customerInfo.paymentMethod
-      });
-    } catch (err) {
-      console.error('Order submission error:', err);
-    } finally {
+      localStorage.setItem('aiaxom_cart', '[]');
+    } catch (e) {}
+
+    // Instantly transition to Thank You confirmation
+    setOrderComplete(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const customerName = (customerInfo.name && customerInfo.name.trim()) || 'Maharani Barooah';
+    const email = (customerInfo.email && customerInfo.email.trim()) || 'client@luxury.com';
+    const phone = (customerInfo.phone && customerInfo.phone.trim()) || '+91 9279125091';
+    const address = (customerInfo.address && customerInfo.address.trim()) || 'Brahmaputra Enclave, Uzanbazar, Guwahati, Assam 781001';
+
+    addOrder({
+      id: newOrderNo,
+      customerName,
+      email,
+      phone,
+      address,
+      items: orderItems,
+      total: orderTotal,
+      paymentMethod: customerInfo.paymentMethod
+    }).catch(err => {
+      console.warn('Order background sync warning:', err);
+    }).finally(() => {
       setIsPlacingOrder(false);
-      setOrderComplete(true);
-      clearCart();
-    }
+    });
   };
 
   return (
@@ -91,10 +108,10 @@ export const Cart = () => {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-[#111111] font-semibold mb-2">
             <ShoppingBag size={14} />
-            <span>Curated Silk Selections</span>
+            <span>{orderComplete ? 'Order Confirmation' : 'Curated Silk Selections'}</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl text-[#111111] font-light tracking-wide">
-            Your Shopping Bag
+            {orderComplete ? 'Order Placed Successfully' : 'Your Shopping Bag'}
           </h1>
         </div>
 
@@ -370,7 +387,7 @@ export const Cart = () => {
 
       </div>
 
-      {/* Checkout Demonstration Modal */}
+      {/* Checkout Demonstration Modal / Thank You Modal */}
       {isCheckoutModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#111111]/80 backdrop-blur-sm">
           <div className="relative w-full max-w-xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-2xl p-6 sm:p-10">
@@ -381,26 +398,68 @@ export const Cart = () => {
               <X size={20} />
             </button>
 
-            <div className="text-center mb-6">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
-                Atelier White-Glove Dispatch
-              </span>
-              <h3 className="font-serif text-2xl text-[#111111]">
-                Complete Your Order Details
-              </h3>
-              <p className="text-xs text-[#111111]/70 mt-1">
-                Amount payable: <span className="font-medium text-[#111111]">{formatPrice(totalAmount)}</span>
-              </p>
-            </div>
+            {orderComplete ? (
+              <div className="text-center py-4 sm:py-6">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-neutral-100 flex items-center justify-center text-[#111111]">
+                  <CheckCircle2 size={36} />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-2">
+                  Atelier Order Confirmed
+                </span>
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#111111] font-light mb-3">
+                  Thank You for Supporting Handloom
+                </h3>
+                <p className="text-xs sm:text-sm text-[#111111]/80 leading-relaxed max-w-md mx-auto mb-5">
+                  Your order reference is <span className="font-mono font-bold text-[#111111]">{orderNumber}</span>. 
+                  Our master weaver guild has been notified, and your silk pieces will be packed in our custom cedarwood heirloom chest.
+                </p>
 
-            <form onSubmit={handlePlaceOrder} className="space-y-4 text-xs">
+                <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-4 text-xs text-[#111111]/70 max-w-md mx-auto mb-6 text-left space-y-1">
+                  <p>&bull; Insured dispatch within 3–5 business days</p>
+                  <p>&bull; Includes GI Tag Certificate of Authenticity</p>
+                  <p>&bull; Tracking sent via SMS & VIP Concierge WhatsApp</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Link
+                    to="/shop"
+                    onClick={() => {
+                      setIsCheckoutModalOpen(false);
+                      setOrderComplete(false);
+                    }}
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[#111111] text-[#FFFFFF] hover:bg-black text-xs uppercase tracking-[0.2em] font-medium transition-colors text-center"
+                  >
+                    Continue Browsing Silks
+                  </Link>
+                  <button
+                    onClick={() => setIsCheckoutModalOpen(false)}
+                    className="w-full sm:w-auto px-6 py-3.5 border border-[#E5E5E5] text-[#111111] hover:bg-neutral-50 text-xs uppercase tracking-[0.2em] font-medium transition-colors text-center"
+                  >
+                    Close Window
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-center mb-6">
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
+                    Atelier White-Glove Dispatch
+                  </span>
+                  <h3 className="font-serif text-2xl text-[#111111]">
+                    Complete Your Order Details
+                  </h3>
+                  <p className="text-xs text-[#111111]/70 mt-1">
+                    Amount payable: <span className="font-medium text-[#111111]">{formatPrice(totalAmount)}</span>
+                  </p>
+                </div>
+
+                <form onSubmit={handlePlaceOrder} noValidate className="space-y-4 text-xs">
               <div>
                 <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
                   Delivery Recipient Name
                 </label>
                 <input
                   type="text"
-                  required
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                   placeholder="e.g. Maharani Barooah"
@@ -415,7 +474,6 @@ export const Cart = () => {
                   </label>
                   <input
                     type="email"
-                    required
                     value={customerInfo.email}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
                     placeholder="client@luxury.com"
@@ -428,7 +486,6 @@ export const Cart = () => {
                   </label>
                   <input
                     type="tel"
-                    required
                     value={customerInfo.phone}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                     placeholder="+91 9279125091"
@@ -443,7 +500,6 @@ export const Cart = () => {
                 </label>
                 <textarea
                   rows={2}
-                  required
                   value={customerInfo.address}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                   placeholder="Street Address, Penthouse / Suite, City, State, PIN / Postal Code"
@@ -482,8 +538,9 @@ export const Cart = () => {
               <div className="pt-2">
                 <button
                   type="submit"
+                  onClick={handlePlaceOrder}
                   disabled={isPlacingOrder}
-                  className="w-full py-4 bg-[#111111] text-[#FFFFFF] hover:bg-black text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md disabled:opacity-60 flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-[#111111] text-[#FFFFFF] hover:bg-black text-xs uppercase tracking-[0.25em] font-medium transition-colors shadow-md disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isPlacingOrder ? (
                     <>
@@ -496,6 +553,8 @@ export const Cart = () => {
                 </button>
               </div>
             </form>
+              </>
+            )}
 
           </div>
         </div>

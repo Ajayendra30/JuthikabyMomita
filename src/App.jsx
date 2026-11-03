@@ -61,7 +61,7 @@ function AdminSubdomainApp() {
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Admin />} />
-          <Route path="/admin" element={<Navigate to="/" replace />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<Navigate to="/" replace />} />

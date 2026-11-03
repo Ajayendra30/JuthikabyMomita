@@ -8,7 +8,7 @@ const QUADRANT_ITEMS = [
     subtitle: 'EXPLORE',
     link: '/bridal',
     videoSrc: '/videos/gmm.mp4',
-    poster: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=80',
+    poster: '/images/bridal-curated-ensembles.jpg',
     ariaLabel: 'Explore Bridal Couture'
   },
   {
@@ -17,7 +17,7 @@ const QUADRANT_ITEMS = [
     subtitle: 'EXPLORE',
     link: '/shop?category=Menswear',
     videoSrc: '/videos/menswear-video.mp4',
-    poster: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=80',
+    poster: '/images/bridal-heirloom-hero.jpg',
     ariaLabel: 'Explore Menswear Collection'
   },
   {
@@ -35,7 +35,7 @@ const QUADRANT_ITEMS = [
     subtitle: 'EXPLORE',
     link: '/shop?category=Accessories',
     videoSrc: '/videos/accessories-video.mp4',
-    poster: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80',
+    poster: '/images/bridal-emerald-gold.jpg',
     ariaLabel: 'Explore Heirloom Accessories'
   }
 ];

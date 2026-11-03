@@ -90,7 +90,7 @@ export const Admin = () => {
     tag: 'Signature Heritage',
     description: '',
     images: [
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+      'https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'
     ],
     sizes: 'Standard Unstitched, Custom Tailored Fit'
   };
@@ -215,13 +215,15 @@ export const Admin = () => {
       assameseName: newProductForm.assameseName.trim(),
       fabric: newProductForm.fabric,
       category: newProductForm.category,
+      department: 'Women',
+      collection: 'Timeless Handloom',
       price: Number(newProductForm.price),
       originalPrice: newProductForm.originalPrice ? Number(newProductForm.originalPrice) : Number(newProductForm.price) * 1.1,
       loomDays: Number(newProductForm.loomDays) || 20,
       artisanLocation: newProductForm.artisanLocation || 'Sualkuchi, Assam',
       tag: 'New Atelier Creation',
       description: newProductForm.description || 'Exquisitely handwoven in Sualkuchi using traditional wooden throw-shuttle looms.',
-      images: cleanImages.length > 0 ? cleanImages : ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'],
+      images: cleanImages.length > 0 ? cleanImages : ['https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'],
       sizes: parsedSizes.length > 0 ? parsedSizes : ['Standard Unstitched', 'Custom Tailored Fit'],
       inStock: true
     });

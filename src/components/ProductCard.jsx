@@ -21,7 +21,7 @@ export const ProductCard = ({ product }) => {
 
   const cardImages = (product.images && product.images.length > 0)
     ? product.images
-    : [product.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'];
+    : [product.image || 'https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'];
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {

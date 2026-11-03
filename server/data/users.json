@@ -28,5 +28,25 @@
     "title": "Patron of Assamese Handloom",
     "tier": "Heritage Silk Patron",
     "createdAt": "2026-10-31T15:27:42.867Z"
+  },
+  {
+    "id": "usr-1793650457341",
+    "name": "Aman",
+    "email": "aman@gamil.com",
+    "password": "272727",
+    "role": "client",
+    "title": "Patron of Assamese Handloom",
+    "tier": "Heritage Silk Patron",
+    "createdAt": "2026-11-02T20:14:17.341Z"
+  },
+  {
+    "id": "usr-1793683635216",
+    "name": "Aman",
+    "email": "aman@gmail.com",
+    "password": "272727",
+    "role": "client",
+    "title": "Patron of Assamese Handloom",
+    "tier": "Heritage Silk Patron",
+    "createdAt": "2026-11-03T05:27:15.216Z"
   }
 ]

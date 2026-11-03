@@ -334,7 +334,7 @@ app.post('/api/products', async (req, res) => {
     originalPrice: newProduct.originalPrice ? Number(newProduct.originalPrice) : Number(newProduct.price) * 1.1,
     loomDays: Number(newProduct.loomDays) || 20,
     artisanLocation: newProduct.artisanLocation || 'Sualkuchi, Assam',
-    images: Array.isArray(newProduct.images) && newProduct.images.length > 0 ? newProduct.images : ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'],
+    images: Array.isArray(newProduct.images) && newProduct.images.length > 0 ? newProduct.images : ['https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'],
     sizes: newProduct.sizes || ['Standard Unstitched', 'Custom Tailored Fit'],
     inStock: newProduct.inStock !== false,
     createdAt: new Date().toISOString()

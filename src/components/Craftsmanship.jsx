@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const Craftsmanship = () => {
   return (
-    <section className="w-full bg-[#1C1B1A] text-[#FFFFFF] p-0 m-0 mt-5 sm:mt-6 md:mt-8 border-b border-[#2A2620]">
+    <section className="w-full bg-[#1C1B1A] text-[#FFFFFF] p-0 m-0 border-b border-[#2A2620]">
       {/* 100% Full-Width Edge-to-Edge Grid with Zero Outer Boundary */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[520px] lg:min-h-[580px]">
         
@@ -39,7 +39,7 @@ export const Craftsmanship = () => {
         {/* Right Column: 100% Full-Bleed Image (Zero Border, Edge-to-Edge) */}
         <div className="lg:col-span-5 relative min-h-[360px] lg:min-h-full">
           <img
-            src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80"
+            src="/images/assam-loom-artisan.jpg"
             alt="Assam Silk Artisan at Loom"
             className="absolute inset-0 w-full h-full object-cover filter brightness-[0.9] contrast-[1.05]"
           />
