@@ -143,47 +143,27 @@ export const CartProvider = ({ children }) => {
     }
   });
 
-  // Dynamic Catalog state (persisted in localStorage + synced with FastAPI/Supabase)
+  const CATALOG_SYNC_VERSION = 'v3_authentic_9_garments';
+
+  // Dynamic Catalog state (persisted in localStorage + auto-synced across all devices)
   const [products, setProducts] = useState(() => {
     try {
-      const deletedIds = new Set(JSON.parse(localStorage.getItem('aiaxom_deleted_product_ids') || '[]'));
+      const storedVersion = localStorage.getItem('aiaxom_catalog_version');
+      // If version mismatch (e.g. mobile or laptop with old cached 12 or 21 dummy items), auto-flush to clean 9
+      if (storedVersion !== CATALOG_SYNC_VERSION) {
+        localStorage.setItem('aiaxom_catalog_version', CATALOG_SYNC_VERSION);
+        const cleanCatalog = INITIAL_PRODUCTS.map(normalizeProduct);
+        localStorage.setItem('aiaxom_products', JSON.stringify(cleanCatalog));
+        return cleanCatalog;
+      }
       const savedProducts = localStorage.getItem('aiaxom_products');
       if (savedProducts) {
-        const parsed = JSON.parse(savedProducts);
-        // Clean out any explicitly deleted IDs, ax-velvet-01, or contemporary-velvet photos
-        let filtered = parsed.filter(p => 
-          p && 
-          p.id !== 'ax-velvet-01' && 
-          !deletedIds.has(p.id) &&
-          !p.images?.some(img => typeof img === 'string' && img.includes('contemporary-velvet'))
-        );
-
-        // Ensure newly introduced creations from INITIAL_PRODUCTS are merged in if not present
-        const existingIds = new Set(filtered.map(p => (p.id ? p.id.replace(/^ax-/i, 'jm-') : '')));
-        const existingNames = new Set(filtered.map(p => (p.name || '').trim().toLowerCase()));
-        for (const initP of INITIAL_PRODUCTS) {
-          const initNorm = normalizeProduct(initP);
-          if (
-            initNorm &&
-            !existingIds.has(initNorm.id) &&
-            !existingNames.has(initNorm.name.trim().toLowerCase()) &&
-            !deletedIds.has(initNorm.id)
-          ) {
-            filtered.push(initNorm);
-          }
-        }
-
-        try {
-          localStorage.setItem('aiaxom_products', JSON.stringify(filtered));
-        } catch (e) {}
-        return filtered.map(normalizeProduct);
+        return JSON.parse(savedProducts).map(normalizeProduct);
       }
-      return INITIAL_PRODUCTS
-        .filter(p => p.id !== 'ax-velvet-01' && !deletedIds.has(p.id))
-        .map(normalizeProduct);
+      return INITIAL_PRODUCTS.map(normalizeProduct);
     } catch (err) {
       console.error('Error reading products from localStorage', err);
-      return INITIAL_PRODUCTS.filter(p => p.id !== 'ax-velvet-01').map(normalizeProduct);
+      return INITIAL_PRODUCTS.map(normalizeProduct);
     }
   });
 
@@ -577,9 +557,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const resetProducts = async () => {
-    setProducts(INITIAL_PRODUCTS.map(normalizeProduct));
-    localStorage.removeItem('aiaxom_products');
-    showNotification('Catalog reset to factory masterworks.');
+    const cleanCatalog = INITIAL_PRODUCTS.map(normalizeProduct);
+    setProducts(cleanCatalog);
+    try {
+      localStorage.setItem('aiaxom_catalog_version', CATALOG_SYNC_VERSION);
+      localStorage.setItem('aiaxom_products', JSON.stringify(cleanCatalog));
+    } catch (e) {}
+    showNotification('Catalog synchronized to official 9 authentic handloom creations.');
 
     if (backendStatus === 'connected') {
       try {

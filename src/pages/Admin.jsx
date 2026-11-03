@@ -548,7 +548,7 @@ export const Admin = () => {
                 </span>
                 <button
                   onClick={() => {
-                    if (window.confirm('Restore default 7 authentic Assamese handloom masterworks to the catalog?')) {
+                    if (window.confirm('Restore official 9 authentic Assamese handloom creations to the catalog?')) {
                       resetProducts();
                     }
                   }}
