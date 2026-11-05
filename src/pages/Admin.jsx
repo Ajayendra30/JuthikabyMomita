@@ -609,6 +609,36 @@ export const Admin = () => {
     ];
   }, [orders]);
 
+  const formatDateForDisplay = (dateVal) => {
+    if (!dateVal) return 'N/A';
+    try {
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) return 'N/A';
+      return d.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return 'N/A';
+    }
+  };
+
+  const formatDateForCSV = (dateVal) => {
+    if (!dateVal) return 'N/A';
+    try {
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) return 'N/A';
+      const day = String(d.getDate()).padStart(2, '0');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = months[d.getMonth()];
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`; // e.g. "03-Nov-2026"
+    } catch (e) {
+      return 'N/A';
+    }
+  };
+
   // 1-Click Export CSV Function
   const handleExportCSV = () => {
     if (!orders || orders.length === 0) {
@@ -618,10 +648,10 @@ export const Admin = () => {
 
     const headers = [
       'Order ID',
-      'Date',
+      'Order Date (DD-MMM-YYYY)',
       'Patron Name',
-      'Email',
-      'Phone',
+      'Email Address',
+      'Contact Phone',
       'Destination Address',
       'Garments Ordered',
       'Order Total (INR)',
@@ -630,11 +660,12 @@ export const Admin = () => {
     ];
 
     const rows = orders.map(o => {
-      const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN') : 'N/A';
+      const dateStr = formatDateForCSV(o.createdAt);
       const itemsStr = (o.items || [])
         .map(i => `${i.name || 'Silk Garment'} (x${i.quantity || 1})`)
         .join('; ');
       
+      const phoneStr = o.phone ? `\t${o.phone}` : 'N/A';
       const escape = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
 
       return [
@@ -642,7 +673,7 @@ export const Admin = () => {
         escape(dateStr),
         escape(o.customerName || o.customer_name || 'Anonymous Patron'),
         escape(o.email || 'N/A'),
-        escape(o.phone || 'N/A'),
+        escape(phoneStr),
         escape(o.address || 'N/A'),
         escape(itemsStr),
         escape(o.total || 0),
@@ -1759,6 +1790,7 @@ export const Admin = () => {
                     <thead>
                       <tr className="border-b border-[#E5E0D8] text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">
                         <th className="py-3 px-3">Order ID</th>
+                        <th className="py-3 px-3">Order Date</th>
                         <th className="py-3 px-3">Patron</th>
                         <th className="py-3 px-3">Garments Purchased</th>
                         <th className="py-3 px-3">Payment Channel</th>
@@ -1771,6 +1803,10 @@ export const Admin = () => {
                         <tr key={o.id} className="hover:bg-neutral-50/80 transition-colors">
                           <td className="py-3.5 px-3 font-mono font-medium text-neutral-700">
                             {o.id}
+                          </td>
+                          <td className="py-3.5 px-3 whitespace-nowrap text-neutral-600">
+                            <span className="font-medium text-neutral-900 block">{formatDateForDisplay(o.createdAt)}</span>
+                            <span className="text-[10px] text-neutral-400">Insured Dispatch</span>
                           </td>
                           <td className="py-3.5 px-3">
                             <span className="font-medium text-neutral-900 block">{o.customerName || o.customer_name}</span>
