@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
+  LayoutDashboard,
   Package, 
   ShoppingBag, 
   Calendar, 
+  Award, 
+  TrendingUp, 
   Plus, 
   Trash2, 
   Edit3, 
@@ -11,9 +14,31 @@ import {
   X, 
   RefreshCw, 
   ArrowLeft, 
-  Award, 
-  TrendingUp,
-  Eye
+  ExternalLink, 
+  CheckCircle2, 
+  Clock, 
+  Truck, 
+  ChevronRight, 
+  Filter, 
+  Sparkles, 
+  DollarSign, 
+  Layers, 
+  ShieldCheck, 
+  Eye, 
+  Grid, 
+  List, 
+  MoreVertical, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  SlidersHorizontal, 
+  ArrowUpRight, 
+  BarChart2, 
+  Check, 
+  AlertCircle, 
+  MessageCircle, 
+  Home, 
+  Menu
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { CATEGORIES } from '../data/products';
@@ -37,8 +62,10 @@ export const Admin = () => {
     syncWithBackend
   } = useCart();
 
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'catalog' | 'consultations' | 'orders' | 'guilds'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'catalog' | 'orders' | 'consultations' | 'guilds'
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
 
   const handleManualSync = async () => {
     setIsSyncing(true);
@@ -68,6 +95,7 @@ export const Admin = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFabricFilter, setSelectedFabricFilter] = useState('All');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
+  const [stockFilter, setStockFilter] = useState('All'); // 'All' | 'inStock' | 'outOfStock'
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
@@ -83,6 +111,8 @@ export const Admin = () => {
     assameseName: '',
     fabric: 'Muga Silk',
     category: 'Muga Silk',
+    department: 'Women',
+    collection: 'Timeless Handloom',
     price: '',
     originalPrice: '',
     loomDays: 25,
@@ -153,6 +183,8 @@ export const Admin = () => {
   const filteredCatalog = products.filter(p => {
     if (selectedFabricFilter !== 'All' && p.fabric !== selectedFabricFilter) return false;
     if (selectedCategoryFilter !== 'All' && p.category !== selectedCategoryFilter) return false;
+    if (stockFilter === 'inStock' && p.inStock === false) return false;
+    if (stockFilter === 'outOfStock' && p.inStock !== false) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const match = 
@@ -195,6 +227,7 @@ export const Admin = () => {
         (o.email && o.email.toLowerCase().includes(q)) ||
         (o.phone && o.phone.toLowerCase().includes(q)) ||
         (o.id && o.id.toLowerCase().includes(q)) ||
+        (o.address && o.address.toLowerCase().includes(q)) ||
         (o.items && o.items.some(item => item.name && item.name.toLowerCase().includes(q)));
       if (!match) return false;
     }
@@ -258,1290 +291,1557 @@ export const Admin = () => {
     setEditingProduct(null);
   };
 
+  const navTabs = [
+    { id: 'overview', label: 'Overview & Pulse', icon: LayoutDashboard },
+    { id: 'catalog', label: 'Catalog & Garments', badge: products.length, icon: Package },
+    { id: 'orders', label: 'Client Dispatches', badge: orders.length, icon: ShoppingBag },
+    { id: 'consultations', label: 'Bespoke Bridal', badge: pendingConsultationsCount, icon: Calendar },
+    { id: 'guilds', label: 'Artisan Guilds', icon: Award }
+  ];
+
+  const getOrderStatusBadgeClass = (status) => {
+    switch (status) {
+      case 'New Order Placed':
+        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'Loom Quality Inspection':
+        return 'bg-purple-50 text-purple-700 border-purple-200';
+      case 'Preparing Cedar Chest':
+        return 'bg-amber-50 text-amber-800 border-amber-200';
+      case 'Insured Dispatch':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'Delivered':
+        return 'bg-stone-100 text-stone-800 border-stone-300';
+      default:
+        return 'bg-neutral-100 text-neutral-800 border-neutral-200';
+    }
+  };
+
+  const getConsultationBadgeClass = (status) => {
+    switch (status) {
+      case 'New':
+        return 'bg-amber-500 text-white font-semibold';
+      case 'In Discussion':
+        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'Loom Assigned':
+        return 'bg-purple-50 text-purple-700 border-purple-200';
+      case 'Completed':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      default:
+        return 'bg-stone-100 text-stone-700 border-stone-200';
+    }
+  };
+
   return (
-    <div className="bg-[#FFFFFF] min-h-screen py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F8F7F4] text-[#1A1918] flex flex-col lg:flex-row font-sans selection:bg-[#B69A62]/20 selection:text-[#111111]">
+      
+      {/* ========================================================================= */}
+      {/* 1. LUXURY ATELIER SIDEBAR (Desktop Fixed & Mobile Slide-Over)             */}
+      {/* ========================================================================= */}
+      
+      {/* Mobile Sidebar Backdrop */}
+      {isMobileSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-xs transition-opacity"
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar Container */}
+      <aside className={`
+        fixed lg:sticky top-0 left-0 z-50 h-screen w-72 bg-[#121110] text-[#E8DFD1] flex flex-col justify-between border-r border-[#262420] transition-transform duration-300 ease-in-out
+        ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
         
-        {/* Top Header Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-[#E5E5E5] mb-8 gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#111111] animate-ping" />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold">
-                Private Atelier Console
-              </span>
-              <span className="text-[9px] uppercase tracking-wider bg-[#FFFFFF] text-[#111111]/60 px-2 py-0.5 border border-[#E5E5E5] font-mono">
-                {window.location.host}
+        {/* Top: Brand Monogram & Status */}
+        <div>
+          <div className="p-6 border-b border-[#262420]">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B69A62] to-[#8C6D23] flex items-center justify-center text-white font-serif text-lg font-light shadow-md">
+                  JM
+                </div>
+                <div>
+                  <h2 className="font-serif text-lg tracking-[0.18em] text-[#FFFFFF] font-light leading-none">
+                    JUTHIKA
+                  </h2>
+                  <span className="text-[9px] uppercase tracking-[0.3em] text-[#B69A62] block mt-1 font-semibold">
+                    Atelier Console
+                  </span>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsMobileSidebarOpen(false)}
+                className="lg:hidden text-[#E8DFD1]/60 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Live Database & Looms Status Indicator */}
+            <div className="mt-5 px-3 py-2 rounded-lg bg-[#1B1917] border border-[#2B2926] flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-[#E8DFD1]/90 font-medium">
+                  {backendStatus === 'connected' ? 'PostgreSQL Live' : 'Atelier Local Active'}
+                </span>
+              </div>
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#2B2926] text-[#B69A62] font-mono">
+                Sualkuchi
               </span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl text-[#111111] font-light">
-              Juthika By Momita Atelier Management
-            </h1>
-            <p className="text-xs text-[#111111]/70 font-light mt-0.5">
-              Sualkuchi Looms, Silk Inventory, Bespoke Consultations & Client Dispatches
-            </p>
-
           </div>
 
-          <div className="flex items-center gap-3">
+          {/* Navigation Items */}
+          <nav className="p-4 space-y-1.5">
+            <span className="px-3 text-[10px] uppercase tracking-[0.25em] text-[#E8DFD1]/40 font-semibold block mb-2">
+              Management
+            </span>
+            {navTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setIsMobileSidebarOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs uppercase tracking-[0.16em] font-medium transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-[#B69A62] text-[#FFFFFF] font-semibold shadow-md'
+                      : 'text-[#E8DFD1]/70 hover:bg-[#1E1C1A] hover:text-[#FFFFFF]'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon size={16} className={isActive ? 'text-white' : 'text-[#B69A62]'} />
+                    <span>{tab.label}</span>
+                  </div>
+                  {tab.badge !== undefined && tab.badge > 0 && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                      isActive ? 'bg-black/25 text-white' : 'bg-[#2A2825] text-[#B69A62]'
+                    }`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Quick Actions in Sidebar */}
+          <div className="p-4 pt-2 border-t border-[#262420] space-y-2">
+            <span className="px-3 text-[10px] uppercase tracking-[0.25em] text-[#E8DFD1]/40 font-semibold block mb-2">
+              Atelier Operations
+            </span>
             <button
               onClick={handleManualSync}
-              title="Sync latest live orders and catalog from server"
-              className={`inline-flex items-center gap-1.5 px-3 py-2 border border-[#E5E5E5] bg-[#FFFFFF] text-[#111111] hover:text-black hover:opacity-70 text-xs transition-colors cursor-pointer ${
-                isSyncing ? 'opacity-60' : ''
-              }`}
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-[#E8DFD1]/80 hover:bg-[#1E1C1A] hover:text-white transition-colors cursor-pointer"
             >
-              <RefreshCw size={13} className={isSyncing ? 'animate-spin text-[#111111]' : ''} />
+              <RefreshCw size={14} className={`text-[#B69A62] ${isSyncing ? 'animate-spin' : ''}`} />
               <span>{isSyncing ? 'Syncing...' : 'Sync Live Orders'}</span>
             </button>
+            <button
+              onClick={() => {
+                if (window.confirm('Restore official 9 authentic Assamese handloom creations to the catalog?')) {
+                  resetProducts();
+                }
+              }}
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-[#E8DFD1]/80 hover:bg-[#1E1C1A] hover:text-white transition-colors cursor-pointer"
+            >
+              <Sparkles size={14} className="text-[#B69A62]" />
+              <span>Restore 9 Masterworks</span>
+            </button>
+            <a
+              href={getMainStoreUrl('/')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs text-[#E8DFD1]/80 hover:bg-[#1E1C1A] hover:text-white transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <ExternalLink size={14} className="text-[#B69A62]" />
+                <span>Visit Live Boutique</span>
+              </div>
+              <ArrowUpRight size={12} className="text-[#E8DFD1]/40" />
+            </a>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex border-b border-[#E5E5E5] mb-8 overflow-x-auto gap-2">
-          {[
-            { id: 'overview', label: 'Overview & Pulse', icon: TrendingUp },
-            { id: 'catalog', label: `Catalog & Garments (${products.length})`, icon: Package },
-            { id: 'consultations', label: `Bespoke Bridal (${consultations.length})`, badge: pendingConsultationsCount, icon: Calendar },
-            { id: 'orders', label: `Client Orders (${orders.length})`, icon: ShoppingBag },
-            { id: 'guilds', label: 'Artisan Guilds', icon: Award }
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-3 px-5 text-xs uppercase tracking-[0.2em] font-medium transition-all flex items-center gap-2 relative whitespace-nowrap ${
-                  isActive
-                    ? 'text-[#111111] font-semibold bg-[#FFFFFF] border-t-2 border-t-[#111111] border-x border-[#E5E5E5]'
-                    : 'text-[#111111]/70 hover:text-[#111111] hover:bg-[#FFFFFF]/50'
-                }`}
-              >
-                <Icon size={14} />
-                <span>{tab.label}</span>
-                {tab.badge > 0 && (
-                  <span className="bg-[#111111] text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold">
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        {/* Bottom: Curator Director Profile Card */}
+        <div className="p-4 border-t border-[#262420] bg-[#100F0E]">
+          <div className="flex items-center gap-3 p-2 rounded-xl bg-[#181615] border border-[#2B2926]">
+            <div className="w-9 h-9 rounded-full bg-[#B69A62]/20 border border-[#B69A62]/40 flex items-center justify-center text-[#B69A62] font-semibold text-xs">
+              HS
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-xs font-medium text-white truncate">Curator Hemanta Saikia</h4>
+              <p className="text-[10px] text-[#B69A62] truncate">Master Atelier Director</p>
+            </div>
+          </div>
         </div>
 
-        {/* TAB 1: OVERVIEW & PULSE */}
-        {activeTab === 'overview' && (
-          <div className="space-y-8 animate-fade-in">
-            {/* Key Metrics Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                <div className="flex items-center justify-between text-xs text-[#111111]/60 mb-2">
-                  <span className="uppercase tracking-wider">Catalog Garments</span>
-                  <Package className="text-[#111111] w-4 h-4" />
-                </div>
-                <div className="font-sans text-3xl text-[#111111] mb-1 font-normal">{products.length}</div>
-                <div className="text-[11px] text-[#111111]/60 flex items-center gap-1">
-                  <span>Catalog Worth: {formatPrice(totalCatalogValue)}</span>
-                </div>
-              </div>
+      </aside>
 
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                <div className="flex items-center justify-between text-xs text-[#111111]/60 mb-2">
-                  <span className="uppercase tracking-wider">Bespoke Inquiries</span>
-                  <Calendar className="text-[#111111] w-4 h-4" />
-                </div>
-                <div className="font-sans text-3xl text-[#111111] mb-1 font-normal">{consultations.length}</div>
-                <div className="text-[11px] text-[#111111] font-medium">
-                  {pendingConsultationsCount} Pending Review
-                </div>
+      {/* ========================================================================= */}
+      {/* 2. MAIN MODERN APP WORKSPACE                                              */}
+      {/* ========================================================================= */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        
+        {/* Top App Header Bar */}
+        <header className="sticky top-0 z-30 bg-[#FFFFFF]/90 backdrop-blur-md border-b border-[#E5E0D8] px-6 sm:px-8 py-4 flex items-center justify-between gap-4">
+          
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsMobileSidebarOpen(true)}
+              className="lg:hidden p-2 text-[#111111] hover:bg-neutral-100 rounded-lg"
+              aria-label="Open Navigation Menu"
+            >
+              <Menu size={20} />
+            </button>
+            <div>
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#8C6D23] font-semibold">
+                <span>Atelier Console</span>
+                <span>/</span>
+                <span className="text-[#111111]">
+                  {navTabs.find(t => t.id === activeTab)?.label}
+                </span>
               </div>
-
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                <div className="flex items-center justify-between text-xs text-[#111111]/60 mb-2">
-                  <span className="uppercase tracking-wider">Client Orders</span>
-                  <ShoppingBag className="text-[#111111] w-4 h-4" />
-                </div>
-                <div className="font-sans text-3xl text-[#111111] mb-1 font-normal">{orders.length}</div>
-                <div className="text-[11px] text-[#111111]/60">
-                  Volume: {formatPrice(totalRevenue)}
-                </div>
-              </div>
-
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                <div className="flex items-center justify-between text-xs text-[#111111]/60 mb-2">
-                  <span className="uppercase tracking-wider">Active Looms</span>
-                  <Award className="text-[#111111] w-4 h-4" />
-                </div>
-                <div className="font-sans text-3xl text-[#111111] mb-1 font-normal">48</div>
-                <div className="text-[11px] text-black font-medium">
-                  100% Sualkuchi Fair Trade
-                </div>
-              </div>
-
+              <h1 className="font-serif text-xl sm:text-2xl text-[#111111] font-normal tracking-wide">
+                {activeTab === 'overview' && 'Atelier Overview & Pulse'}
+                {activeTab === 'catalog' && 'Haute Couture Silk Catalog'}
+                {activeTab === 'orders' && 'Client Orders & Dispatches'}
+                {activeTab === 'consultations' && 'Bespoke Bridal Consultations'}
+                {activeTab === 'guilds' && 'Sualkuchi Heritage & Looms'}
+              </h1>
             </div>
+          </div>
 
-            {/* Quick Actions & Recent Activity Split */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Header Action Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#111111] text-white hover:bg-black rounded-lg text-xs uppercase tracking-[0.2em] font-medium shadow-sm transition-all hover:shadow-md cursor-pointer"
+            >
+              <Plus size={14} className="text-[#B69A62]" />
+              <span className="hidden sm:inline">Add Silk Garment</span>
+            </button>
+
+            <a
+              href={getMainStoreUrl('/')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 border border-[#E5E0D8] bg-white text-[#111111] hover:bg-neutral-50 rounded-lg text-xs tracking-wider transition-colors"
+            >
+              <ExternalLink size={13} className="text-[#8C6D23]" />
+              <span>Live Store</span>
+            </a>
+          </div>
+
+        </header>
+
+        {/* Workspace Body Content */}
+        <main className="p-6 sm:p-8 space-y-8 max-w-7xl mx-auto w-full">
+
+          {/* ===================================================================== */}
+          {/* TAB 1: MODERN OVERVIEW & PULSE                                        */}
+          {/* ===================================================================== */}
+          {activeTab === 'overview' && (
+            <div className="space-y-8 animate-fade-in">
               
-              {/* Left: Quick Actions & Sualkuchi Status (5 cols) */}
-              <div className="lg:col-span-5 space-y-6">
-                <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                  <h3 className="font-serif text-xl text-[#111111] mb-4 pb-2 border-b border-[#E5E5E5]">
-                    Atelier Operations
-                  </h3>
-                  <div className="space-y-3">
-                    <button
-                      onClick={() => {
-                        setActiveTab('catalog');
-                        setIsAddModalOpen(true);
-                      }}
-                      className="w-full py-3 px-4 bg-[#111111] text-[#FFFFFF] hover:bg-black transition-colors text-xs uppercase tracking-widest font-medium flex items-center justify-center gap-2"
-                    >
-                      <Plus size={14} />
-                      <span>Add New Silk Garment</span>
-                    </button>
-
-                    <button
-                      onClick={() => setActiveTab('consultations')}
-                      className="w-full py-3 px-4 bg-[#FFFFFF] border border-[#E5E5E5] text-[#111111] hover:border-[#111111] transition-colors text-xs uppercase tracking-widest font-medium flex items-center justify-center gap-2"
-                    >
-                      <Calendar size={14} />
-                      <span>Review Bridal Inquiries ({pendingConsultationsCount} New)</span>
-                    </button>
-
-                    <button
-                      onClick={() => setActiveTab('orders')}
-                      className="w-full py-3 px-4 bg-[#FFFFFF] border border-[#E5E5E5] text-[#111111] hover:border-[#111111] transition-colors text-xs uppercase tracking-widest font-medium flex items-center justify-center gap-2"
-                    >
-                      <ShoppingBag size={14} />
-                      <span>Inspect Client Dispatches ({orders.length})</span>
-                    </button>
+              {/* 4 Hero KPI Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                
+                {/* Metric 1 */}
+                <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between text-neutral-500 mb-3">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-neutral-500">Catalog Worth</span>
+                    <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+                      <DollarSign size={18} />
+                    </div>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                    {formatPrice(totalCatalogValue)}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-emerald-700 font-medium">
+                    <CheckCircle2 size={13} />
+                    <span>{products.length} Authentic Masterworks</span>
                   </div>
                 </div>
 
-                {/* Sualkuchi Guild Status Box */}
-                <div className="bg-[#111111] text-[#FFFFFF] p-6 border border-[#E5E5E5] space-y-3">
-                  <span className="text-[10px] uppercase tracking-widest text-[#111111] font-semibold block">
-                    Guild Compliance &bull; Assam Handloom
-                  </span>
-                  <h4 className="font-serif text-lg text-[#FFFFFF]">
-                    Sualkuchi Silk Weaver Protection
-                  </h4>
-                  <p className="text-xs text-[#E5E5E5]/80 font-light leading-relaxed">
-                    All pieces currently listed adhere to authentic throw-shuttle extra-weft standards. Zero synthetic polyester blends detected. GI Tag Registration active for 2026/2027.
-                  </p>
+                {/* Metric 2 */}
+                <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between text-neutral-500 mb-3">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-neutral-500">Client Orders</span>
+                    <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                      <ShoppingBag size={18} />
+                    </div>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                    {orders.length} Orders
+                  </div>
+                  <div className="text-xs text-neutral-600 font-medium">
+                    Revenue: <strong className="text-neutral-900">{formatPrice(totalRevenue)}</strong>
+                  </div>
                 </div>
+
+                {/* Metric 3 */}
+                <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between text-neutral-500 mb-3">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-neutral-500">Bespoke Bridal</span>
+                    <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center">
+                      <Calendar size={18} />
+                    </div>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                    {consultations.length} Inquiries
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-amber-700 font-semibold">
+                    <Clock size={13} />
+                    <span>{pendingConsultationsCount} Pending Review</span>
+                  </div>
+                </div>
+
+                {/* Metric 4 */}
+                <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between text-neutral-500 mb-3">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-neutral-500">Active Looms</span>
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                      <Award size={18} />
+                    </div>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                    48 Looms
+                  </div>
+                  <div className="text-xs text-neutral-600 font-medium">
+                    100% Sualkuchi Fair Trade GI
+                  </div>
+                </div>
+
               </div>
 
-              {/* Right: Recent Bridal Inquiries & Orders (7 cols) */}
-              <div className="lg:col-span-7 bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5] mb-4">
-                  <h3 className="font-serif text-xl text-[#111111]">
-                    Recent Bespoke Appointments
-                  </h3>
-                  <button
-                    onClick={() => setActiveTab('consultations')}
-                    className="text-xs uppercase tracking-wider text-[#111111] hover:underline"
-                  >
-                    View All &rarr;
-                  </button>
-                </div>
-
-                <div className="divide-y divide-[#E5E5E5]">
-                  {consultations.slice(0, 4).map((c) => (
-                    <div key={c.id} className="py-3 flex items-center justify-between text-xs">
+              {/* Split Analytics & Feeds */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left (8 Columns): Live Orders & Loom Distribution */}
+                <div className="lg:col-span-8 space-y-6">
+                  
+                  {/* Live Order Feed Card */}
+                  <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs">
+                    <div className="flex items-center justify-between pb-4 border-b border-[#F0ECE1] mb-4">
                       <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-[#111111] text-sm font-serif">{c.name}</span>
-                          <span className={`text-[9px] px-2 py-0.5 rounded uppercase tracking-wider ${
-                            c.status === 'New' ? 'bg-[#111111] text-white' : 'bg-[#E5E5E5] text-[#111111]'
-                          }`}>
-                            {c.status}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-[#111111]/60 mt-0.5">
-                          {c.occasion} &bull; <span className="text-[#111111]">{c.preferredFabric}</span> &bull; {c.phone}
+                        <h3 className="font-serif text-lg text-[#111111] font-normal">
+                          Live Client Dispatches & Orders
+                        </h3>
+                        <p className="text-xs text-neutral-500 font-light mt-0.5">
+                          Real-time stream of patron orders and cedarwood heirloom dispatch
                         </p>
                       </div>
-                      <span className="text-[11px] font-mono text-[#111111]/50">{c.id}</span>
+                      <button
+                        onClick={() => setActiveTab('orders')}
+                        className="text-xs font-semibold text-[#8C6D23] hover:text-[#B69A62] uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>View All ({orders.length})</span>
+                        <ChevronRight size={13} />
+                      </button>
                     </div>
-                  ))}
-                </div>
 
-                <div className="mt-6 pt-4 border-t border-[#E5E5E5]">
-                  <h4 className="font-serif text-lg text-[#111111] mb-3">
-                    Recent Client Bag Dispatches
-                  </h4>
-                  <div className="divide-y divide-[#E5E5E5]">
-                    {orders.slice(0, 3).map((o) => (
-                      <div key={o.id} className="py-2.5 flex items-center justify-between text-xs">
-                        <div>
-                          <span className="font-medium text-[#111111]">{o.customerName}</span>
-                          <p className="text-[11px] text-[#111111]/60 truncate max-w-xs">
-                            {o.items?.map(i => i.name).join(', ')}
-                          </p>
+                    <div className="divide-y divide-[#F2EFE9]">
+                      {orders.slice(0, 4).map((order) => (
+                        <div key={order.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="flex items-start gap-3.5">
+                            <div className="w-10 h-10 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-700 flex items-center justify-center font-serif font-semibold text-sm flex-shrink-0">
+                              {(order.customerName || 'P').charAt(0)}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium text-sm text-[#111111]">{order.customerName}</span>
+                                <span className="text-[10px] font-mono text-neutral-400">({order.id})</span>
+                              </div>
+                              <p className="text-xs text-neutral-500 truncate max-w-sm sm:max-w-md mt-0.5">
+                                {order.items?.map(i => `${i.name} (x${i.quantity})`).join(', ')}
+                              </p>
+                              <div className="flex items-center gap-3 mt-1 text-[11px] text-neutral-400">
+                                <span>{order.address?.split(',').slice(-2).join(',') || 'India'}</span>
+                                <span>&bull;</span>
+                                <span className="text-neutral-600">{order.paymentMethod || 'VIP Wire'}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center sm:flex-col sm:items-end justify-between gap-1 pl-13 sm:pl-0">
+                            <span className="font-medium text-sm text-[#111111]">
+                              {formatPrice(order.total)}
+                            </span>
+                            <span className={`text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold border ${getOrderStatusBadgeClass(order.status)}`}>
+                              {order.status}
+                            </span>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <span className="font-sans font-medium text-[#111111] block text-xs">
-                            {formatPrice(o.total)}
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Silk Fiber & Loom Capacity Card */}
+                  <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs">
+                    <h3 className="font-serif text-lg text-[#111111] font-normal mb-1">
+                      Atelier Loom Capacity & Silk Distribution
+                    </h3>
+                    <p className="text-xs text-neutral-500 font-light mb-6">
+                      Authentic wild silk fiber allocation across Kamrup throw-shuttle master looms
+                    </p>
+
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between text-xs mb-1.5">
+                          <span className="font-medium text-neutral-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#B69A62]" />
+                            Pure Golden Muga Silk (Antheraea assamensis)
                           </span>
-                          <span className="text-[9px] uppercase tracking-wider text-[#111111]">
-                            {o.status}
-                          </span>
+                          <span className="font-semibold text-neutral-700">55% (26 Looms Assigned)</span>
+                        </div>
+                        <div className="w-full h-2.5 bg-neutral-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-[#B69A62] to-[#D4AF37] rounded-full" style={{ width: '55%' }} />
                         </div>
                       </div>
+
+                      <div>
+                        <div className="flex justify-between text-xs mb-1.5">
+                          <span className="font-medium text-neutral-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#A855F7]" />
+                            Ceremonial Mulberry Paat Silk
+                          </span>
+                          <span className="font-semibold text-neutral-700">30% (14 Looms Assigned)</span>
+                        </div>
+                        <div className="w-full h-2.5 bg-neutral-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full" style={{ width: '30%' }} />
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between text-xs mb-1.5">
+                          <span className="font-medium text-neutral-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" />
+                            Cruelty-Free Ahimsa Eri Silk (Samia cynthia ricini)
+                          </span>
+                          <span className="font-semibold text-neutral-700">15% (8 Looms Assigned)</span>
+                        </div>
+                        <div className="w-full h-2.5 bg-neutral-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full" style={{ width: '15%' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Right (4 Columns): Bespoke Inquiries & Atelier Guild Card */}
+                <div className="lg:col-span-4 space-y-6">
+                  
+                  {/* Bespoke Bridal Queue */}
+                  <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs">
+                    <div className="flex items-center justify-between pb-3 border-b border-[#F0ECE1] mb-4">
+                      <div>
+                        <h3 className="font-serif text-lg text-[#111111]">
+                          Bridal Inquiries
+                        </h3>
+                        <p className="text-[11px] text-neutral-400">High-touch client curation</p>
+                      </div>
+                      <button
+                        onClick={() => setActiveTab('consultations')}
+                        className="text-xs font-semibold text-[#8C6D23] hover:underline"
+                      >
+                        All &rarr;
+                      </button>
+                    </div>
+
+                    <div className="space-y-3.5">
+                      {consultations.slice(0, 3).map((item) => (
+                        <div key={item.id} className="p-3.5 rounded-xl border border-[#F0ECE1] bg-neutral-50/50 hover:bg-neutral-50 transition-colors">
+                          <div className="flex items-start justify-between gap-2 mb-1.5">
+                            <span className="font-medium text-sm text-[#111111] font-serif">{item.name}</span>
+                            <span className={`text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold ${getConsultationBadgeClass(item.status)}`}>
+                              {item.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-neutral-600 font-light mb-2">
+                            {item.occasion} &bull; <strong className="text-neutral-800">{item.preferredFabric}</strong>
+                          </p>
+                          <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-2 border-t border-neutral-200/50">
+                            <span>{item.preferredDate || 'Date Flexible'}</span>
+                            {item.phone && (
+                              <a
+                                href={`https://wa.me/${item.phone.replace(/[^0-9]/g, '')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-medium"
+                              >
+                                <MessageCircle size={12} />
+                                <span>WhatsApp</span>
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Sualkuchi Guild Heritage Protection Card */}
+                  <div className="rounded-2xl bg-[#141312] text-[#FFFFFF] p-6 border border-[#2B2926] shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#B69A62]/10 rounded-full blur-2xl pointer-events-none" />
+                    
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-[#B69A62] font-semibold block mb-2">
+                      GI Tag Verified &bull; Sualkuchi
+                    </span>
+                    <h4 className="font-serif text-lg text-white font-light mb-2">
+                      Hereditary Loom Protection
+                    </h4>
+                    <p className="text-xs text-neutral-300 font-light leading-relaxed mb-4">
+                      Every piece logged in this console connects directly to accredited master weavers in Kamrup. Zero industrial automation, 100% hand-spun gold Guna and silk.
+                    </p>
+                    <div className="pt-3 border-t border-neutral-800 flex items-center justify-between text-[11px] text-[#B69A62]">
+                      <span>Fair Dignity-First Wages</span>
+                      <span>Active 2026/27</span>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ===================================================================== */}
+          {/* TAB 2: MODERN CATALOG & GARMENTS                                      */}
+          {/* ===================================================================== */}
+          {activeTab === 'catalog' && (
+            <div className="space-y-6 animate-fade-in">
+              
+              {/* Modern Search & Filter Controls Toolbar */}
+              <div className="bg-white border border-[#E5E0D8] rounded-2xl p-5 shadow-xs space-y-4">
+                
+                {/* Search Bar + Primary Action Buttons */}
+                <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Search creations by name, Assamese script, fabric, or ID..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-[#B69A62] focus:bg-white transition-colors"
+                    />
+                    {searchQuery && (
+                      <button 
+                        onClick={() => setSearchQuery('')}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700"
+                      >
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {/* View Mode Toggle */}
+                    <div className="flex items-center p-1 bg-neutral-100 rounded-xl border border-neutral-200">
+                      <button
+                        onClick={() => setViewMode('grid')}
+                        className={`p-1.5 rounded-lg text-xs ${viewMode === 'grid' ? 'bg-white shadow-xs text-neutral-900 font-medium' : 'text-neutral-500'}`}
+                        title="Grid View"
+                      >
+                        <Grid size={15} />
+                      </button>
+                      <button
+                        onClick={() => setViewMode('table')}
+                        className={`p-1.5 rounded-lg text-xs ${viewMode === 'table' ? 'bg-white shadow-xs text-neutral-900 font-medium' : 'text-neutral-500'}`}
+                        title="Table View"
+                      >
+                        <List size={15} />
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => setIsAddModalOpen(true)}
+                      className="px-4 py-2.5 bg-[#111111] text-white hover:bg-black rounded-xl text-xs uppercase tracking-wider font-medium flex items-center gap-2 cursor-pointer shadow-xs transition-all"
+                    >
+                      <Plus size={14} className="text-[#B69A62]" />
+                      <span>Add Garment</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Filter Pills (Fabric + Category) */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-100">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold mr-1">Fabric:</span>
+                    {['All', 'Muga Silk', 'Paat Silk', 'Eri Silk', 'Kesa Paat'].map((fabric) => (
+                      <button
+                        key={fabric}
+                        onClick={() => setSelectedFabricFilter(fabric)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                          selectedFabricFilter === fabric
+                            ? 'bg-[#111111] text-white'
+                            : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                        }`}
+                      >
+                        {fabric}
+                      </button>
                     ))}
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-neutral-400">
+                      Showing <strong className="text-neutral-800">{filteredCatalog.length}</strong> of {products.length} Garments
+                    </span>
+                    <button
+                      onClick={() => {
+                        if (window.confirm('Restore official 9 authentic Assamese handloom creations to the catalog?')) {
+                          resetProducts();
+                        }
+                      }}
+                      className="text-xs text-[#8C6D23] hover:underline flex items-center gap-1 cursor-pointer font-medium"
+                    >
+                      <Sparkles size={12} />
+                      <span>Restore Official 9</span>
+                    </button>
                   </div>
                 </div>
 
               </div>
 
-            </div>
-          </div>
-        )}
-
-        {/* TAB 2: CATALOG & GARMENTS */}
-        {activeTab === 'catalog' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Controls Bar */}
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
-              <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                <div className="relative flex-grow sm:flex-grow-0 sm:w-64">
-                  <Search size={14} className="absolute left-3 top-3 text-[#111111]/40" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search silk garments..."
-                    className="w-full pl-9 pr-3 py-2 bg-[#FFFFFF] border border-[#E5E5E5] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-                  />
-                </div>
-
-                <select
-                  value={selectedFabricFilter}
-                  onChange={(e) => setSelectedFabricFilter(e.target.value)}
-                  className="bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-                >
-                  <option value="All">All Fabrics</option>
-                  <option value="Muga Silk">Muga Silk</option>
-                  <option value="Eri Silk">Eri Silk</option>
-                  <option value="Paat Silk">Paat Silk</option>
-                </select>
-
-                <select
-                  value={selectedCategoryFilter}
-                  onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-                  className="bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-                >
-                  <option value="All">All Categories</option>
-                  {CATEGORIES.filter(c => c !== 'All').map(c => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-                <span className="text-xs text-[#111111]/60">
-                  {filteredCatalog.length} of {products.length} Garments
-                </span>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Restore official 9 authentic Assamese handloom creations to the catalog?')) {
-                      resetProducts();
-                    }
-                  }}
-                  title="Reset catalog back to curated masterworks"
-                  className="px-3 py-2 border border-[#E5E5E5] bg-[#FFFFFF] hover:bg-stone-50 text-xs text-[#111111] flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <RefreshCw size={12} />
-                  <span>Restore Masterworks</span>
-                </button>
-                <button
-                  onClick={() => setIsAddModalOpen(true)}
-                  className="px-4 py-2 bg-[#111111] text-[#FFFFFF] hover:bg-black text-xs uppercase tracking-wider font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Plus size={14} />
-                  <span>Add Garment</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Products Table */}
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] overflow-x-auto shadow-sm">
-              <table className="w-full text-left text-xs text-[#111111]">
-                <thead className="bg-[#FFFFFF] uppercase tracking-wider text-[10px] text-[#111111]/70 border-b border-[#E5E5E5]">
-                  <tr>
-                    <th className="py-3.5 px-4">Garment</th>
-                    <th className="py-3.5 px-4">Fabric</th>
-                    <th className="py-3.5 px-4">Category</th>
-                    <th className="py-3.5 px-4">Price (INR)</th>
-                    <th className="py-3.5 px-4">Loom Time</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#E5E5E5]">
-                  {filteredCatalog.map((p) => (
-                    <tr key={p.id} className="hover:bg-stone-50 transition-colors">
-                      <td className="py-3 px-4 flex items-center gap-3">
-                        <img
-                          src={p.images[0]}
-                          alt={p.name}
-                          className="w-12 h-14 object-cover border border-[#E5E5E5] flex-shrink-0"
+              {/* Garment Grid View */}
+              {viewMode === 'grid' ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredCatalog.map((product) => (
+                    <div 
+                      key={product.id}
+                      className="bg-white border border-[#E5E0D8] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group"
+                    >
+                      {/* Product Thumbnail */}
+                      <div className="relative aspect-[4/5] bg-neutral-100 overflow-hidden">
+                        <img 
+                          src={product.images?.[0] || 'https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                         />
-                        <div>
-                          <span className="font-serif text-sm font-medium text-[#111111] block">
-                            {p.name}
+                        
+                        {/* Floating Top Badges */}
+                        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+                          <span className="px-2.5 py-1 bg-black/80 backdrop-blur-xs text-[#E8DFD1] text-[10px] uppercase tracking-wider rounded-md font-semibold">
+                            {product.fabric}
                           </span>
-                          {(p.assameseName || p.assamese_name) && (
-                            <span className="text-[11px] text-[#111111] font-serif block">
-                              {p.assameseName || p.assamese_name}
+                          {product.images?.length > 1 && (
+                            <span className="px-2 py-0.5 bg-white/90 backdrop-blur-xs text-neutral-800 text-[9px] rounded-md font-medium">
+                              {product.images.length} Photos
                             </span>
                           )}
-                          <span className="text-[10px] font-mono text-[#111111]">
-                            {p.id ? p.id.replace(/^ax-/i, 'jm-') : ''}
-                          </span>
                         </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 bg-neutral-100 text-[#111111] font-medium rounded">
-                          {p.fabric}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-xs text-[#111111]/80">
-                        {p.category}
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="font-sans text-xs sm:text-[13px] font-normal text-[#111111]">
-                          {formatPrice(p.price)}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-[#111111]/70">
-                        {p.loomDays || 25} Days &bull; Sualkuchi
-                      </td>
-                      <td className="py-3 px-4">
-                        {p.inStock !== false ? (
-                          <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 bg-neutral-100 text-black border border-neutral-300 font-medium rounded inline-block">
-                            In Stock
-                          </span>
-                        ) : (
-                          <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 bg-neutral-100 text-neutral-800 border border-neutral-300 font-medium rounded inline-block">
-                            Made to Order
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <a
-                            href={getMainStoreUrl(`/product/${p.id}`)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="View storefront page"
-                            className="p-1.5 text-[#111111]/60 hover:text-black hover:opacity-70 hover:bg-stone-100"
-                          >
-                            <Eye size={14} />
-                          </a>
+
+                        {/* In-Stock Pill on Image */}
+                        <div className="absolute top-3 right-3">
                           <button
-                            onClick={() => setEditingProduct(p)}
-                            title="Edit Garment"
-                            className="p-1.5 text-[#111111]/60 hover:text-black hover:opacity-70 hover:bg-stone-100"
+                            onClick={() => updateProduct(product.id, { inStock: product.inStock === false })}
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-colors shadow-xs flex items-center gap-1.5 ${
+                              product.inStock !== false
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-rose-500 text-white'
+                            }`}
+                            title="Click to toggle stock status"
                           >
-                            <Edit3 size={14} />
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                            <span>{product.inStock !== false ? 'In Stock' : 'Sold Out'}</span>
+                          </button>
+                        </div>
+
+                        {/* Hover Quick Action Buttons */}
+                        <div className="absolute inset-x-3 bottom-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => setEditingProduct(product)}
+                            className="flex-1 py-2 bg-white text-neutral-900 rounded-lg text-xs uppercase tracking-wider font-semibold shadow-md hover:bg-neutral-100 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <Edit3 size={13} />
+                            <span>Edit Garment</span>
                           </button>
                           <button
                             onClick={() => {
-                              if (window.confirm(`Are you sure you want to delete "${p.name}"?`)) {
-                                deleteProduct(p.id);
+                              if (window.confirm(`Remove "${product.name}" from the atelier catalog?`)) {
+                                deleteProduct(product.id);
                               }
                             }}
+                            className="p-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 shadow-md transition-colors cursor-pointer"
                             title="Delete Garment"
-                            className="p-1.5 text-[#111111]/40 hover:text-red-600 hover:bg-red-50"
                           >
                             <Trash2 size={14} />
                           </button>
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
 
-              {filteredCatalog.length === 0 && (
-                <div className="text-center py-12 text-[#111111]/60 text-xs">
-                  No garments match your active filters.
+                      {/* Card Content Details */}
+                      <div className="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-start justify-between gap-2 mb-1">
+                            <h3 className="font-serif text-base text-[#111111] font-normal leading-snug line-clamp-1">
+                              {product.name}
+                            </h3>
+                          </div>
+                          {(product.assameseName || product.assamese_name) && (
+                            <p className="text-xs text-[#8C6D23] font-light mb-2.5">
+                              {product.assameseName || product.assamese_name}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-3 text-xs text-neutral-500 mb-3">
+                            <span className="flex items-center gap-1">
+                              <Clock size={12} className="text-neutral-400" />
+                              <span>{product.loomDays || product.loom_days || 25} Loom Days</span>
+                            </span>
+                            <span>&bull;</span>
+                            <span className="text-neutral-600 truncate max-w-[120px]">
+                              {product.category}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Pricing & Stock Details Footer */}
+                        <div className="pt-3 border-t border-neutral-100 flex items-center justify-between">
+                          <div>
+                            <span className="text-sm font-semibold text-[#111111] block">
+                              {formatPrice(product.price)}
+                            </span>
+                            {product.originalPrice && product.originalPrice > product.price && (
+                              <span className="text-[11px] text-neutral-400 line-through">
+                                {formatPrice(product.originalPrice)}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] font-mono text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded">
+                            {product.id}
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                /* Garment Table View */
+                <div className="bg-white border border-[#E5E0D8] rounded-2xl overflow-hidden shadow-xs">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-neutral-50 text-neutral-500 uppercase tracking-wider text-[10px] font-semibold border-b border-neutral-200">
+                        <tr>
+                          <th className="py-3.5 px-4">Garment</th>
+                          <th className="py-3.5 px-4">Fabric & Category</th>
+                          <th className="py-3.5 px-4">Loom Time</th>
+                          <th className="py-3.5 px-4">Price</th>
+                          <th className="py-3.5 px-4">Stock Status</th>
+                          <th className="py-3.5 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-neutral-100">
+                        {filteredCatalog.map((product) => (
+                          <tr key={product.id} className="hover:bg-neutral-50/70 transition-colors">
+                            <td className="py-3.5 px-4">
+                              <div className="flex items-center gap-3">
+                                <img
+                                  src={product.images?.[0] || 'https://thesilkchamber.com/cdn/shop/files/mugasari_4c4c1055-f4e5-4275-929e-47cca7fd8daf.jpg?v=1758283256&width=1800'}
+                                  alt={product.name}
+                                  className="w-11 h-14 object-cover rounded-lg border border-neutral-200"
+                                />
+                                <div>
+                                  <div className="font-serif text-sm text-neutral-900 font-medium">
+                                    {product.name}
+                                  </div>
+                                  <div className="text-[11px] text-[#8C6D23]">
+                                    {product.assameseName || product.assamese_name}
+                                  </div>
+                                  <span className="text-[9px] font-mono text-neutral-400">{product.id}</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <span className="px-2 py-1 rounded bg-neutral-100 text-neutral-800 font-medium text-[11px]">
+                                {product.fabric}
+                              </span>
+                              <div className="text-[11px] text-neutral-400 mt-1">{product.category}</div>
+                            </td>
+                            <td className="py-3.5 px-4 text-neutral-600">
+                              {product.loomDays || product.loom_days || 25} Days
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <div className="font-semibold text-neutral-900">{formatPrice(product.price)}</div>
+                              {product.originalPrice && (
+                                <div className="text-[10px] text-neutral-400 line-through">
+                                  {formatPrice(product.originalPrice)}
+                                </div>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <button
+                                onClick={() => updateProduct(product.id, { inStock: product.inStock === false })}
+                                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold cursor-pointer ${
+                                  product.inStock !== false
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                    : 'bg-rose-50 text-rose-700 border border-rose-200'
+                                }`}
+                              >
+                                {product.inStock !== false ? '● In Stock' : '● Sold Out'}
+                              </button>
+                            </td>
+                            <td className="py-3.5 px-4 text-right">
+                              <div className="inline-flex items-center gap-1.5">
+                                <button
+                                  onClick={() => setEditingProduct(product)}
+                                  className="p-1.5 hover:bg-neutral-100 text-neutral-700 rounded-lg cursor-pointer"
+                                  title="Edit"
+                                >
+                                  <Edit3 size={14} />
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm(`Remove "${product.name}"?`)) {
+                                      deleteProduct(product.id);
+                                    }
+                                  }}
+                                  className="p-1.5 hover:bg-rose-50 text-rose-600 rounded-lg cursor-pointer"
+                                  title="Delete"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
+
             </div>
-          </div>
-        )}
+          )}
 
-        {/* TAB 3: BESPOKE BRIDAL APPOINTMENTS */}
-        {activeTab === 'consultations' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Header and Controls */}
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
-              <div>
-                <h3 className="font-serif text-lg text-[#111111]">
-                  Bespoke Bridal & Custom Consultation Dossier
-                </h3>
-                <p className="text-xs text-[#111111]/60 font-light">
-                  Direct client inquiries from the Consultation Modal and Bridal Couture booking suite.
-                </p>
+          {/* ===================================================================== */}
+          {/* TAB 3: MODERN CLIENT ORDERS & DISPATCHES                              */}
+          {/* ===================================================================== */}
+          {activeTab === 'orders' && (
+            <div className="space-y-6 animate-fade-in">
+              
+              {/* Order Search & Status Filter Controls */}
+              <div className="bg-white border border-[#E5E0D8] rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Search orders by customer name, order ID, phone, address, or item..."
+                      value={orderSearchQuery}
+                      onChange={(e) => setOrderSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-[#B69A62] focus:bg-white transition-colors"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleManualSync}
+                      className="px-3.5 py-2.5 border border-neutral-200 bg-white hover:bg-neutral-50 rounded-xl text-xs flex items-center gap-2 text-neutral-700 cursor-pointer"
+                    >
+                      <RefreshCw size={13} className={isSyncing ? 'animate-spin' : ''} />
+                      <span>Sync Orders</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-neutral-100">
+                  <span className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold mr-1">Status:</span>
+                  {[
+                    'All',
+                    'New Order Placed',
+                    'Loom Quality Inspection',
+                    'Preparing Cedar Chest',
+                    'Insured Dispatch',
+                    'Delivered'
+                  ].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setOrderStatusFilter(status)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                        orderStatusFilter === status
+                          ? 'bg-[#111111] text-white'
+                          : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs uppercase tracking-wider bg-neutral-100 text-[#111111] px-3 py-1 font-semibold">
-                  {filteredConsultations.length} of {consultations.length} Requests
-                </span>
-              </div>
-            </div>
 
-            {/* Filter Bar */}
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-3 flex flex-wrap items-center gap-3">
-              <div className="relative flex-grow sm:flex-grow-0 sm:w-72">
-                <Search size={14} className="absolute left-3 top-2.5 text-[#111111]/40" />
-                <input
-                  type="text"
-                  value={consultationSearchQuery}
-                  onChange={(e) => setConsultationSearchQuery(e.target.value)}
-                  placeholder="Search by client, ID, phone, occasion..."
-                  className="w-full pl-9 pr-3 py-1.5 bg-[#FFFFFF] border border-[#E5E5E5] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-                />
-              </div>
-
-              <select
-                value={consultationStatusFilter}
-                onChange={(e) => setConsultationStatusFilter(e.target.value)}
-                className="bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-1.5 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-              >
-                <option value="All">All Statuses</option>
-                <option value="New">New</option>
-                <option value="In Discussion">In Discussion</option>
-                <option value="Loom Assigned">Loom Assigned</option>
-                <option value="Weaving in Progress">Weaving in Progress</option>
-                <option value="Completed">Completed</option>
-                <option value="Archived">Archived</option>
-              </select>
-
-              {(consultationSearchQuery || consultationStatusFilter !== 'All') && (
-                <button
-                  onClick={() => {
-                    setConsultationSearchQuery('');
-                    setConsultationStatusFilter('All');
-                  }}
-                  className="text-xs text-[#111111] hover:underline"
-                >
-                  Clear Filters
-                </button>
-              )}
-            </div>
-
-            {/* Inquiries Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredConsultations.map((c) => {
-                const consultationStatuses = ['New', 'In Discussion', 'Loom Assigned', 'Weaving in Progress', 'Completed', 'Archived'];
-                const currentStatus = consultationStatuses.find(st => st.toLowerCase() === (c.status || '').toLowerCase().trim()) || c.status || 'New';
-                const statusOptions = consultationStatuses.includes(currentStatus) 
-                  ? consultationStatuses 
-                  : [currentStatus, ...consultationStatuses];
-
-                return (
-                  <div key={c.id} className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm flex flex-col justify-between space-y-4">
-                    <div>
-                      <div className="flex items-center justify-between border-b border-[#E5E5E5] pb-3 mb-3">
-                        <div>
-                          <h4 className="font-serif text-lg text-[#111111] font-normal leading-tight">
-                            {c.name}
-                          </h4>
-                          <span className="text-[10px] font-mono text-[#111111]">{c.id}</span>
+              {/* Order Cards List */}
+              <div className="space-y-4">
+                {filteredOrders.length === 0 ? (
+                  <div className="bg-white border border-[#E5E0D8] rounded-2xl p-12 text-center text-neutral-400">
+                    <ShoppingBag size={32} className="mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No client orders match the current filter criteria.</p>
+                  </div>
+                ) : (
+                  filteredOrders.map((order) => (
+                    <div 
+                      key={order.id}
+                      className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow"
+                    >
+                      {/* Top Bar: Order ID, Date, Amount, Status Selector */}
+                      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-neutral-100 gap-4 mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-neutral-100 text-[#111111] flex items-center justify-center font-serif font-bold text-base">
+                            {(order.customerName || 'P').charAt(0)}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-xs font-semibold text-[#111111]">{order.id}</span>
+                              <span className="text-[10px] text-neutral-400">
+                                {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recent'}
+                              </span>
+                            </div>
+                            <h3 className="font-medium text-sm text-neutral-900 mt-0.5">{order.customerName}</h3>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <select
-                            value={currentStatus}
-                            onChange={(e) => updateConsultationStatus(c.id, e.target.value)}
-                            className={`text-[10px] uppercase tracking-wider px-2 py-1 font-semibold border cursor-pointer ${
-                              currentStatus === 'New' 
-                                ? 'bg-[#111111] text-white border-[#111111]'
-                                : currentStatus === 'Loom Assigned' || currentStatus === 'Weaving in Progress'
-                                ? 'bg-black text-white border-emerald-800'
-                                : 'bg-[#FFFFFF] text-[#111111] border-[#E5E5E5]'
-                            }`}
-                          >
-                            {statusOptions.map(st => (
-                              <option key={st} value={st}>{st}</option>
-                            ))}
-                          </select>
+
+                        {/* Status Dropdown & Total */}
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <span className="text-[10px] text-neutral-400 uppercase tracking-wider block">Total Amount</span>
+                            <span className="font-serif text-base font-semibold text-neutral-900">
+                              {formatPrice(order.total)}
+                            </span>
+                          </div>
+
+                          <div className="relative">
+                            <select
+                              value={order.status}
+                              onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                              className={`text-xs font-medium px-3 py-1.5 rounded-lg border focus:outline-none cursor-pointer ${getOrderStatusBadgeClass(order.status)}`}
+                            >
+                              <option value="New Order Placed">New Order Placed</option>
+                              <option value="Loom Quality Inspection">Loom Quality Inspection</option>
+                              <option value="Preparing Cedar Chest">Preparing Cedar Chest</option>
+                              <option value="Insured Dispatch">Insured Dispatch</option>
+                              <option value="Delivered">Delivered</option>
+                            </select>
+                          </div>
+
                           <button
                             onClick={() => {
-                              if (window.confirm(`Archive/delete consultation request from ${c.name} (${c.id})?`)) {
-                                deleteConsultation(c.id);
+                              if (window.confirm(`Archive order ${order.id}?`)) {
+                                deleteOrder(order.id);
                               }
                             }}
-                            title="Delete consultation"
-                            className="p-1 text-[#111111]/40 hover:text-red-600 transition-colors cursor-pointer"
+                            className="p-1.5 text-neutral-400 hover:text-rose-600 rounded-lg transition-colors cursor-pointer"
+                            title="Archive Order"
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={15} />
                           </button>
                         </div>
                       </div>
 
-                      <div className="space-y-2 text-xs text-[#111111]/80">
-                        <div>
-                          <span className="text-[10px] text-[#111111]/50 uppercase tracking-wider block">Occasion:</span>
-                          <span className="font-medium text-[#111111]">{c.occasion}</span>
-                        </div>
-
-                        <div>
-                          <span className="text-[10px] text-[#111111]/50 uppercase tracking-wider block">Preferred Silk:</span>
-                          <span className="text-[#111111] font-medium">{c.preferredFabric}</span>
-                        </div>
-
-                        <div>
-                          <span className="text-[10px] text-[#111111]/50 uppercase tracking-wider block">Format & Location:</span>
-                          <span>{c.consultationType}</span>
-                        </div>
-
-                        {c.preferredDate && (
-                          <div>
-                            <span className="text-[10px] text-[#111111]/50 uppercase tracking-wider block">Requested Date:</span>
-                            <span>{c.preferredDate}</span>
+                      {/* Middle: Items & Customer Details */}
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                        
+                        {/* Ordered Items (7 cols) */}
+                        <div className="md:col-span-7 space-y-2">
+                          <span className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold block mb-1">
+                            Heirloom Garments Selected ({order.items?.length || 0})
+                          </span>
+                          <div className="space-y-2">
+                            {order.items?.map((item, idx) => (
+                              <div key={idx} className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-neutral-50/70 border border-neutral-100">
+                                <div>
+                                  <span className="font-medium text-neutral-900">{item.name}</span>
+                                  <div className="text-[10px] text-neutral-500">
+                                    Size: {item.selectedSize || 'Standard'} &bull; Qty: {item.quantity || 1}
+                                  </div>
+                                </div>
+                                <span className="font-medium text-neutral-800">
+                                  {formatPrice(item.price * (item.quantity || 1))}
+                                </span>
+                              </div>
+                            ))}
                           </div>
-                        )}
+                        </div>
 
-                        <div className="pt-2 border-t border-[#E5E5E5]/50">
-                          <span className="text-[10px] text-[#111111]/50 uppercase tracking-wider block">Client Notes:</span>
-                          <p className="text-[11px] text-[#111111]/75 italic mt-1 leading-relaxed bg-[#FFFFFF] p-2.5 border border-[#E5E5E5]/40">
-                            &ldquo;{c.message}&rdquo;
+                        {/* Customer Address & Payment (5 cols) */}
+                        <div className="md:col-span-5 space-y-2 text-xs border-t md:border-t-0 md:border-l border-neutral-100 md:pl-6 pt-3 md:pt-0">
+                          <span className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold block mb-1">
+                            Dispatch & Contact Information
+                          </span>
+                          <p className="text-neutral-700 leading-relaxed font-light">
+                            <MapPin size={12} className="inline mr-1 text-[#8C6D23]" />
+                            {order.address || 'Address pending client confirmation'}
                           </p>
+                          <div className="pt-2 text-neutral-500 space-y-1">
+                            {order.phone && (
+                              <p className="flex items-center gap-1.5">
+                                <Phone size={11} className="text-neutral-400" />
+                                <span>{order.phone}</span>
+                                <a
+                                  href={`https://wa.me/${order.phone.replace(/[^0-9]/g, '')}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-emerald-700 text-[10px] hover:underline font-medium"
+                                >
+                                  (WhatsApp)
+                                </a>
+                              </p>
+                            )}
+                            {order.email && (
+                              <p className="flex items-center gap-1.5">
+                                <Mail size={11} className="text-neutral-400" />
+                                <span>{order.email}</span>
+                              </p>
+                            )}
+                            <p className="text-[10px] uppercase tracking-wider text-neutral-500 mt-1">
+                              Payment: <strong className="text-neutral-800">{order.paymentMethod || 'VIP Wire'}</strong>
+                            </p>
+                          </div>
                         </div>
+
+                      </div>
+
+                    </div>
+                  ))
+                )}
+              </div>
+
+            </div>
+          )}
+
+          {/* ===================================================================== */}
+          {/* TAB 4: MODERN BESPOKE BRIDAL CONSULTATIONS                            */}
+          {/* ===================================================================== */}
+          {activeTab === 'consultations' && (
+            <div className="space-y-6 animate-fade-in">
+              
+              <div className="bg-white border border-[#E5E0D8] rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Search bespoke appointments by patron name, phone, occasion, or silk..."
+                      value={consultationSearchQuery}
+                      onChange={(e) => setConsultationSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-[#B69A62] focus:bg-white transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-neutral-100">
+                  <span className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold mr-1">Status:</span>
+                  {['All', 'New', 'In Discussion', 'Loom Assigned', 'Completed', 'Archived'].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setConsultationStatusFilter(status)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                        consultationStatusFilter === status
+                          ? 'bg-[#111111] text-white'
+                          : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredConsultations.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="bg-white border border-[#E5E0D8] rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <span className={`text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold border ${getConsultationBadgeClass(item.status)}`}>
+                          {item.status}
+                        </span>
+                        <span className="text-[10px] font-mono text-neutral-400">{item.id}</span>
+                      </div>
+
+                      <h3 className="font-serif text-lg text-neutral-900 font-medium mb-1">
+                        {item.name}
+                      </h3>
+                      <div className="text-xs text-[#8C6D23] font-medium mb-3">
+                        {item.occasion} &bull; {item.preferredFabric}
+                      </div>
+
+                      <div className="space-y-2 text-xs text-neutral-600 mb-4 bg-neutral-50/70 p-3.5 rounded-xl border border-neutral-100">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar size={13} className="text-neutral-400" />
+                          <span>Appt Date: <strong>{item.preferredDate || 'To be scheduled'}</strong></span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <MapPin size={13} className="text-neutral-400" />
+                          <span className="truncate">{item.consultationType || 'Guwahati Flagship Atelier'}</span>
+                        </div>
+                        {item.message && (
+                          <p className="text-[11px] text-neutral-500 italic pt-1 border-t border-neutral-200/50">
+                            &ldquo;{item.message}&rdquo;
+                          </p>
+                        )}
                       </div>
                     </div>
 
-                    <div className="pt-3 border-t border-[#E5E5E5] text-[11px] text-[#111111]/70 space-y-1">
-                      <p>Phone: <a href={`tel:${c.phone}`} className="text-[#111111] hover:underline font-mono">{c.phone}</a></p>
-                      <p>Email: <a href={`mailto:${c.email}`} className="text-[#111111] hover:underline">{c.email}</a></p>
+                    <div className="pt-3 border-t border-neutral-100 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        {item.phone && (
+                          <a
+                            href={`https://wa.me/${item.phone.replace(/[^0-9]/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-xs font-medium flex items-center gap-1"
+                          >
+                            <MessageCircle size={12} />
+                            <span>WhatsApp</span>
+                          </a>
+                        )}
+                        {item.email && (
+                          <a
+                            href={`mailto:${item.email}`}
+                            className="p-1.5 hover:bg-neutral-100 text-neutral-600 rounded-lg"
+                            title="Send Email"
+                          >
+                            <Mail size={14} />
+                          </a>
+                        )}
+                      </div>
+
+                      <select
+                        value={item.status}
+                        onChange={(e) => updateConsultationStatus(item.id, e.target.value)}
+                        className="text-xs font-medium px-2 py-1 rounded-lg border border-neutral-200 bg-white focus:outline-none cursor-pointer"
+                      >
+                        <option value="New">New</option>
+                        <option value="In Discussion">In Discussion</option>
+                        <option value="Loom Assigned">Loom Assigned</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Archived">Archived</option>
+                      </select>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          )}
+
+          {/* ===================================================================== */}
+          {/* TAB 5: MODERN ARTISAN GUILDS & HERITAGE                               */}
+          {/* ===================================================================== */}
+          {activeTab === 'guilds' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white border border-[#E5E0D8] rounded-2xl p-8 shadow-xs">
+                <div className="max-w-3xl">
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-[#8C6D23] font-semibold block mb-2">
+                    Living Heritage &bull; Fair Trade Sualkuchi
+                  </span>
+                  <h2 className="font-serif text-2xl sm:text-3xl text-neutral-900 font-light mb-3">
+                    Kamrup Silk Weaver Guild Registry
+                  </h2>
+                  <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed mb-8">
+                    Juthika by Momita operates as an artisanal sanctuary. We collaborate directly with 45+ hereditary master weaver families across Sualkuchi, ensuring fair-trade living dignity wages, healthcare security, and complete protection of the GI Tag for pure Assamese Muga and Paat silks.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                    <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
+                      <span className="text-xs text-neutral-500 uppercase tracking-wider block mb-1">Active Guilds</span>
+                      <span className="font-serif text-2xl text-neutral-900">3 Master Cooperatives</span>
+                      <span className="text-[11px] text-emerald-700 block mt-1">Sualkuchi, Hajo & Kamrup</span>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
+                      <span className="text-xs text-neutral-500 uppercase tracking-wider block mb-1">Throw-Shuttle Looms</span>
+                      <span className="font-serif text-2xl text-neutral-900">48 Heritage Looms</span>
+                      <span className="text-[11px] text-neutral-600 block mt-1">100% Traditional Extra-Weft</span>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
+                      <span className="text-xs text-neutral-500 uppercase tracking-wider block mb-1">GI Tag Authenticity</span>
+                      <span className="font-serif text-2xl text-neutral-900">Govt Reg. #GI-44</span>
+                      <span className="text-[11px] text-[#8C6D23] block mt-1">Zero Synthetic Blends</span>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-
-            {filteredConsultations.length === 0 && (
-              <div className="text-center py-12 text-[#111111]/60 text-xs bg-[#FFFFFF] border border-[#E5E5E5]">
-                No bespoke inquiries match your active search filters.
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* TAB 4: CLIENT ORDERS & DISPATCHES */}
-        {activeTab === 'orders' && (
-          <div className="space-y-6 animate-fade-in">
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="font-serif text-lg text-[#111111]">
-                  Client Bag Dispatches & Order Tracking
-                </h3>
-                <p className="text-xs text-[#111111]/60 font-light">
-                  Real-time client orders logged via the cart checkout process.
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleManualSync}
-                  className="px-3 py-1.5 border border-[#E5E5E5] bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[11px] uppercase tracking-wider text-[#111111] flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <RefreshCw size={12} className={isSyncing ? 'animate-spin text-[#111111]' : ''} />
-                  <span>Refresh Orders</span>
-                </button>
-                <span className="text-xs uppercase tracking-wider font-sans text-[#111111] font-medium">
-                  Total Volume: {formatPrice(totalRevenue)}
-                </span>
-              </div>
-            </div>
-
-            {/* Orders Filter Bar */}
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-3 flex flex-wrap items-center gap-3">
-              <div className="relative flex-grow sm:flex-grow-0 sm:w-72">
-                <Search size={14} className="absolute left-3 top-2.5 text-[#111111]/40" />
-                <input
-                  type="text"
-                  value={orderSearchQuery}
-                  onChange={(e) => setOrderSearchQuery(e.target.value)}
-                  placeholder="Search by client, order ID, phone, garment..."
-                  className="w-full pl-9 pr-3 py-1.5 bg-[#FFFFFF] border border-[#E5E5E5] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-                />
-              </div>
-
-              <select
-                value={orderStatusFilter}
-                onChange={(e) => setOrderStatusFilter(e.target.value)}
-                className="bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-1.5 text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
-              >
-                <option value="All">All Statuses</option>
-                <option value="Preparing Cedar Chest">Preparing Cedar Chest</option>
-                <option value="Loom Quality Inspection">Loom Quality Inspection</option>
-                <option value="Artisan Weaving">Artisan Weaving</option>
-                <option value="Insured Dispatch">Insured Dispatch</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
-
-              {(orderSearchQuery || orderStatusFilter !== 'All') && (
-                <button
-                  onClick={() => {
-                    setOrderSearchQuery('');
-                    setOrderStatusFilter('All');
-                  }}
-                  className="text-xs text-[#111111] hover:underline"
-                >
-                  Clear Filters
-                </button>
-              )}
-            </div>
-
-            {/* Orders List */}
-            <div className="space-y-4">
-              {filteredOrders.map((o) => {
-                const orderStatuses = [
-                  'Preparing Cedar Chest',
-                  'Loom Quality Inspection',
-                  'Artisan Weaving',
-                  'Insured Dispatch',
-                  'Delivered',
-                  'Cancelled'
-                ];
-                const currentStatus = orderStatuses.find(st => st.toLowerCase() === (o.status || '').toLowerCase().trim()) || o.status || 'Preparing Cedar Chest';
-                const statusOptions = orderStatuses.includes(currentStatus) 
-                  ? orderStatuses 
-                  : [currentStatus, ...orderStatuses];
-
-                return (
-                  <div key={o.id} className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 shadow-sm">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E5E5E5] gap-2">
-                      <div>
-                        <div className="flex items-center gap-3">
-                          <span className="font-serif text-lg text-[#111111] font-medium">
-                            {o.customerName}
-                          </span>
-                          <span className="text-xs font-mono text-[#111111] bg-neutral-100 px-2 py-0.5 rounded">
-                            {o.id}
-                          </span>
-                        </div>
-                        <span className="text-xs text-[#111111]/60">
-                          {o.email} &bull; {o.phone}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <span className="font-sans text-lg text-[#111111] font-medium">
-                          {formatPrice(o.total)}
-                        </span>
-                        <select
-                          value={currentStatus}
-                          onChange={(e) => updateOrderStatus(o.id, e.target.value)}
-                          className="text-xs px-3 py-1.5 bg-[#FFFFFF] border border-[#E5E5E5] focus:outline-none focus:border-[#111111] cursor-pointer"
-                        >
-                          {statusOptions.map(st => (
-                            <option key={st} value={st}>{st}</option>
-                          ))}
-                        </select>
-                        <button
-                          onClick={() => {
-                            if (window.confirm(`Archive/delete order ${o.id} for ${o.customerName}?`)) {
-                              deleteOrder(o.id);
-                            }
-                          }}
-                          title="Archive order"
-                          className="p-1.5 text-[#111111]/40 hover:text-red-600 transition-colors cursor-pointer"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                      <div>
-                        <span className="text-[10px] uppercase tracking-wider text-[#111111]/50 block mb-1">
-                          Garments in Dispatch:
-                        </span>
-                        <ul className="space-y-1">
-                          {o.items?.map((item, idx) => (
-                            <li key={idx} className="flex justify-between text-[#111111]/80">
-                              <span>{item.quantity}x {item.name} ({item.selectedSize})</span>
-                              <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <span className="text-[10px] uppercase tracking-wider text-[#111111]/50 block mb-1">
-                          Destination Address:
-                        </span>
-                        <p className="text-[#111111]/80 leading-relaxed bg-[#FFFFFF] p-2 border border-[#E5E5E5]/50">
-                          {o.address || 'Flagship Atelier Collection'}
-                        </p>
-                        <span className="text-[10px] text-[#111111]/50 block mt-1">
-                          Payment: {o.paymentMethod}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {filteredOrders.length === 0 && (
-                <div className="text-center py-12 text-[#111111]/60 text-xs bg-[#FFFFFF] border border-[#E5E5E5]">
-                  No orders match your active search filters.
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 5: GUILDS & SUALKUCHI LOOM TRACKER */}
-        {activeTab === 'guilds' && (
-          <div className="space-y-8 animate-fade-in">
-            <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-8 shadow-sm">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-2">
-                Hereditary Artisan Lineage
-              </span>
-              <h2 className="font-serif text-3xl text-[#111111] mb-4">
-                Sualkuchi Partner Guilds & Looms
-              </h2>
-              <p className="text-xs sm:text-sm text-[#111111]/75 font-light leading-relaxed max-w-3xl">
-                AIAXOM collaborates directly with 45 master weaver family clusters across Sualkuchi, Kamrup, and Majuli. 
-                Every master weaver receives fair living compensation 3.2x above the regional benchmark, 
-                healthcare coverage, and recognized intellectual design preservation.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 space-y-3">
-                <span className="font-serif text-xl text-[#111111] block">Barpeta-Sualkuchi Royal Guild</span>
-                <p className="text-[#111111]/70 font-light">Lead Artisan: Master Weaver Trailokya Das (5th Gen)</p>
-                <div className="p-3 bg-[#FFFFFF] border border-[#E5E5E5] space-y-1 text-[11px]">
-                  <p>&bull; Active Looms: 18 Wooden Throw-Shuttles</p>
-                  <p>&bull; Specialization: 100% Wild Muga Kingkhap Motifs</p>
-                  <p>&bull; Certified GI Compliance: Active</p>
-                </div>
-              </div>
-
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 space-y-3">
-                <span className="font-serif text-xl text-[#111111] block">Kamrup Paat Bridal Sanctuary</span>
-                <p className="text-[#111111]/70 font-light">Lead Artisan: Master Weaver Bimala Kalita (4th Gen)</p>
-                <div className="p-3 bg-[#FFFFFF] border border-[#E5E5E5] space-y-1 text-[11px]">
-                  <p>&bull; Active Looms: 16 Fly & Throw Shuttles</p>
-                  <p>&bull; Specialization: Pure Mulberry Paat & Silver Guna</p>
-                  <p>&bull; Certified GI Compliance: Active</p>
-                </div>
-              </div>
-
-              <div className="bg-[#FFFFFF] border border-[#E5E5E5] p-6 space-y-3">
-                <span className="font-serif text-xl text-[#111111] block">Majuli Ahimsa Eri Collective</span>
-                <p className="text-[#111111]/70 font-light">Lead Artisan: Master Weaver Nayanmoni Saikia (3rd Gen)</p>
-                <div className="p-3 bg-[#FFFFFF] border border-[#E5E5E5] space-y-1 text-[11px]">
-                  <p>&bull; Active Looms: 14 Hand-Spun Eri Looms</p>
-                  <p>&bull; Specialization: Botanical-Dyed Cruelty-Free Wraps</p>
-                  <p>&bull; Certified Peace Silk: Active</p>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
+        </main>
       </div>
 
-      {/* MODAL: ADD NEW SILK GARMENT */}
+      {/* ========================================================================= */}
+      {/* 3. MODAL: ADD NEW SILK GARMENT                                            */}
+      {/* ========================================================================= */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111111]/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-2xl p-6 sm:p-8 my-8">
-            <button
-              onClick={() => setIsAddModalOpen(false)}
-              className="absolute top-4 right-4 text-[#111111]/60 hover:text-[#111111]"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="mb-6">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
-                Atelier Masterwork Curation
-              </span>
-              <h3 className="font-serif text-2xl text-[#111111]">
-                Add New Garment to Catalog
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-neutral-200 max-h-[92vh] flex flex-col overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+              <div>
+                <h3 className="font-serif text-xl text-neutral-900 font-normal">
+                  Add New Creation to Catalog
+                </h3>
+                <p className="text-xs text-neutral-500 font-light mt-0.5">
+                  Publish a new authentic handwoven silk masterwork to the boutique
+                </p>
+              </div>
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="p-1.5 text-neutral-400 hover:text-neutral-800 rounded-lg hover:bg-neutral-200/50"
+              >
+                <X size={18} />
+              </button>
             </div>
 
-            <form onSubmit={handleCreateProduct} className="space-y-4 text-xs">
+            {/* Modal Body Form */}
+            <form onSubmit={handleCreateProduct} className="p-6 overflow-y-auto space-y-4 text-xs">
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
                     Garment Name (English) *
                   </label>
                   <input
                     type="text"
                     required
+                    placeholder="e.g. Royal Kingkhap Muga Mekhela Chador"
                     value={newProductForm.name}
                     onChange={(e) => setNewProductForm({ ...newProductForm, name: e.target.value })}
-                    placeholder="e.g. Royal Singkhap Muga Mekhela"
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Assamese Script Title (Optional)
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Assamese Script Title
                   </label>
                   <input
                     type="text"
+                    placeholder="e.g. ৰয়েল কিংখাপ মুগা মেখেলা চাদৰ"
                     value={newProductForm.assameseName}
                     onChange={(e) => setNewProductForm({ ...newProductForm, assameseName: e.target.value })}
-                    placeholder="e.g. ৰাজকীয় সোণালী মুগা"
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
                     Silk Fabric *
                   </label>
                   <select
                     value={newProductForm.fabric}
                     onChange={(e) => setNewProductForm({ ...newProductForm, fabric: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                    className="w-full px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                   >
-                    <option value="Muga Silk">Muga Silk (Wild Gold)</option>
-                    <option value="Eri Silk">Eri Silk (Ahimsa Peace Silk)</option>
-                    <option value="Paat Silk">Paat Silk (Royal Mulberry)</option>
+                    <option value="Muga Silk">Pure Muga Silk</option>
+                    <option value="Paat Silk">Mulberry Paat Silk</option>
+                    <option value="Eri Silk">Ahimsa Eri Silk</option>
+                    <option value="Kesa Paat">Raw Kesa Paat</option>
+                    <option value="Muga-Paat Hybrid">Muga-Paat Hybrid</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
                     Category *
                   </label>
                   <select
                     value={newProductForm.category}
                     onChange={(e) => setNewProductForm({ ...newProductForm, category: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                    className="w-full px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                   >
-                    {CATEGORIES.filter(c => c !== 'All').map(c => (
-                      <option key={c} value={c}>{c}</option>
+                    {CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Price (INR ₹) *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    placeholder="e.g. 68500"
+                    value={newProductForm.price}
+                    onChange={(e) => setNewProductForm({ ...newProductForm, price: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Price in INR (₹) *
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Original Price / Strikethrough (INR ₹)
                   </label>
                   <input
                     type="number"
-                    required
-                    value={newProductForm.price}
-                    onChange={(e) => setNewProductForm({ ...newProductForm, price: e.target.value })}
-                    placeholder="68500"
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                    placeholder="e.g. 75000"
+                    value={newProductForm.originalPrice}
+                    onChange={(e) => setNewProductForm({ ...newProductForm, originalPrice: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Loom Days *
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Handloom Weaving Days
                   </label>
                   <input
                     type="number"
+                    placeholder="25"
                     value={newProductForm.loomDays}
                     onChange={(e) => setNewProductForm({ ...newProductForm, loomDays: e.target.value })}
-                    placeholder="28"
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                   />
                 </div>
               </div>
 
-              {/* Multiple Photography Angles Manager */}
-              <div className="space-y-3 pt-2 pb-1 border-y border-[#E5E5E5]/60">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <label className="block uppercase tracking-wider text-[10px] text-[#111111] font-medium">
-                      Garment Photography & Multiple Angles *
-                    </label>
-                    <p className="text-[11px] text-[#111111]/60 font-light">
-                      Add 2, 3 or more photos showing different angles (Front, Side, Close-up) for the thumbnail gallery.
-                    </p>
-                  </div>
+              {/* Photo Angles */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="uppercase tracking-wider text-[10px] text-neutral-700 font-semibold">
+                    Product Images (High-Res Image URLs)
+                  </label>
                   <button
                     type="button"
                     onClick={handleAddImageField}
-                    className="inline-flex items-center gap-1 px-3 py-1 text-[10px] uppercase tracking-wider bg-[#111111] text-white hover:bg-black transition-colors"
+                    className="text-[#8C6D23] hover:underline font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
                   >
                     <Plus size={12} />
-                    <span>Add Angle</span>
+                    <span>Add Another Photo Angle</span>
                   </button>
                 </div>
 
-                <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                  {(newProductForm.images || ['']).map((imgUrl, idx) => (
-                    <div key={idx} className="p-2.5 border border-[#E5E5E5] bg-white flex items-center gap-3">
-                      {/* Live Thumbnail Preview */}
-                      <div className="w-12 h-14 bg-stone-100 border border-[#E5E5E5] flex-shrink-0 overflow-hidden flex items-center justify-center">
-                        {imgUrl ? (
-                          <img 
-                            src={imgUrl} 
-                            alt={`Angle ${idx + 1}`} 
-                            className="w-full h-full object-cover" 
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                          />
-                        ) : (
-                          <span className="text-[9px] text-[#111111]/40 text-center font-mono">No Image</span>
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[10px] uppercase tracking-wider text-[#111111] font-semibold">
-                            {idx === 0 ? 'Angle 1: Main Front Standing View *' : idx === 1 ? 'Angle 2: Side Profile View' : idx === 2 ? 'Angle 3: Sitting / Pallu Detail View' : `Angle ${idx + 1}`}
-                          </span>
-                          {idx === 0 && (
-                            <span className="text-[9px] text-[#111111]/50 uppercase tracking-widest">Default Cover</span>
-                          )}
-                        </div>
-                        <input
-                          type="url"
-                          required={idx === 0}
-                          value={imgUrl}
-                          onChange={(e) => handleImageChange(idx, e.target.value)}
-                          placeholder="Paste image URL (https://...)"
-                          className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#111111]"
-                        />
-                      </div>
-
-                      {newProductForm.images?.length > 1 && (
+                <div className="space-y-2">
+                  {newProductForm.images?.map((url, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={url}
+                        onChange={(e) => handleImageChange(idx, e.target.value)}
+                        className="flex-1 px-3.5 py-2 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                      />
+                      {newProductForm.images.length > 1 && (
                         <button
                           type="button"
                           onClick={() => handleRemoveImageField(idx)}
-                          className="p-1.5 text-[#111111]/40 hover:text-red-600 hover:bg-red-50 transition-colors"
-                          title="Remove this photo angle"
+                          className="p-2 text-rose-500 hover:text-rose-700 rounded-lg hover:bg-rose-50"
                         >
-                          <Trash2 size={13} />
+                          <Trash2 size={14} />
                         </button>
                       )}
                     </div>
                   ))}
                 </div>
 
-                {/* Quick preset chips to append */}
-                <div>
-                  <span className="text-[9px] text-[#111111]/60 uppercase tracking-wider block mb-1">
-                    Quick Preset Samples (click to add as another angle):
-                  </span>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {PRESET_IMAGES.map((preset, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => handleAddPresetToForm(preset.url)}
-                        className="text-[9px] px-2 py-0.5 bg-[#FFFFFF] border border-[#E5E5E5] hover:border-[#111111] text-[#111111]/80 hover:text-black hover:opacity-70 flex items-center gap-1 transition-colors"
-                      >
-                        <Plus size={9} />
-                        <span>{preset.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                  Weaving Description
-                </label>
-                <textarea
-                  rows={3}
-                  value={newProductForm.description}
-                  onChange={(e) => setNewProductForm({ ...newProductForm, description: e.target.value })}
-                  placeholder="Describe the motifs, Sualkuchi artisans, and silk texture..."
-                  className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                />
-              </div>
-
-              <div className="pt-2 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-5 py-2.5 border border-[#111111] text-xs uppercase tracking-wider text-[#111111]"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] text-xs uppercase tracking-widest font-medium transition-colors"
-                >
-                  Add to Atelier Catalog
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL: EDIT PRODUCT */}
-      {editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111111]/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-2xl p-6 sm:p-8 my-8">
-            <button
-              onClick={() => setEditingProduct(null)}
-              className="absolute top-4 right-4 text-[#111111]/60 hover:text-[#111111]"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="mb-6">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
-                Edit Atelier Garment
-              </span>
-              <h3 className="font-serif text-2xl text-[#111111]">
-                {editingProduct.name}
-              </h3>
-              <span className="text-[10px] font-mono text-[#111111]">
-                {editingProduct.id ? editingProduct.id.replace(/^ax-/i, 'jm-') : ''}
-              </span>
-            </div>
-
-            <form onSubmit={handleSaveEditProduct} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Garment Name (English) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={editingProduct.name || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Assamese Script Title
-                  </label>
-                  <input
-                    type="text"
-                    value={editingProduct.assameseName || editingProduct.assamese_name || ''}
-                    onChange={(e) => setEditingProduct({ 
-                      ...editingProduct, 
-                      assameseName: e.target.value,
-                      assamese_name: e.target.value 
-                    })}
-                    placeholder="e.g. ৰাজকীয় সোণালী মুগা"
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Silk Fabric *
-                  </label>
-                  <select
-                    value={editingProduct.fabric || 'Muga Silk'}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, fabric: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  >
-                    <option value="Muga Silk">Muga Silk (Wild Gold)</option>
-                    <option value="Eri Silk">Eri Silk (Ahimsa Peace Silk)</option>
-                    <option value="Paat Silk">Paat Silk (Royal Mulberry)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Category *
-                  </label>
-                  <select
-                    value={editingProduct.category || 'Muga Silk'}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  >
-                    {CATEGORIES.filter(c => c !== 'All').map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Price in INR (₹) *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={editingProduct.price || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Original / Comparison Price (₹)
-                  </label>
-                  <input
-                    type="number"
-                    value={editingProduct.originalPrice || editingProduct.original_price || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, originalPrice: e.target.value, original_price: e.target.value })}
-                    placeholder="Optional list price"
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                    Loom Days *
-                  </label>
-                  <input
-                    type="number"
-                    value={editingProduct.loomDays ?? editingProduct.loom_days ?? 20}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, loomDays: e.target.value, loom_days: e.target.value })}
-                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
-                  />
-                </div>
-              </div>
-
-              {/* Stock Status Toggle */}
-              <div className="p-3 border border-[#E5E5E5] bg-stone-50 flex items-center justify-between">
-                <div>
-                  <span className="block uppercase tracking-wider text-[10px] text-[#111111] font-medium">
-                    Inventory Status
-                  </span>
-                  <p className="text-[11px] text-[#111111]/60 font-light">
-                    When toggled on, garment shows as "In Stock" with rapid dispatch. When off, displays "Made to Order".
-                  </p>
-                </div>
-                <label className="inline-flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={editingProduct.inStock !== false && editingProduct.in_stock !== false}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, inStock: e.target.checked, in_stock: e.target.checked })}
-                    className="w-4 h-4 accent-[#111111]"
-                  />
-                  <span className="text-xs font-medium text-[#111111]">
-                    {editingProduct.inStock !== false && editingProduct.in_stock !== false ? 'In Stock & Ready' : 'Made to Order'}
-                  </span>
-                </label>
-              </div>
-
-              {/* Photo Angles Manager for Edit Modal */}
-              <div className="space-y-3 pt-2 pb-1 border-y border-[#E5E5E5]/60">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <label className="block uppercase tracking-wider text-[10px] text-[#111111] font-medium">
-                      Garment Photography & Angles ({editingProduct.images?.length || 0})
-                    </label>
-                    <p className="text-[11px] text-[#111111]/60 font-light">
-                      Add, edit, or delete photos for this garment's vertical thumbnail gallery.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingProduct({
-                        ...editingProduct,
-                        images: [...(editingProduct.images || []), '']
-                      });
-                    }}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#111111] text-white hover:bg-black transition-colors cursor-pointer"
-                  >
-                    <Plus size={11} />
-                    <span>Add Angle</span>
-                  </button>
-                </div>
-
-                <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
-                  {(editingProduct.images || []).map((imgUrl, idx) => (
-                    <div key={idx} className="p-2 border border-[#E5E5E5] bg-white flex items-center gap-2.5">
-                      <div className="w-10 h-12 bg-stone-100 border border-[#E5E5E5] flex-shrink-0 overflow-hidden flex items-center justify-center">
-                        {imgUrl ? (
-                          <img 
-                            src={imgUrl} 
-                            alt={`Angle ${idx + 1}`} 
-                            className="w-full h-full object-cover" 
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                          />
-                        ) : (
-                          <span className="text-[8px] text-[#111111]/40 text-center font-mono">No Image</span>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[9px] text-[#111111] font-semibold block uppercase">
-                          Angle {idx + 1} {idx === 0 ? '(Main Front)' : ''}
-                        </span>
-                        <input
-                          type="url"
-                          value={imgUrl}
-                          onChange={(e) => {
-                            const updated = [...(editingProduct.images || [])];
-                            updated[idx] = e.target.value;
-                            setEditingProduct({ ...editingProduct, images: updated });
-                          }}
-                          placeholder="https://..."
-                          className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-2 py-1 text-xs focus:outline-none focus:border-[#111111]"
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = (editingProduct.images || []).filter((_, i) => i !== idx);
-                          setEditingProduct({ ...editingProduct, images: updated });
-                        }}
-                        className="p-1 text-red-500 hover:text-red-700 cursor-pointer"
-                        title="Delete photo angle"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
+                {/* Quick Presets */}
+                <div className="mt-2 pt-2 border-t border-neutral-100 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] text-neutral-400">Presets:</span>
+                  {PRESET_IMAGES.map((p, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => handleAddPresetToForm(p.url)}
+                      className="px-2 py-1 rounded bg-neutral-100 text-[10px] text-neutral-600 hover:bg-neutral-200 transition-colors cursor-pointer"
+                    >
+                      + {p.label}
+                    </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
-                  Weaving Description
+                <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                  Atelier Editorial Description
                 </label>
                 <textarea
                   rows={3}
-                  value={editingProduct.description || ''}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
-                  className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                  value={newProductForm.description}
+                  onChange={(e) => setNewProductForm({ ...newProductForm, description: e.target.value })}
+                  placeholder="Describe the motifs, warp and weft counts, and provenance..."
+                  className="w-full px-3.5 py-2 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
                 />
               </div>
 
-              <div className="pt-2 flex justify-end gap-3">
+              <div className="pt-3 border-t border-neutral-200 flex items-center justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setEditingProduct(null)}
-                  className="px-5 py-2.5 border border-[#111111] text-xs uppercase tracking-wider text-[#111111] cursor-pointer"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="px-5 py-2.5 border border-neutral-200 rounded-xl text-neutral-700 hover:bg-neutral-100 text-xs font-medium cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] text-xs uppercase tracking-widest font-medium transition-colors cursor-pointer"
+                  className="px-6 py-2.5 bg-[#111111] text-white hover:bg-black rounded-xl text-xs uppercase tracking-wider font-semibold shadow-sm transition-all cursor-pointer"
+                >
+                  Publish Creation
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 4. MODAL: EDIT EXISTING SILK GARMENT                                      */}
+      {/* ========================================================================= */}
+      {editingProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-neutral-200 max-h-[92vh] flex flex-col overflow-hidden">
+            
+            <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+              <div>
+                <h3 className="font-serif text-xl text-neutral-900 font-normal">
+                  Edit Garment: {editingProduct.name}
+                </h3>
+                <p className="text-xs text-neutral-500 font-light mt-0.5">
+                  Update pricing, images, loom days, or stock availability
+                </p>
+              </div>
+              <button
+                onClick={() => setEditingProduct(null)}
+                className="p-1.5 text-neutral-400 hover:text-neutral-800 rounded-lg hover:bg-neutral-200/50"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEditProduct} className="p-6 overflow-y-auto space-y-4 text-xs">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Garment Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editingProduct.name}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Assamese Script Title
+                  </label>
+                  <input
+                    type="text"
+                    value={editingProduct.assameseName || editingProduct.assamese_name || ''}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, assameseName: e.target.value, assamese_name: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Price (INR ₹)
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    value={editingProduct.price}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Original Price (INR ₹)
+                  </label>
+                  <input
+                    type="number"
+                    value={editingProduct.originalPrice || editingProduct.original_price || ''}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, originalPrice: e.target.value, original_price: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                    Loom Weaving Days
+                  </label>
+                  <input
+                    type="number"
+                    value={editingProduct.loomDays || editingProduct.loom_days || 25}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, loomDays: e.target.value, loom_days: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                  Stock Status
+                </label>
+                <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200">
+                  <input
+                    type="checkbox"
+                    id="editInStock"
+                    checked={editingProduct.inStock !== false}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, inStock: e.target.checked })}
+                    className="w-4 h-4 accent-[#111111]"
+                  />
+                  <label htmlFor="editInStock" className="cursor-pointer font-medium text-neutral-800">
+                    Garment is In Stock and Available for Immediate Dispatch
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                  Editorial Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={editingProduct.description || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+                  className="w-full px-3.5 py-2 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-neutral-200 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setEditingProduct(null)}
+                  className="px-5 py-2.5 border border-neutral-200 rounded-xl text-neutral-700 hover:bg-neutral-100 text-xs font-medium cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#111111] text-white hover:bg-black rounded-xl text-xs uppercase tracking-wider font-semibold shadow-sm transition-all cursor-pointer"
                 >
                   Save Changes
                 </button>
               </div>
+
             </form>
+
           </div>
         </div>
       )}
