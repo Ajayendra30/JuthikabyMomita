@@ -2510,221 +2510,236 @@ export const Admin = () => {
       {/* 3. MODAL: ADD NEW SILK GARMENT                                            */}
       {/* ========================================================================= */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-neutral-200 max-h-[92vh] flex flex-col overflow-hidden">
-            
-            {/* Modal Header */}
-            <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
-              <div>
-                <h3 className="font-serif text-xl text-neutral-900 font-normal">
-                  Add New Creation to Catalog
-                </h3>
-                <p className="text-xs text-neutral-500 font-light mt-0.5">
-                  Publish a new authentic handwoven silk masterwork to the boutique
-                </p>
-              </div>
-              <button
-                onClick={() => setIsAddModalOpen(false)}
-                className="p-1.5 text-neutral-400 hover:text-neutral-800 rounded-lg hover:bg-neutral-200/50"
-              >
-                <X size={18} />
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111111]/80 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-2xl p-6 sm:p-8 my-8">
+            <button
+              onClick={() => setIsAddModalOpen(false)}
+              className="absolute top-4 right-4 text-[#111111]/60 hover:text-[#111111] cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="mb-6">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
+                Atelier Masterwork Curation
+              </span>
+              <h3 className="font-serif text-2xl text-[#111111]">
+                Add New Garment to Catalog
+              </h3>
             </div>
 
-            {/* Modal Body Form */}
-            <form onSubmit={handleCreateProduct} className="p-6 overflow-y-auto space-y-4 text-xs">
-              
+            <form onSubmit={handleCreateProduct} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
                     Garment Name (English) *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Royal Kingkhap Muga Mekhela Chador"
                     value={newProductForm.name}
                     onChange={(e) => setNewProductForm({ ...newProductForm, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    placeholder="e.g. Royal Singkhap Muga Mekhela"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Assamese Script Title
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Assamese Script Title (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. ৰয়েল কিংখাপ মুগা মেখেলা চাদৰ"
                     value={newProductForm.assameseName}
                     onChange={(e) => setNewProductForm({ ...newProductForm, assameseName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Silk Fabric *
-                  </label>
-                  <select
-                    value={newProductForm.fabric}
-                    onChange={(e) => setNewProductForm({ ...newProductForm, fabric: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
-                  >
-                    <option value="Muga Silk">Pure Muga Silk</option>
-                    <option value="Paat Silk">Mulberry Paat Silk</option>
-                    <option value="Eri Silk">Ahimsa Eri Silk</option>
-                    <option value="Kesa Paat">Raw Kesa Paat</option>
-                    <option value="Muga-Paat Hybrid">Muga-Paat Hybrid</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Category *
-                  </label>
-                  <select
-                    value={newProductForm.category}
-                    onChange={(e) => setNewProductForm({ ...newProductForm, category: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
-                  >
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Price (INR ₹) *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    placeholder="e.g. 68500"
-                    value={newProductForm.price}
-                    onChange={(e) => setNewProductForm({ ...newProductForm, price: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    placeholder="e.g. ৰাজকীয় সোণালী মুগা"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Original Price / Strikethrough (INR ₹)
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Silk Fabric *
+                  </label>
+                  <select
+                    value={newProductForm.fabric}
+                    onChange={(e) => setNewProductForm({ ...newProductForm, fabric: e.target.value })}
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                  >
+                    <option value="Muga Silk">Muga Silk (Wild Gold)</option>
+                    <option value="Eri Silk">Eri Silk (Ahimsa Peace Silk)</option>
+                    <option value="Paat Silk">Paat Silk (Royal Mulberry)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Category *
+                  </label>
+                  <select
+                    value={newProductForm.category}
+                    onChange={(e) => setNewProductForm({ ...newProductForm, category: e.target.value })}
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                  >
+                    {CATEGORIES.filter(c => c !== 'All').map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Price in INR (₹) *
                   </label>
                   <input
                     type="number"
-                    placeholder="e.g. 75000"
-                    value={newProductForm.originalPrice}
-                    onChange={(e) => setNewProductForm({ ...newProductForm, originalPrice: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    required
+                    value={newProductForm.price}
+                    onChange={(e) => setNewProductForm({ ...newProductForm, price: e.target.value })}
+                    placeholder="68500"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Handloom Weaving Days
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Loom Days *
                   </label>
                   <input
                     type="number"
-                    placeholder="25"
                     value={newProductForm.loomDays}
                     onChange={(e) => setNewProductForm({ ...newProductForm, loomDays: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    placeholder="28"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
               </div>
 
-              {/* Photo Angles */}
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="uppercase tracking-wider text-[10px] text-neutral-700 font-semibold">
-                    Product Images (High-Res Image URLs)
-                  </label>
+              {/* Multiple Photography Angles Manager */}
+              <div className="space-y-3 pt-2 pb-1 border-y border-[#E5E5E5]/60">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="block uppercase tracking-wider text-[10px] text-[#111111] font-medium">
+                      Garment Photography & Multiple Angles *
+                    </label>
+                    <p className="text-[11px] text-[#111111]/60 font-light">
+                      Add 2, 3 or more photos showing different angles (Front, Side, Close-up) for the thumbnail gallery.
+                    </p>
+                  </div>
                   <button
                     type="button"
                     onClick={handleAddImageField}
-                    className="text-[#8C6D23] hover:underline font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] uppercase tracking-wider font-semibold text-[#111111] hover:opacity-70 flex items-center gap-1 border-b border-[#111111] pb-0.5 cursor-pointer"
                   >
-                    <Plus size={12} />
-                    <span>Add Another Photo Angle</span>
+                    <Plus size={10} />
+                    <span>Add Angle</span>
                   </button>
                 </div>
 
                 <div className="space-y-2">
-                  {newProductForm.images?.map((url, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <input
-                        type="url"
-                        placeholder="https://..."
-                        value={url}
-                        onChange={(e) => handleImageChange(idx, e.target.value)}
-                        className="flex-1 px-3.5 py-2 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
-                      />
-                      {newProductForm.images.length > 1 && (
+                  {newProductForm.images?.map((imgUrl, idx) => (
+                    <div key={idx} className="flex items-center gap-2 p-2 bg-[#FAFAFA] border border-[#E5E5E5]">
+                      {/* Live Thumbnail Preview */}
+                      <div className="w-10 h-12 bg-[#FFFFFF] border border-[#E5E5E5] flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        {imgUrl ? (
+                          <img 
+                            src={imgUrl} 
+                            alt={`Angle ${idx + 1}`} 
+                            className="w-full h-full object-cover" 
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <span className="text-[9px] text-[#111111]/40 text-center font-mono">No Image</span>
+                        )}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[10px] uppercase tracking-wider text-[#111111] font-semibold">
+                            {idx === 0 ? 'Angle 1: Main Front Standing View *' : idx === 1 ? 'Angle 2: Side Profile View' : idx === 2 ? 'Angle 3: Sitting / Pallu Detail View' : `Angle ${idx + 1}`}
+                          </span>
+                          {idx === 0 && (
+                            <span className="text-[9px] text-[#111111]/50 uppercase tracking-widest">Default Cover</span>
+                          )}
+                        </div>
+                        <input
+                          type="url"
+                          required={idx === 0}
+                          value={imgUrl}
+                          onChange={(e) => handleImageChange(idx, e.target.value)}
+                          placeholder="Paste image URL (https://...)"
+                          className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#111111]"
+                        />
+                      </div>
+
+                      {newProductForm.images?.length > 1 && (
                         <button
                           type="button"
                           onClick={() => handleRemoveImageField(idx)}
-                          className="p-2 text-rose-500 hover:text-rose-700 rounded-lg hover:bg-rose-50"
+                          className="p-1.5 text-[#111111]/40 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                          title="Remove this photo angle"
                         >
-                          <Trash2 size={14} />
+                          <Trash2 size={13} />
                         </button>
                       )}
                     </div>
                   ))}
                 </div>
 
-                {/* Quick Presets */}
-                <div className="mt-2 pt-2 border-t border-neutral-100 flex flex-wrap items-center gap-1.5">
-                  <span className="text-[10px] text-neutral-400">Presets:</span>
-                  {PRESET_IMAGES.map((p, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => handleAddPresetToForm(p.url)}
-                      className="px-2 py-1 rounded bg-neutral-100 text-[10px] text-neutral-600 hover:bg-neutral-200 transition-colors cursor-pointer"
-                    >
-                      + {p.label}
-                    </button>
-                  ))}
+                {/* Quick preset chips to append */}
+                <div>
+                  <span className="text-[9px] text-[#111111]/60 uppercase tracking-wider block mb-1">
+                    Quick Preset Samples (click to add as another angle):
+                  </span>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {PRESET_IMAGES.map((preset, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleAddPresetToForm(preset.url)}
+                        className="text-[9px] px-2 py-0.5 bg-[#FFFFFF] border border-[#E5E5E5] hover:border-[#111111] text-[#111111]/80 hover:text-black hover:opacity-70 flex items-center gap-1 transition-colors cursor-pointer"
+                      >
+                        <Plus size={9} />
+                        <span>{preset.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <div>
-                <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                  Atelier Editorial Description
+                <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                  Weaving Description
                 </label>
                 <textarea
                   rows={3}
                   value={newProductForm.description}
                   onChange={(e) => setNewProductForm({ ...newProductForm, description: e.target.value })}
-                  placeholder="Describe the motifs, warp and weft counts, and provenance..."
-                  className="w-full px-3.5 py-2 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  placeholder="Describe the motifs, Sualkuchi artisans, and silk texture..."
+                  className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-neutral-200 flex items-center justify-end gap-3">
+              <div className="pt-2 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-5 py-2.5 border border-neutral-200 rounded-xl text-neutral-700 hover:bg-neutral-100 text-xs font-medium cursor-pointer"
+                  className="px-5 py-2.5 border border-[#111111] text-xs uppercase tracking-wider text-[#111111] cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#111111] text-white hover:bg-black rounded-xl text-xs uppercase tracking-wider font-semibold shadow-sm transition-all cursor-pointer"
+                  className="px-6 py-2.5 bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] text-xs uppercase tracking-widest font-medium transition-colors cursor-pointer"
                 >
-                  Publish Creation
+                  Add to Atelier Catalog
                 </button>
               </div>
-
             </form>
-
           </div>
         </div>
       )}
@@ -2733,142 +2748,256 @@ export const Admin = () => {
       {/* 4. MODAL: EDIT EXISTING SILK GARMENT                                      */}
       {/* ========================================================================= */}
       {editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-neutral-200 max-h-[92vh] flex flex-col overflow-hidden">
-            
-            <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
-              <div>
-                <h3 className="font-serif text-xl text-neutral-900 font-normal">
-                  Edit Garment: {editingProduct.name}
-                </h3>
-                <p className="text-xs text-neutral-500 font-light mt-0.5">
-                  Update pricing, images, loom days, or stock availability
-                </p>
-              </div>
-              <button
-                onClick={() => setEditingProduct(null)}
-                className="p-1.5 text-neutral-400 hover:text-neutral-800 rounded-lg hover:bg-neutral-200/50"
-              >
-                <X size={18} />
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111111]/80 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-2xl p-6 sm:p-8 my-8">
+            <button
+              onClick={() => setEditingProduct(null)}
+              className="absolute top-4 right-4 text-[#111111]/60 hover:text-[#111111] cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="mb-6">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#111111] font-semibold block mb-1">
+                Edit Atelier Garment
+              </span>
+              <h3 className="font-serif text-2xl text-[#111111]">
+                {editingProduct.name}
+              </h3>
+              <span className="text-[10px] font-mono text-[#111111]">
+                {editingProduct.id ? editingProduct.id.replace(/^ax-/i, 'jm-') : ''}
+              </span>
             </div>
 
-            <form onSubmit={handleSaveEditProduct} className="p-6 overflow-y-auto space-y-4 text-xs">
-              
+            <form onSubmit={handleSaveEditProduct} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Garment Name
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Garment Name (English) *
                   </label>
                   <input
                     type="text"
                     required
-                    value={editingProduct.name}
+                    value={editingProduct.name || ''}
                     onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
                     Assamese Script Title
                   </label>
                   <input
                     type="text"
                     value={editingProduct.assameseName || editingProduct.assamese_name || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, assameseName: e.target.value, assamese_name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    onChange={(e) => setEditingProduct({ 
+                      ...editingProduct, 
+                      assameseName: e.target.value,
+                      assamese_name: e.target.value 
+                    })}
+                    placeholder="e.g. ৰাজকীয় সোণালী মুগা"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Silk Fabric *
+                  </label>
+                  <select
+                    value={editingProduct.fabric || 'Muga Silk'}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, fabric: e.target.value })}
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                  >
+                    <option value="Muga Silk">Muga Silk (Wild Gold)</option>
+                    <option value="Eri Silk">Eri Silk (Ahimsa Peace Silk)</option>
+                    <option value="Paat Silk">Paat Silk (Royal Mulberry)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Category *
+                  </label>
+                  <select
+                    value={editingProduct.category || 'Muga Silk'}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
+                  >
+                    {CATEGORIES.filter(c => c !== 'All').map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Price (INR ₹)
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Price in INR (₹) *
                   </label>
                   <input
                     type="number"
                     required
-                    value={editingProduct.price}
+                    value={editingProduct.price || ''}
                     onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Original Price (INR ₹)
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Original / Comparison Price (₹)
                   </label>
                   <input
                     type="number"
                     value={editingProduct.originalPrice || editingProduct.original_price || ''}
                     onChange={(e) => setEditingProduct({ ...editingProduct, originalPrice: e.target.value, original_price: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    placeholder="Optional list price"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                    Loom Weaving Days
+                  <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                    Loom Days *
                   </label>
                   <input
                     type="number"
-                    value={editingProduct.loomDays || editingProduct.loom_days || 25}
+                    value={editingProduct.loomDays ?? editingProduct.loom_days ?? 20}
                     onChange={(e) => setEditingProduct({ ...editingProduct, loomDays: e.target.value, loom_days: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                    className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                  Stock Status
-                </label>
-                <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200">
+              {/* Stock Status Toggle */}
+              <div className="p-3 border border-[#E5E5E5] bg-stone-50 flex items-center justify-between">
+                <div>
+                  <span className="block uppercase tracking-wider text-[10px] text-[#111111] font-medium">
+                    Inventory Status
+                  </span>
+                  <p className="text-[11px] text-[#111111]/60 font-light">
+                    When toggled on, garment shows as "In Stock" with rapid dispatch. When off, displays "Made to Order".
+                  </p>
+                </div>
+                <label className="inline-flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    id="editInStock"
-                    checked={editingProduct.inStock !== false}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, inStock: e.target.checked })}
+                    checked={editingProduct.inStock !== false && editingProduct.in_stock !== false}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, inStock: e.target.checked, in_stock: e.target.checked })}
                     className="w-4 h-4 accent-[#111111]"
                   />
-                  <label htmlFor="editInStock" className="cursor-pointer font-medium text-neutral-800">
-                    Garment is In Stock and Available for Immediate Dispatch
-                  </label>
+                  <span className="text-xs font-medium text-[#111111]">
+                    {editingProduct.inStock !== false && editingProduct.in_stock !== false ? 'In Stock & Ready' : 'Made to Order'}
+                  </span>
+                </label>
+              </div>
+
+              {/* Photo Angles Manager for Edit Modal */}
+              <div className="space-y-3 pt-2 pb-1 border-y border-[#E5E5E5]/60">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="block uppercase tracking-wider text-[10px] text-[#111111] font-medium">
+                      Garment Photography & Angles ({editingProduct.images?.length || 0})
+                    </label>
+                    <p className="text-[11px] text-[#111111]/60 font-light">
+                      Add, edit, or delete photos for this garment's vertical thumbnail gallery.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingProduct({
+                        ...editingProduct,
+                        images: [...(editingProduct.images || []), '']
+                      });
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#111111] text-white hover:bg-black transition-colors cursor-pointer"
+                  >
+                    <Plus size={11} />
+                    <span>Add Angle</span>
+                  </button>
+                </div>
+
+                <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                  {(editingProduct.images || []).map((imgUrl, idx) => (
+                    <div key={idx} className="p-2 border border-[#E5E5E5] bg-white flex items-center gap-2.5">
+                      <div className="w-10 h-12 bg-stone-100 border border-[#E5E5E5] flex-shrink-0 overflow-hidden flex items-center justify-center">
+                        {imgUrl ? (
+                          <img 
+                            src={imgUrl} 
+                            alt={`Angle ${idx + 1}`} 
+                            className="w-full h-full object-cover" 
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <span className="text-[8px] text-[#111111]/40 text-center font-mono">No Image</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[9px] text-[#111111] font-semibold block uppercase">
+                          Angle {idx + 1} {idx === 0 ? '(Main Front)' : ''}
+                        </span>
+                        <input
+                          type="url"
+                          value={imgUrl}
+                          onChange={(e) => {
+                            const updated = [...(editingProduct.images || [])];
+                            updated[idx] = e.target.value;
+                            setEditingProduct({ ...editingProduct, images: updated });
+                          }}
+                          placeholder="https://..."
+                          className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-2 py-1 text-xs focus:outline-none focus:border-[#111111]"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = (editingProduct.images || []).filter((_, i) => i !== idx);
+                          setEditingProduct({ ...editingProduct, images: updated });
+                        }}
+                        className="p-1 text-red-500 hover:text-red-700 cursor-pointer"
+                        title="Delete photo angle"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div>
-                <label className="block uppercase tracking-wider text-[10px] text-neutral-700 font-semibold mb-1">
-                  Editorial Description
+                <label className="block uppercase tracking-wider text-[10px] text-[#111111] mb-1 font-medium">
+                  Weaving Description
                 </label>
                 <textarea
                   rows={3}
                   value={editingProduct.description || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
-                  className="w-full px-3.5 py-2 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#B69A62]"
+                  className="w-full bg-[#FFFFFF] border border-[#E5E5E5] px-3 py-2 text-xs focus:outline-none focus:border-[#111111]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-neutral-200 flex items-center justify-end gap-3">
+              <div className="pt-2 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setEditingProduct(null)}
-                  className="px-5 py-2.5 border border-neutral-200 rounded-xl text-neutral-700 hover:bg-neutral-100 text-xs font-medium cursor-pointer"
+                  className="px-5 py-2.5 border border-[#111111] text-xs uppercase tracking-wider text-[#111111] cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#111111] text-white hover:bg-black rounded-xl text-xs uppercase tracking-wider font-semibold shadow-sm transition-all cursor-pointer"
+                  className="px-6 py-2.5 bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] text-xs uppercase tracking-widest font-medium transition-colors cursor-pointer"
                 >
                   Save Changes
                 </button>
               </div>
-
             </form>
-
           </div>
         </div>
       )}
