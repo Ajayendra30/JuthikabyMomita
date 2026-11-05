@@ -23,6 +23,14 @@
   h1, h2, h3, h4, h5, .font-serif {
     font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
     letter-spacing: 0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+
+  /* Force all numbers and prices to sit flat on the normal baseline */
+  *, .lining-nums, [class*="price"], [class*="Price"] {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
   }
 }
 

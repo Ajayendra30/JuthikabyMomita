@@ -109,7 +109,7 @@ const DonutPieChart = ({ data, total, formatPrice }) => {
           <span className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold truncate max-w-[130px]">
             {hoveredSlice ? hoveredSlice.label : 'Gross Sales'}
           </span>
-          <span className="font-serif text-lg sm:text-xl font-bold text-[#111111] leading-none my-1">
+          <span className="font-sans text-lg sm:text-xl font-bold text-[#111111] leading-none my-1 tracking-tight">
             {formatPrice(hoveredSlice ? hoveredSlice.revenue : total)}
           </span>
           <span className="text-[10px] text-[#B69A62] font-semibold">
@@ -151,7 +151,7 @@ const DonutPieChart = ({ data, total, formatPrice }) => {
               </div>
 
               <div className="text-right">
-                <div className="text-xs font-serif font-medium text-neutral-900">
+                <div className="text-xs font-sans font-bold text-neutral-900 tracking-tight">
                   {formatPrice(slice.revenue)}
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-600 font-bold">
@@ -185,7 +185,7 @@ const MonthlyRevenueBarChart = ({ monthlyData, formatPrice }) => {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-neutral-400 uppercase tracking-wider text-[10px] font-semibold">Revenue:</span>
-          <strong className="text-[#8C6D23] font-serif font-bold text-sm">
+          <strong className="text-[#8C6D23] font-sans font-bold text-sm tracking-tight">
             {formatPrice(hoveredBar ? hoveredBar.revenue : monthlyData.reduce((s, m) => s + m.revenue, 0))}
           </strong>
           {hoveredBar?.growth && (
@@ -210,7 +210,7 @@ const MonthlyRevenueBarChart = ({ monthlyData, formatPrice }) => {
               onMouseLeave={() => setHoveredBar(null)}
             >
               {/* Tooltip value on hover or top bar */}
-              <div className={`text-[10px] font-serif font-medium text-neutral-700 mb-1.5 transition-all ${
+              <div className={`text-[10px] font-sans font-semibold text-neutral-700 mb-1.5 transition-all tracking-tight ${
                 isHovered ? 'opacity-100 scale-105 font-bold text-[#8C6D23]' : 'opacity-0 sm:opacity-75'
               }`}>
                 {item.revenue >= 10000000 
@@ -1087,7 +1087,7 @@ export const Admin = () => {
                       <DollarSign size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {formatPrice(totalCatalogValue)}
                   </div>
                   <div className="flex items-center gap-2 text-xs text-emerald-700 font-medium">
@@ -1104,7 +1104,7 @@ export const Admin = () => {
                       <ShoppingBag size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {orders.length} Orders
                   </div>
                   <div className="text-xs text-neutral-600 font-medium">
@@ -1120,7 +1120,7 @@ export const Admin = () => {
                       <Calendar size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {consultations.length} Inquiries
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-amber-700 font-semibold">
@@ -1137,7 +1137,7 @@ export const Admin = () => {
                       <Award size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-medium mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     48 Looms
                   </div>
                   <div className="text-xs text-neutral-600 font-medium">
@@ -1190,7 +1190,7 @@ export const Admin = () => {
                       <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-semibold mb-1">
                         Seasonal Revenue Run-Rate
                       </h4>
-                      <div className="text-2xl font-serif text-neutral-900 font-semibold">
+                      <div className="text-2xl font-sans text-neutral-900 font-bold tracking-tight">
                         {formatPrice(totalRevenue)}
                       </div>
                       <p className="text-xs text-emerald-700 font-medium flex items-center gap-1 mt-0.5">
@@ -1377,7 +1377,7 @@ export const Admin = () => {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#B69A62]/10 rounded-full blur-2xl pointer-events-none" />
                     
                     <span className="text-[10px] uppercase tracking-[0.25em] text-[#B69A62] font-semibold block mb-2">
-                      GI Tag Verified &bull; Sualkuchi
+                       Sualkuchi
                     </span>
                     <h4 className="font-serif text-lg text-white font-light mb-2">
                       Hereditary Loom Protection
@@ -1473,7 +1473,7 @@ export const Admin = () => {
                       <BarChart3 size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-semibold mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {formatPrice(totalRevenue)}
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
@@ -1490,7 +1490,7 @@ export const Admin = () => {
                       <Target size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-semibold mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {formatPrice(averageOrderValue)}
                   </div>
                   <div className="text-xs text-neutral-500">
@@ -1506,7 +1506,7 @@ export const Admin = () => {
                       <Package size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-semibold mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {totalItemsSold} Garments
                   </div>
                   <div className="text-xs text-neutral-500">
@@ -1522,7 +1522,7 @@ export const Admin = () => {
                       <CheckCircle2 size={18} />
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-serif text-[#111111] font-semibold mb-1">
+                  <div className="text-2xl sm:text-3xl font-sans font-bold text-[#111111] tracking-tight mb-1">
                     {fulfillmentRate}% Rate
                   </div>
                   <div className="text-xs text-emerald-700 font-medium">
@@ -1659,7 +1659,7 @@ export const Admin = () => {
                             </div>
 
                             <div className="text-right flex-shrink-0">
-                              <span className="text-xs font-serif font-semibold text-neutral-900 block">
+                              <span className="text-xs font-sans font-bold text-neutral-900 block tracking-tight">
                                 {formatPrice(prod.revenue)}
                               </span>
                               <span className="text-[10px] text-neutral-400">
@@ -1700,7 +1700,7 @@ export const Admin = () => {
                               <span>{hub.icon}</span>
                               <span className="truncate">{hub.name}</span>
                             </span>
-                            <span className="font-serif font-semibold text-neutral-900 ml-2">
+                            <span className="font-sans font-bold text-neutral-900 ml-2 tracking-tight">
                               {formatPrice(hub.revenue)}
                             </span>
                           </div>
@@ -1739,7 +1739,7 @@ export const Admin = () => {
                             <span className="text-xs font-semibold text-neutral-900">
                               {method.name}
                             </span>
-                            <span className="text-xs font-serif font-bold text-neutral-900">
+                            <span className="text-xs font-sans font-bold text-neutral-900 tracking-tight">
                               {formatPrice(method.revenue)}
                             </span>
                           </div>
@@ -1822,7 +1822,7 @@ export const Admin = () => {
                           <td className="py-3.5 px-3 text-neutral-600">
                             {o.paymentMethod || 'VIP Wire'}
                           </td>
-                          <td className="py-3.5 px-3 text-right font-serif font-bold text-neutral-900">
+                          <td className="py-3.5 px-3 text-right font-sans font-bold text-neutral-900 tracking-tight">
                             {formatPrice(o.total)}
                           </td>
                           <td className="py-3.5 px-3 text-center">
@@ -2238,7 +2238,7 @@ export const Admin = () => {
                         <div className="flex items-center gap-3">
                           <div className="text-right">
                             <span className="text-[10px] text-neutral-400 uppercase tracking-wider block">Total Amount</span>
-                            <span className="font-serif text-base font-semibold text-neutral-900">
+                            <span className="font-sans text-base font-bold text-neutral-900 tracking-tight">
                               {formatPrice(order.total)}
                             </span>
                           </div>
@@ -2482,19 +2482,19 @@ export const Admin = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                     <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
                       <span className="text-xs text-neutral-500 uppercase tracking-wider block mb-1">Active Guilds</span>
-                      <span className="font-serif text-2xl text-neutral-900">3 Master Cooperatives</span>
+                      <span className="font-sans text-2xl font-bold tracking-tight text-neutral-900">3 Master Cooperatives</span>
                       <span className="text-[11px] text-emerald-700 block mt-1">Sualkuchi, Hajo & Kamrup</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
                       <span className="text-xs text-neutral-500 uppercase tracking-wider block mb-1">Throw-Shuttle Looms</span>
-                      <span className="font-serif text-2xl text-neutral-900">48 Heritage Looms</span>
+                      <span className="font-sans text-2xl font-bold tracking-tight text-neutral-900">48 Heritage Looms</span>
                       <span className="text-[11px] text-neutral-600 block mt-1">100% Traditional Extra-Weft</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
                       <span className="text-xs text-neutral-500 uppercase tracking-wider block mb-1">GI Tag Authenticity</span>
-                      <span className="font-serif text-2xl text-neutral-900">Govt Reg. #GI-44</span>
+                      <span className="font-sans text-2xl font-bold tracking-tight text-neutral-900">Govt Reg. #GI-44</span>
                       <span className="text-[11px] text-[#8C6D23] block mt-1">Zero Synthetic Blends</span>
                     </div>
                   </div>
