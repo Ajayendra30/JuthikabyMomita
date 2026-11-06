@@ -4,6 +4,7 @@ import {
   MapPin, 
   Phone, 
   Mail, 
+  Award,
   ArrowUp
 } from 'lucide-react';
 
@@ -15,24 +16,24 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#FFFFFF] text-[#111111] pt-16 pb-12 border-t border-[#E5E5E5]">
+    <footer className="bg-[#141414] text-[#FFFFFF] pt-16 pb-12 border-t border-[#262626]">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Main 4-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-16 border-b border-[#E5E5E5]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-16 border-b border-[#262626]">
           
           {/* Brand Column (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="inline-block">
-              <span className="font-serif text-3xl tracking-[0.22em] text-[#111111] uppercase block leading-none">
+              <span className="font-serif text-3xl tracking-[0.22em] text-[#FFFFFF] uppercase block leading-none">
                 JUTHIKA
               </span>
-              <span className="text-[10px] uppercase tracking-[0.38em] text-[#B69A62] font-semibold block mt-1.5">
+              <span className="text-[10px] uppercase tracking-[0.38em] text-[#D4AF37] font-medium block mt-1.5">
                 BY MOMITA &bull; LUXURY ASSAMESE SILK
               </span>
             </Link>
 
-            <p className="text-xs text-[#666666] font-light leading-relaxed max-w-sm pt-2">
+            <p className="text-xs text-[#C4C4C4] font-light leading-relaxed max-w-sm pt-2">
               Celebrating six hundred years of Sualkuchi handloom grandeur. 
               We curate rare wild Muga, cruelty-free Ahimsa Eri, and royal mulberry Paat silk into timeless haute couture.
             </p>
@@ -43,7 +44,7 @@ export const Footer = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="w-8 h-8 rounded-full border border-[#E5E5E5] flex items-center justify-center text-[#555555] hover:text-[#B69A62] hover:border-[#B69A62] hover:bg-[#B69A62]/10 transition-colors"
+                className="w-8 h-8 rounded-full border border-[#333333] flex items-center justify-center text-[#C4C4C4] hover:text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -54,7 +55,7 @@ export const Footer = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noreferrer"
-                className="w-8 h-8 rounded-full border border-[#E5E5E5] flex items-center justify-center text-[#555555] hover:text-[#B69A62] hover:border-[#B69A62] hover:bg-[#B69A62]/10 transition-colors"
+                className="w-8 h-8 rounded-full border border-[#333333] flex items-center justify-center text-[#C4C4C4] hover:text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -66,42 +67,42 @@ export const Footer = () => {
 
           {/* Shop Categories (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-serif text-base sm:text-lg text-[#111111] tracking-[0.18em] uppercase mb-5 font-normal">
+            <h4 className="font-serif text-base sm:text-lg text-[#FFFFFF] tracking-[0.18em] uppercase mb-5 font-normal">
               The Silk Collections
             </h4>
-            <ul className="space-y-2.5 text-xs font-light text-[#666666]">
+            <ul className="space-y-2.5 text-xs font-light text-[#C4C4C4]">
               <li>
-                <Link to="/shop?category=Muga%20Silk" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/shop?category=Muga%20Silk" className="hover:text-[#D4AF37] transition-colors">
                   Muga Silk — The Golden Weave
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=Eri%20Silk" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/shop?category=Eri%20Silk" className="hover:text-[#D4AF37] transition-colors">
                   Eri Silk — Ahimsa Peace Silk
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=Paat%20Silk" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/shop?category=Paat%20Silk" className="hover:text-[#D4AF37] transition-colors">
                   Paat Silk — Royal Mulberry
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=Sarees" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/shop?category=Sarees" className="hover:text-[#D4AF37] transition-colors">
                   Sualkuchi Heritage Sarees
                 </Link>
               </li>
               <li>
-                <Link to="/bridal" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/bridal" className="hover:text-[#D4AF37] transition-colors">
                   Imperial Bridal Couture
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=Occasion%20Wear" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/shop?category=Occasion%20Wear" className="hover:text-[#D4AF37] transition-colors">
                   Occasion & Festive Wear
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=Ready-to-Wear" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/shop?category=Ready-to-Wear" className="hover:text-[#D4AF37] transition-colors">
                   Modern Silk Ready-to-Wear
                 </Link>
               </li>
@@ -110,42 +111,42 @@ export const Footer = () => {
 
           {/* About & Craftsmanship (2 cols) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-serif text-base sm:text-lg text-[#111111] tracking-[0.18em] uppercase mb-5 font-normal">
+            <h4 className="font-serif text-base sm:text-lg text-[#FFFFFF] tracking-[0.18em] uppercase mb-5 font-normal">
               Atelier & Craft
             </h4>
-            <ul className="space-y-2.5 text-xs font-light text-[#666666]">
+            <ul className="space-y-2.5 text-xs font-light text-[#C4C4C4]">
               <li>
-                <Link to="/our-craft" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/our-craft" className="hover:text-[#D4AF37] transition-colors">
                   Our Handloom Heritage
                 </Link>
               </li>
               <li>
-                <Link to="/collections" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/collections" className="hover:text-[#D4AF37] transition-colors">
                   Curated Collections
                 </Link>
               </li>
               <li>
-                <Link to="/lookbook" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/lookbook" className="hover:text-[#D4AF37] transition-colors">
                   Editorial Lookbook
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/about" className="hover:text-[#D4AF37] transition-colors">
                   The Juthika Story
                 </Link>
               </li>
               <li>
-                <Link to="/bridal" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/bridal" className="hover:text-[#D4AF37] transition-colors">
                   Bespoke Bridal Salon
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/contact" className="hover:text-[#D4AF37] transition-colors">
                   Client Concierge
                 </Link>
               </li>
               <li className="pt-2 flex items-center gap-3">
-                <Link to="/login" className="hover:text-[#B69A62] transition-colors">
+                <Link to="/login" className="hover:text-[#D4AF37] transition-colors">
                   Patron Sign In
                 </Link>
               </li>
@@ -154,35 +155,35 @@ export const Footer = () => {
 
           {/* Contact & Private Suites (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-serif text-base sm:text-lg text-[#111111] tracking-[0.18em] uppercase mb-5 font-normal">
+            <h4 className="font-serif text-base sm:text-lg text-[#FFFFFF] tracking-[0.18em] uppercase mb-5 font-normal">
               Private Ateliers
             </h4>
-            <div className="space-y-3 text-xs text-[#666666] font-light">
+            <div className="space-y-3 text-xs text-[#C4C4C4] font-light">
               <div className="flex items-start gap-2.5">
-                <MapPin size={15} className="text-[#B69A62] flex-shrink-0 mt-0.5" />
+                <MapPin size={15} className="text-[#D4AF37] flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-[#111111]">Flagship Atelier:</p>
+                  <p className="font-medium text-[#FFFFFF]">Flagship Atelier:</p>
                   <p>Silk Quarter, Sualkuchi & GS Road, Guwahati, Assam 781005</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-2.5">
-                <MapPin size={15} className="text-[#B69A62] flex-shrink-0 mt-0.5" />
+                <MapPin size={15} className="text-[#D4AF37] flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-[#111111]">Private Suite:</p>
+                  <p className="font-medium text-[#FFFFFF]">Private Suite:</p>
                   <p>The Chanakya & Mehrauli, New Delhi 110030</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5 pt-1">
-                <Mail size={15} className="text-[#B69A62] flex-shrink-0" />
-                <a href="mailto:concierge@juthikabymomita.com" className="hover:text-[#B69A62] transition-colors">
+                <Mail size={15} className="text-[#D4AF37] flex-shrink-0" />
+                <a href="mailto:concierge@juthikabymomita.com" className="hover:text-[#D4AF37] transition-colors">
                   concierge@juthikabymomita.com
                 </a>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <Phone size={15} className="text-[#B69A62] flex-shrink-0" />
+                <Phone size={15} className="text-[#D4AF37] flex-shrink-0" />
                 <span>+91 361 298 7654 / +91 98110 54321</span>
               </div>
             </div>
@@ -191,24 +192,24 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-[#777777]">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-[#999999]">
           <p className="font-light text-center md:text-left mb-4 md:mb-0">
             &copy; {CURRENT_YEAR} Juthika by Momita. All Rights Reserved. Luxury Assamese Silk Handcrafted with Reverence in Assam, India.
           </p>
 
           <div className="flex items-center space-x-6 text-[11px]">
-            <Link to="/about" className="hover:text-[#B69A62] transition-colors">
+            <Link to="/about" className="hover:text-[#D4AF37] transition-colors">
               Handloom Ethics
             </Link>
-            <Link to="/contact" className="hover:text-[#B69A62] transition-colors">
+            <Link to="/contact" className="hover:text-[#D4AF37] transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/contact" className="hover:text-[#B69A62] transition-colors">
+            <Link to="/contact" className="hover:text-[#D4AF37] transition-colors">
               Terms of Service
             </Link>
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1 text-[#B69A62] hover:text-[#111111] transition-colors ml-4 cursor-pointer"
+              className="flex items-center gap-1 text-[#D4AF37] hover:text-[#FFFFFF] transition-colors ml-4 cursor-pointer"
               aria-label="Scroll to top"
             >
               <span>Back to Top</span>
