@@ -1,3 +1,4 @@
+import { getAssetUrl } from '../utils/assetPath';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, Award, ShieldCheck, Heart } from 'lucide-react';
@@ -59,7 +60,7 @@ export const OurCraft = () => {
           {/* Right Column: 100% Full-Bleed Handloom Imagery */}
           <div className="lg:col-span-6 relative min-h-[380px] lg:min-h-full overflow-hidden bg-[#111111]">
             <img
-              src="/images/assam-loom-artisan.jpg"
+              src={getAssetUrl('/images/assam-loom-artisan.jpg')}
               alt="Sualkuchi Artisan Handloom"
               className="absolute inset-0 w-full h-full object-cover filter brightness-[0.95] contrast-[1.03]"
             />
@@ -286,3 +287,4 @@ export const OurCraft = () => {
     </div>
   );
 };
+

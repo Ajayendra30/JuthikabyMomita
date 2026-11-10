@@ -1,3 +1,4 @@
+import { getAssetUrl } from '../utils/assetPath';
 // Juthika by Momita Luxury Assamese Silk Boutique — Curated Collections & Editorial Stories
 
 export const SIGNATURE_COLLECTIONS = [
@@ -19,7 +20,7 @@ export const SIGNATURE_COLLECTIONS = [
     category: "Eri Silk",
     slug: "eri-silk",
     heroImage: "https://thesilkchamber.com/cdn/shop/files/erisilksari_18749ea6-7a3f-4c6c-9a09-1618d14a8328.jpg?v=1770292936&width=1800",
-    videoUrl: "/videos/gmm.mp4",
+    videoUrl: getAssetUrl('/videos/gmm.mp4'),
     isVideo: true,
     videoBadge: "Atelier Film",
     description: "Cruelty-free Ahimsa peace silk with an exquisite woolen-cotton handfeel. Naturally isothermal, soothing, and timelessly understated.",
@@ -149,3 +150,4 @@ export const LOOKBOOK_ITEMS = [
     caption: "A timeless dialogue between deep mineral indigo and shimmering handwoven silver zari."
   }
 ];
+

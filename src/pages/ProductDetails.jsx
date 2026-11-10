@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import { getAssetUrl } from '../utils/assetPath';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Heart, 
@@ -158,7 +159,7 @@ export const ProductDetails = () => {
             
             {/* Category Label */}
             <p className="text-[10px] uppercase tracking-[0.25em] text-[#111111]/60 font-semibold mb-2">
-              {product.secondaryCategory ? `${product.category} • ${product.secondaryCategory}` : product.category}
+              {product.secondaryCategory ? `${product.category} � ${product.secondaryCategory}` : product.category}
             </p>
 
             {/* Title with Wishlist Heart on Right (Exact layout in Screenshot 1) */}
@@ -528,7 +529,7 @@ export const ProductDetails = () => {
               {/* Mannequin Diagram / How to Measure Image */}
               <div className="pt-2 pb-4 flex justify-center">
                 <img 
-                  src="/images/size-guide-mannequin.png" 
+                  src={getAssetUrl('/images/size-guide-mannequin.png')} 
                   alt="How to measure - Chest, Waist, Hip, Shoulder" 
                   className="max-h-[460px] w-auto object-contain mx-auto"
                 />
@@ -544,3 +545,4 @@ export const ProductDetails = () => {
     </div>
   );
 };
+

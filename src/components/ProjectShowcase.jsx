@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Volume2, VolumeX, Play, Pause, ArrowRight, Film } from 'lucide-react';
+import { Volume2, VolumeX, Play, Pause, Film } from 'lucide-react';
+import { getAssetUrl } from '../utils/assetPath';
 
 export const ProjectShowcase = () => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -15,36 +16,28 @@ export const ProjectShowcase = () => {
     video.muted = true;
     const playPromise = video.play();
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => setIsPlaying(true))
-        .catch((err) => {
-          console.warn('Autoplay deferred:', err);
-          setIsPlaying(false);
-        });
+      playPromise.catch(() => {
+        // Autoplay policy prevented playback, fallback gracefully
+      });
     }
   }, []);
 
-  const togglePlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (video.paused) {
-      video.play()
-        .then(() => setIsPlaying(true))
-        .catch((e) => console.warn('Play error:', e));
-    } else {
-      video.pause();
-      setIsPlaying(false);
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
   };
 
-  const toggleMute = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const newMuted = !video.muted;
-    video.muted = newMuted;
-    setIsMuted(newMuted);
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
   };
 
   return (
@@ -65,8 +58,8 @@ export const ProjectShowcase = () => {
           onPause={() => setIsPlaying(false)}
           className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.08] saturate-[0.95]"
         >
-          <source src="/videos/gmm.mp4" type="video/mp4" />
-          <source src="/videos/gm.mp4" type="video/mp4" />
+          <source src={getAssetUrl('/videos/gmm.mp4')} type="video/mp4" />
+          <source src={getAssetUrl('/videos/gm.mp4')} type="video/mp4" />
         </video>
 
         {/* Vintage Film Texture & Antique Vignette */}

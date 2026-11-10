@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { getAssetUrl } from '../utils/assetPath';
 
 export const Craftsmanship = () => {
   return (
@@ -18,15 +19,16 @@ export const Craftsmanship = () => {
               Preserving the Guilds of Sualkuchi
             </h2>
             <p className="text-sm sm:text-base text-[#E8DFD1]/85 font-light leading-relaxed mb-8">
-              Every Juthika by Momita drape is direct-from-artisan. We work directly with over 45 master weaver families in Kamrup, 
-              providing fair dignity-first wages, healthcare security, and complete artistic autonomy to safeguard this endangered craft.
+              Every creation is born on traditional bamboo looms in Sualkuchi, Assam&rsquo;s historic silk hamlet. 
+              Our master weavers breathe life into ancient motifs, hand-threading unadulterated Muga and cruelty-free Eri with mathematical precision. 
+              By partnering directly with weaving clusters, we honor their generational legacy and ensure fair-trade ethical stewardship.
             </p>
             <div className="flex flex-wrap items-center gap-6">
               <Link
                 to="/our-craft"
-                className="px-7 sm:px-9 py-3.5 bg-[#B69A62] text-[#FFFFFF] hover:bg-[#A0834E] text-xs uppercase tracking-[0.25em] font-medium transition-colors flex items-center gap-2 shadow-sm"
+                className="inline-flex items-center gap-2.5 px-8 py-3.5 bg-[#B69A62] text-[#1C1B1A] hover:bg-[#C8AC75] text-xs uppercase tracking-[0.22em] font-medium transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
               >
-                <span>Explore Our Heritage</span>
+                <span>Read The Artisan Story</span>
                 <ArrowRight size={14} />
               </Link>
               <span className="text-xs sm:text-sm text-[#E8DFD1]/60 italic font-serif">
@@ -39,7 +41,7 @@ export const Craftsmanship = () => {
         {/* Right Column: 100% Full-Bleed Image (Zero Border, Edge-to-Edge) */}
         <div className="lg:col-span-5 relative min-h-[360px] lg:min-h-full">
           <img
-            src="/images/assam-loom-artisan.jpg"
+            src={getAssetUrl('/images/assam-loom-artisan.jpg')}
             alt="Assam Silk Artisan at Loom"
             className="absolute inset-0 w-full h-full object-cover filter brightness-[0.9] contrast-[1.05]"
           />

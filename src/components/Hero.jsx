@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
+import { getAssetUrl } from '../utils/assetPath';
 
 export const Hero = () => {
   return (
@@ -15,11 +15,11 @@ export const Hero = () => {
           loop
           playsInline
           preload="metadata"
-          poster="/images/boutique-poster.jpg"
+          poster={getAssetUrl('/images/boutique-poster.jpg')}
           className="w-full h-full object-cover object-top brightness-[0.88] contrast-[1.02]"
         >
           <source
-            src="/videos/boutique-hero.mp4"
+            src={getAssetUrl('/videos/boutique-hero.mp4')}
             type="video/mp4"
           />
           Your browser does not support video playback.
@@ -35,18 +35,7 @@ export const Hero = () => {
 
         {/* Add your existing heading, description and buttons here */}
 
-        {/* Scroll Indicator
-        <div className="mt-16 flex flex-col items-center opacity-70 hover:opacity-100 transition-opacity">
-          <span className="text-[9px] uppercase tracking-[0.3em] text-[#E8DFD1] mb-1">
-            Scroll to Discover
-          </span>
-
-          <ChevronDown className="w-4 h-4 text-[#B69A62] animate-bounce" />
-        </div> */}
-
       </div>
-
-      
     </section>
   );
 };

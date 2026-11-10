@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { getAssetUrl } from '../utils/assetPath';
 
 const QUADRANT_ITEMS = [
   {
@@ -7,8 +8,8 @@ const QUADRANT_ITEMS = [
     title: 'BRIDAL',
     subtitle: 'EXPLORE',
     link: '/bridal',
-    videoSrc: '/videos/gmm.mp4',
-    poster: '/images/bridal-curated-ensembles.jpg',
+    videoSrc: getAssetUrl('/videos/gmm.mp4'),
+    poster: getAssetUrl('/images/bridal-curated-ensembles.jpg'),
     ariaLabel: 'Explore Bridal Couture'
   },
   {
@@ -16,8 +17,8 @@ const QUADRANT_ITEMS = [
     title: 'MENSWEAR',
     subtitle: 'EXPLORE',
     link: '/shop?category=Menswear',
-    videoSrc: '/videos/menswear-video.mp4',
-    poster: '/images/bridal-heirloom-hero.jpg',
+    videoSrc: getAssetUrl('/videos/menswear-video.mp4'),
+    poster: getAssetUrl('/images/bridal-heirloom-hero.jpg'),
     ariaLabel: 'Explore Menswear Collection'
   },
   {
@@ -25,7 +26,7 @@ const QUADRANT_ITEMS = [
     title: 'FASHION',
     subtitle: 'EXPLORE',
     link: '/collections',
-    videoSrc: '/videos/fashion-video.mp4',
+    videoSrc: getAssetUrl('/videos/fashion-video.mp4'),
     poster: 'https://thesilkchamber.com/cdn/shop/files/kperisari_4e0389a4-2f66-4583-bcce-3088a728a035.jpg?v=1739620090&width=1800',
     ariaLabel: 'Explore Fashion and Ready-to-Wear'
   },
@@ -34,8 +35,8 @@ const QUADRANT_ITEMS = [
     title: 'ACCESSORIES',
     subtitle: 'EXPLORE',
     link: '/shop?category=Accessories',
-    videoSrc: '/videos/accessories-video.mp4',
-    poster: '/images/bridal-emerald-gold.jpg',
+    videoSrc: getAssetUrl('/videos/accessories-video.mp4'),
+    poster: getAssetUrl('/images/bridal-emerald-gold.jpg'),
     ariaLabel: 'Explore Heirloom Accessories'
   }
 ];

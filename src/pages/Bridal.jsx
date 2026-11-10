@@ -1,3 +1,4 @@
+import { getAssetUrl } from '../utils/assetPath';
 import React from 'react';
 import { Sparkles, Calendar } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -18,7 +19,7 @@ export const Bridal = () => {
       <section className="relative min-h-[88vh] sm:min-h-[92vh] lg:min-h-[96vh] flex items-center justify-start bg-[#111111] text-[#FFFFFF] overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/bridal-palace-hero.png"
+            src={getAssetUrl('/images/bridal-palace-hero.png')}
             alt="Juthika by Momita Haute Bridal Sanctuary"
             className="w-full h-full object-cover object-[78%_center] sm:object-[82%_center] lg:object-right filter brightness-[0.96] contrast-[1.02]"
           />
@@ -116,7 +117,7 @@ export const Bridal = () => {
 
           <div className="lg:col-span-6 relative min-h-[460px] lg:min-h-full overflow-hidden bg-[#111111]">
             <img
-              src="/images/bridal-narrative.jpg"
+              src={getAssetUrl('/images/bridal-narrative.jpg')}
               alt="Assamese Bride in Golden Muga and Paat"
               className="absolute inset-0 w-full h-full object-cover object-top filter brightness-[0.98] contrast-[1.02] transition-transform duration-1000 ease-out hover:scale-105"
             />
