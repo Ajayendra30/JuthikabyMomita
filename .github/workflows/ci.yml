@@ -3,73 +3,60 @@ name: Juthika CI/CD Pipeline
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
-# Set permissions for GitHub Actions to deploy to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment to prevent race conditions
+# Allow only one concurrent deployment
 concurrency:
   group: 'pages'
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  # =========================================================================
-  # 1. CI (CONTINUOUS INTEGRATION): Build, Lint & Verification
-  # =========================================================================
-  build-and-verify:
-    name: 🔍 CI: Build & Lint Verification
+  build-and-deploy:
+    name: Build & Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout Repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js 20
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - name: 📦 Install Dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: 🔍 Run Oxlint Linter
+      - name: Run Oxlint Linter
         run: npm run lint
 
-      - name: 🚀 Production Build for GitHub Pages
+      - name: Production Build for GitHub Pages
         run: npm run build
         env:
           GITHUB_PAGES: 'true'
 
-      # SPA fallback: GitHub Pages serves 404.html for any direct subroute
-      - name: 📄 Create SPA 404.html Fallback
+      # SPA fallback for direct navigation
+      - name: Create SPA 404 Fallback
         run: cp dist/index.html dist/404.html
 
-      - name: 📤 Upload Pages Artifact
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
 
-  # =========================================================================
-  # 2. CD (CONTINUOUS DEPLOYMENT): Automated Release to GitHub Pages
-  # =========================================================================
-  deploy-to-github-pages:
-    name: 🚀 CD: Automated Deployment
-    needs: build-and-verify
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: 🌐 Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
