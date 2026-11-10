@@ -16,7 +16,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#FFFFFF] text-[#FFFFFF] pt-16 pb-12 border-t border-[#262626]">
+    <footer className="bg-[#141414] text-[#FFFFFF] pt-16 pb-12 border-t border-[#262626]">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Main 4-Column Grid */}
