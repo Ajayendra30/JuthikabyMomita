@@ -1,10 +1,15 @@
-﻿# AIAXOM — Luxury Assamese Silk Boutique
-**Full-Stack Luxury E-Commerce: React 19 Frontend + FastAPI Backend + Supabase PostgreSQL**
+# JUTHIKA BY MOMITA � Luxury Assamese Silk Atelier
+**Full-Stack Luxury E-Commerce & Atelier Management: React 19 Frontend + Express.js Backend + Supabase PostgreSQL**
 
-> A modern, editorial, luxury fashion boutique experience for **AIAXOM**, celebrating Assamese handloom silks (Muga, Eri, Paat Silk, Bridal Couture, Occasion Wear, and Ready-to-Wear) handwoven in Sualkuchi, Assam. Inspired by the editorial elegance, visual hierarchy, and craftsmanship storytelling of Tarun Tahiliani.
+[![Juthika CI/CD Pipeline](https://github.com/Ajayendra30/JuthikabyMomita/actions/workflows/ci.yml/badge.svg)](https://github.com/Ajayendra30/JuthikabyMomita/actions/workflows/ci.yml)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel&logoColor=white)](https://juthika-by-momita.vercel.app)
+[![React 19](https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white)](https://react.dev)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
+
+> A modern, editorial, luxury fashion boutique and private atelier console for **Juthika by Momita**, celebrating six hundred years of Assamese handloom silks (Muga, Eri Ahimsa, Paat Silk, Bridal Couture, Occasion Wear, and Ready-to-Wear) handwoven in Sualkuchi, Assam. Inspired by the editorial elegance, visual hierarchy, and craftsmanship storytelling of Tarun Tahiliani.
 
 ---
-
 ##  Luxury Design System
 
 - **Color Palette**:
@@ -24,4 +29,5 @@
   - Fully responsive across mobile, tablet, laptop, and desktop
 
 ---
+
 
