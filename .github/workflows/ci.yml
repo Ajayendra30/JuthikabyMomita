@@ -5,10 +5,25 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+
+# Set permissions for GitHub Actions to deploy to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment to prevent race conditions
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
+  # =========================================================================
+  # 1. CI (CONTINUOUS INTEGRATION): Build, Lint & Verification
+  # =========================================================================
   build-and-verify:
-    name: Build & Lint Verification
+    name: 🔍 CI: Build & Lint Verification
     runs-on: ubuntu-latest
 
     steps:
@@ -27,5 +42,34 @@ jobs:
       - name: 🔍 Run Oxlint Linter
         run: npm run lint
 
-      - name: 🚀 Production Build (Vite)
+      - name: 🚀 Production Build for GitHub Pages
         run: npm run build
+        env:
+          GITHUB_PAGES: 'true'
+
+      # SPA fallback: GitHub Pages serves 404.html for any direct subroute
+      - name: 📄 Create SPA 404.html Fallback
+        run: cp dist/index.html dist/404.html
+
+      - name: 📤 Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+  # =========================================================================
+  # 2. CD (CONTINUOUS DEPLOYMENT): Automated Release to GitHub Pages
+  # =========================================================================
+  deploy-to-github-pages:
+    name: 🚀 CD: Automated Deployment
+    needs: build-and-verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🌐 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
